@@ -8,16 +8,17 @@
 flowchart LR
     A[config.txt 名称|URL] --> B[GitHub Actions 每30min]
     B --> C{URL 类型}
-    C -->|直链 http| D[fetch + rss-parser]
-    C -->|RSSHub /路由| E[实例池轮换 + rss-parser]
-    D --> F[state.json 去重]
-    E --> F
-    F --> G[render.mjs 生成 index.html]
-    G --> H[git push 回仓库]
-    H --> I[GitHub Pages 展示]
+    C -->|B站 /bilibili路由| D[bilibili.mjs 直连API]
+    C -->|直链 http| E[fetch + rss-parser]
+    C -->|RSSHub /路由| F[实例池轮换 + rss-parser]
+    D --> G[state.json 去重]
+    E --> G
+    F --> G
+    G --> H[render.mjs 生成 index.html]
+    H --> I[git push → Pages]
 ```
 
-纯拉取架构，零服务。直链源直接 fetch；B站等非 RSS 源走 RSSHub 公共实例池轮换。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip 压缩 + Dublin Core。
+纯拉取架构，零服务。直链源直接 fetch；B站路由走 B站 API 直连（WBI 签名，避开公共 RSSHub 实例对 B站的风控）；其他 RSSHub 路由走实例池轮换。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip + Dublin Core。
 
 ## 部署
 
@@ -40,7 +41,8 @@ flowchart LR
 | --- | --- |
 | `config.txt` | 订阅列表，行式 `名称\|URL`，`#` 注释 |
 | `instances.txt` | RSSHub 公共实例池（路由源用） |
-| `scripts/fetch.mjs` | 同步核心：拉取 → 解析 → 去重 → 生成 |
+| `scripts/fetch.mjs` | 同步核心：三路分发 → 解析 → 去重 → 生成 |
+| `scripts/bilibili.mjs` | B站 API 直连（WBI 签名，B站路由用） |
 | `scripts/render.mjs` | 紧凑文字列表渲染 |
 | `state.json` | 去重状态，自动维护 |
 | `index.html` | 仪表盘，自动生成 |
@@ -60,7 +62,7 @@ node scripts/fetch.mjs
 
 - 实时性：GitHub Actions cron 不保证准时，实际延迟 5–35 分钟，非真实时
 - 抖音等强反爬源不稳定（依赖 RSSHub 实例的 Playwright 支持）
-- B站等非 RSS 源依赖公共 RSSHub 实例可用性
+- B站路由走 API 直连（公共 RSSHub 实例对 B站普遍风控），偶发 -352 风控时下次 sync 自动重试
 - 合规：底层依赖非公开 API（B站等），个人自用，勿商业化
 
 ## 许可

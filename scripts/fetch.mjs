@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import Parser from 'rss-parser';
 import { renderHTML } from './render.mjs';
+import { fetchBilibiliVideos } from './bilibili.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
@@ -50,8 +51,13 @@ async function fetchFromRsshub(route) {
     throw new Error('RSSHub 实例池全部失败');
 }
 
-// 拉取单个源：二路分发，返回 rss-parser 解析后的条目数组
+// 拉取单个源：三路分发，返回条目数组
 async function fetchItems(source) {
+    // B站路由直连 B站 API（避开公共 RSSHub 实例对 B站的风控/限流）
+    const biliMatch = source.url.match(/^\/bilibili\/user\/video\/(\w+)/);
+    if (biliMatch) {
+        return await fetchBilibiliVideos(biliMatch[1]);
+    }
     let xml;
     if (source.url.startsWith('/')) {
         xml = await fetchFromRsshub(source.url);

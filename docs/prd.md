@@ -28,9 +28,10 @@
 - 支持空行、`#` 注释
 
 ### 3.2 数据拉取
+- B站路由（`/bilibili/user/video/:uid`）：直连 B站 API（WBI 签名 + 匿名 buvid + dm_img 指纹），避开公共 RSSHub 实例对 B站的风控
 - 直链：直接 fetch + 通用 RSS 解析
-- RSSHub 路由：拼公共实例池 URL，失败自动轮换
-- 单源超时 15s，实例池全部失败标记错误（不中断其他源）
+- 其他 RSSHub 路由：拼公共实例池 URL，失败自动轮换
+- 单源超时 15s，失败标记错误（不中断其他源）
 - 通用解析支持 RSS 2.0 / Atom / RDF，含 gzip 压缩、Dublin Core 日期
 
 ### 3.3 去重

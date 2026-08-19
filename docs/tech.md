@@ -15,7 +15,9 @@ flowchart LR
     H --> I[GitHub Pages 展示]
 ```
 
-**纯拉取架构**：消费端只做拉取-解析-去重-渲染，零服务。不部署 RSSHub，不内置反爬逻辑。
+**纯拉取架构**：消费端只做拉取-解析-去重-渲染，零服务。不部署 RSSHub。
+
+**B站路由例外**：公共 RSSHub 实例对 B站路由普遍风控/限流（实测 10+ 实例全挂），故 `/bilibili/user/video/:uid` 路由走 B站 API 直连（`bilibili.mjs`，WBI 签名），避开实例依赖。其他 RSSHub 路由仍走实例池。这是为稳定性做的架构妥协——消费端对 B站内置反爬，换取不依赖不稳定实例。
 
 ## 2. 核心组件
 
@@ -27,8 +29,9 @@ flowchart LR
 
 ### 2.3 scripts/fetch.mjs — 同步核心
 - 解析 `名称 | URL`
-- 二路分发：
-  - `/` 开头 → 实例池轮换 fetch + rss-parser
+- 三路分发：
+  - `/bilibili/user/video/:uid` → B站 API 直连（`bilibili.mjs`）
+  - `/` 开头（其他 RSSHub 路由）→ 实例池轮换 fetch + rss-parser
   - `http` 开头 → 直接 fetch + rss-parser
 - 去重 key = URL，新 ID 置前合并保留 100 条
 - 失败源保留旧 state，记录错误
@@ -60,6 +63,7 @@ flowchart LR
 ```
 config.txt ──→ fetch.mjs
                  │
+                 ├─ B站路由 ──→ bilibili.mjs 直连API ──→ items[]
                  ├─ 直链源 ──→ fetch → rss-parser ──→ items[]
                  ├─ RSSHub源 ─→ 实例池轮换 → rss-parser ──→ items[]
                  │
@@ -115,7 +119,8 @@ rss-feed/
 │   ├── tech.md             # 本 TECH
 │   └── research/           # 源码级调研报告
 └── scripts/
-    ├── fetch.mjs           # 同步核心
+    ├── fetch.mjs           # 同步核心（三路分发）
+    ├── bilibili.mjs        # B站 API 直连（WBI 签名）
     └── render.mjs          # 前端渲染
 ```
 
