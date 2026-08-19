@@ -7,27 +7,251 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.7;font-size:14px}
-.wrap{max-width:640px;margin:0 auto;padding:48px 20px}
-h1{font-size:1.15rem;font-weight:600;color:#e6edf3;margin-bottom:8px}
-.meta{color:#7d8590;font-size:.85rem;margin-bottom:32px}
-.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:24px;margin-bottom:16px}
-.card p{margin:8px 0}
-code{background:#21262d;padding:2px 6px;border-radius:3px;font-size:.85em}
-.note{color:#7d8590;font-size:.8rem}
-@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}h1{color:#1f2328}.card{background:#f6f8fa;border-color:#d0d7de}code{background:#eaeef2}.note{color:#57606a}}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 96px}
+header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #21262d}
+header h1{font-size:1.15rem;font-weight:600;color:#e6edf3}
+header .meta{color:#7d8590;font-size:.75rem;margin-top:6px}
+/* details 原生折叠：summary 为源标题栏，点击切换 */
+details.src{margin-bottom:12px;background:#161b22;border:1px solid #21262d;border-radius:6px;overflow:hidden}
+details.src[open]{border-color:#30363d}
+details.src>summary{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;list-style:none;user-select:none}
+details.src>summary::-webkit-details-marker{display:none}
+details.src>summary:hover{background:#1c2128}
+.src-name{font-size:.92rem;font-weight:600;color:#e6edf3}
+.tag{font-size:.65rem;padding:1px 6px;background:#21262d;border-radius:3px;color:#7d8590}
+.badge{font-size:.65rem;padding:1px 6px;background:#1f6feb;border-radius:3px;color:#fff}
+.count{font-size:.7rem;color:#6e7681;margin-left:auto}
+.list{display:flex;flex-direction:column;padding:2px 0}
+.item{display:flex;gap:12px;padding:7px 14px;border-left:2px solid transparent;text-decoration:none;color:inherit;transition:background .12s}
+.item:hover{background:#0d1117;border-left-color:#30363d}
+.item.new{border-left-color:#f0883e}
+.time{color:#6e7681;font-size:.7rem;flex-shrink:0;width:64px;padding-top:2px}
+.title{color:#c9d1d9;font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item:hover .title{color:#58a6ff}
+.err{color:#f85149;font-size:.78rem;padding:8px 14px}
+@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}header{border-color:#d0d7de}header h1{color:#1f2328}details.src{background:#f6f8fa;border-color:#eaeef2}details.src[open]{border-color:#d0d7de}details.src>summary:hover{background:#eef1f4}.src-name{color:#1f2328}.tag{background:#eaeef2;color:#57606a}.item:hover{background:#fff;border-left-color:#d0d7de}.time{color:#57606a}.title{color:#1f2328}.item:hover .title{color:#0969da}.count{color:#57606a}}
 </style>
 </head>
 <body>
 <div class="wrap">
+<header>
 <h1>RSS 订阅</h1>
-<div class="meta">等待首次同步</div>
-<div class="card">
-<p>本页面由 GitHub Actions 每 30 分钟自动生成，当前尚未同步。</p>
-<p class="note">首次使用：</p>
-<p>1. 仓库 <strong>Actions</strong> 标签页 → <code>sync</code> → <strong>Run workflow</strong></p>
-<p>2. 等待约 1 分钟，刷新本页</p>
-<p class="note">订阅列表见 <code>config.txt</code>，路由速查见 <code>reference/rsshub-routes.md</code>。</p>
-</div>
+<div class="meta">2026/8/19 18:07:57 · 每 30 分钟同步</div>
+</header>
+<details class="src error"><summary><span class="src-name">DIYgod</span><span class="tag">bilibili</span><span class="count">源失败</span></summary><p class="err">⚠ B站风控，3 次重试失败（Unexpected token '&lt;', &quot;&lt;!DOCTYPE &quot;... is not valid JSON）（下次重试）</p></details>
+<details class="src" open>
+    <summary><span class="src-name">凉风Kaze</span><span class="tag">bilibili</span><span class="badge">30 新</span><span class="count">显示 10/30</span></summary>
+    <div class="list"><a class="item new" href="https://www.bilibili.com/video/BV1A2bi6UEev" target="_blank" rel="noopener">
+      <span class="time">1 天前</span><span class="title">音画不同步！为什么视频口型总是怪怪的？</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV12TgV63ESW" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">外观大改，更强了吗？Insta360 X6上手</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1UKgL6SEyA" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">长着云台的手机？荣耀Robot Phone上手</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1Apu368EeY" target="_blank" rel="noopener">
+      <span class="time">10 天前</span><span class="title">对话诺兰！导演亲手翻开了《奥德赛》的另一面</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1ymux6BEFU" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">家里的旧光盘，为什么播不出来了？</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1teuc63E6D" target="_blank" rel="noopener">
+      <span class="time">14 天前</span><span class="title">太卷了！改变视频行业的AI又迭代了什么？</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1Pt3D6jEob" target="_blank" rel="noopener">
+      <span class="time">17 天前</span><span class="title">租几颗上亿元的卫星，能拍到什么？</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1c7GA6kEqN" target="_blank" rel="noopener">
+      <span class="time">19 天前</span><span class="title">我们拍到了水下风暴</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1QEgZ6rEGj" target="_blank" rel="noopener">
+      <span class="time">23 天前</span><span class="title">和解剖了4000具尸体的法医，一起看了影片中的尸体...</span>
+    </a><a class="item new" href="https://www.bilibili.com/video/BV1yTgC6XENF" target="_blank" rel="noopener">
+      <span class="time">27 天前</span><span class="title">颠覆行业？索尼FX5深度评测</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">Cloudflare Blog</span><span class="tag">blog.cloudflare.com</span><span class="badge">20 新</span><span class="count">显示 10/20</span></summary>
+    <div class="list"><a class="item new" href="https://blog.cloudflare.com/rfc9234-bgp-role-model/" target="_blank" rel="noopener">
+      <span class="time">18 小时前</span><span class="title">BGP Role model: tracking the adoption of RFC 9234</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/mcp-security-updates/" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">How Cloudflare detects MCP traffic and helps secure it</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/workers-protected-by-access/" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">Secure all your internal vibe-coded applications — in one click</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/total-eclipse-internet-traffic-iceland-spain-portugal/" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">Total eclipse of the Internet: traffic impacts in Iceland, Spain, and Portugal</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/certificate-transparency-monitoring-ga/" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">Certificate Transparency Monitoring is now generally available</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/ddos-threat-report-2026-h1/" target="_blank" rel="noopener">
+      <span class="time">7 天前</span><span class="title">Cloudflare DDoS Threat Report H1 2026: 1 Tbps attacks soar as DNS floods and geopolitical tensions drive a new wave</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/agents-week-review-august-2026/" target="_blank" rel="noopener">
+      <span class="time">8 天前</span><span class="title">Everything we launched during Agents Week</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/fedramp-class-d-certification/" target="_blank" rel="noopener">
+      <span class="time">8 天前</span><span class="title">Serving the most critical missions: Cloudflare for Government achieves FedRAMP Class D (High) Certified status</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/good-and-bad-agentic-behaviors/" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">Unveiling good and bad behaviors on the Agentic Internet</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/introducing-radar-researcher/" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">Introducing Radar Researcher: An AI tool for exploring Internet data in plain language</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">Claude Code Releases</span><span class="tag">github.com</span><span class="badge">10 新</span><span class="count">10 条</span></summary>
+    <div class="list"><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.235" target="_blank" rel="noopener">
+      <span class="time">13 小时前</span><span class="title">v2.1.235</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.234" target="_blank" rel="noopener">
+      <span class="time">1 天前</span><span class="title">v2.1.234</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.233" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">v2.1.233</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.232" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">v2.1.232</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.231" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">v2.1.231</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.229" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">v2.1.229</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.228" target="_blank" rel="noopener">
+      <span class="time">7 天前</span><span class="title">v2.1.228</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.227" target="_blank" rel="noopener">
+      <span class="time">8 天前</span><span class="title">v2.1.227</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.226" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">v2.1.226</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.225" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">v2.1.225</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">知乎日报</span><span class="tag">zhihu</span><span class="badge">30 新</span><span class="count">显示 10/30</span></summary>
+    <div class="list"><a class="item new" href="https://daily.zhihu.com/story/9791958" target="_blank" rel="noopener">
+      <span class="time">2 天前</span><span class="title">马和牛都只吃素，为何它们这么壮？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791950" target="_blank" rel="noopener">
+      <span class="time">2 天前</span><span class="title">为什么会有人认为整个华北平原都是黄河三角洲？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791966" target="_blank" rel="noopener">
+      <span class="time">2 天前</span><span class="title">瞎扯 · 如何正确地吐槽</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791939" target="_blank" rel="noopener">
+      <span class="time">3 天前</span><span class="title">在中国古代有哪些著名的交通线？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791938" target="_blank" rel="noopener">
+      <span class="time">3 天前</span><span class="title">这几年盖的30层高的住宅有多少年寿命?</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791933" target="_blank" rel="noopener">
+      <span class="time">3 天前</span><span class="title">如果从有文明开始就放任黄河不管，到现在会形成什么样的地貌？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791918" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">绝对零度为什么是零下 273.15 摄氏度？目前工程上能实现的最低温度是多少？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791911" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">在古代当土司是种怎样的体验？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791906" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">如果给一只雄蜂幼虫一直喂食蜂王浆，这只雄蜂发育成成虫后会怎么样？</span>
+    </a><a class="item new" href="https://daily.zhihu.com/story/9791893" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">为什么牛要穿鼻子，而不是和马一样用笼头呢？</span>
+    </a></div>
+  </details>
+<details class="src error"><summary><span class="src-name">掘金 AI 周榜</span><span class="tag">juejin</span><span class="count">源失败</span></summary><p class="err">⚠ RSSHub 实例池全部失败（下次重试）</p></details>
+<details class="src" open>
+    <summary><span class="src-name">Solidot</span><span class="tag">solidot</span><span class="badge">20 新</span><span class="count">显示 10/20</span></summary>
+    <div class="list"><a class="item new" href="https://www.solidot.org/story?sid=85135" target="_blank" rel="noopener">
+      <span class="time">2 小时前</span><span class="title">诺基亚大幅缩减中国业务</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85134" target="_blank" rel="noopener">
+      <span class="time">2 小时前</span><span class="title">蓝箭航天成功回收朱雀三号火箭第一级</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85133" target="_blank" rel="noopener">
+      <span class="time">3 小时前</span><span class="title">DDR5 内存条价格在 12 个月内上涨 500%</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85132" target="_blank" rel="noopener">
+      <span class="time">3 小时前</span><span class="title">Comcast 将数百万路由器变成运动探测器</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85131" target="_blank" rel="noopener">
+      <span class="time">4 小时前</span><span class="title">出生后限制摄入糖分与成年后更低的癌症风险相关</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85130" target="_blank" rel="noopener">
+      <span class="time">19 小时前</span><span class="title">Firefox 154 释出</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85129" target="_blank" rel="noopener">
+      <span class="time">20 小时前</span><span class="title">Google 拍下破产航空公司 Spirit 的数据</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85128" target="_blank" rel="noopener">
+      <span class="time">21 小时前</span><span class="title">苹果开发配备摄像头的耳机 AirPods</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85127" target="_blank" rel="noopener">
+      <span class="time">21 小时前</span><span class="title">美国青少年吸烟率降至历史新低的 1.4%</span>
+    </a><a class="item new" href="https://www.solidot.org/story?sid=85126" target="_blank" rel="noopener">
+      <span class="time">23 小时前</span><span class="title">极端高温对老年人口的危害比预期的更大</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">V2EX 热门</span><span class="tag">v2ex</span><span class="badge">8 新</span><span class="count">8 条</span></summary>
+    <div class="list"><a class="item new" href="https://www.v2ex.com/t/1235528" target="_blank" rel="noopener">
+      <span class="time">6 小时前</span><span class="title">[BeefAPI] 已稳定运行 4 个月， 0 客诉｜ Claude/GPT 平价中转，新用户评论区留 id 送 5 刀额度</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235509" target="_blank" rel="noopener">
+      <span class="time">7 小时前</span><span class="title">前端的小伙伴们，都怎么样了</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235487" target="_blank" rel="noopener">
+      <span class="time">8 小时前</span><span class="title">粱圣变小粱了，还有啥方便好用的 coding 套餐吗？</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235483" target="_blank" rel="noopener">
+      <span class="time">8 小时前</span><span class="title">为什么没有诞生第二个“胖东来”？</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235479" target="_blank" rel="noopener">
+      <span class="time">8 小时前</span><span class="title">跟摩的佬骂起来了。</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235472" target="_blank" rel="noopener">
+      <span class="time">8 小时前</span><span class="title">AI Coding 时代作为面试官已经不会面试开发了</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235460" target="_blank" rel="noopener">
+      <span class="time">9 小时前</span><span class="title">初恋结婚了，新郎不是我</span>
+    </a><a class="item new" href="https://www.v2ex.com/t/1235437" target="_blank" rel="noopener">
+      <span class="time">17 小时前</span><span class="title">中式的酒桌文化 一生黑</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">GitHub Trending Python</span><span class="tag">github</span><span class="badge">17 新</span><span class="count">显示 10/17</span></summary>
+    <div class="list"><a class="item new" href="https://github.com/harry0703/MoneyPrinterTurbo" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">harry0703/MoneyPrinterTurbo</span>
+    </a><a class="item new" href="https://github.com/volcengine/OpenViking" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">volcengine/OpenViking</span>
+    </a><a class="item new" href="https://github.com/mukul975/Anthropic-Cybersecurity-Skills" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">mukul975/Anthropic-Cybersecurity-Skills</span>
+    </a><a class="item new" href="https://github.com/public-apis/public-apis" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">public-apis/public-apis</span>
+    </a><a class="item new" href="https://github.com/jundot/omlx" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">jundot/omlx</span>
+    </a><a class="item new" href="https://github.com/microsoft/qlib" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">microsoft/qlib</span>
+    </a><a class="item new" href="https://github.com/browser-use/video-use" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">browser-use/video-use</span>
+    </a><a class="item new" href="https://github.com/pipeshub-ai/pipeshub-ai" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">pipeshub-ai/pipeshub-ai</span>
+    </a><a class="item new" href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">RVC-Project/Retrieval-based-Voice-Conversion-WebUI</span>
+    </a><a class="item new" href="https://github.com/usestrix/strix" target="_blank" rel="noopener">
+      <span class="time"></span><span class="title">usestrix/strix</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">少数派 Matrix</span><span class="tag">sspai</span><span class="badge">20 新</span><span class="count">显示 10/20</span></summary>
+    <div class="list"><a class="item new" href="https://sspai.com/post/113499" target="_blank" rel="noopener">
+      <span class="time">2 天前</span><span class="title">如果没有1.0.7补丁，《轮回之兽》仍只值得一个“褒贬不一”</span>
+    </a><a class="item new" href="https://sspai.com/post/108010" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">与世界建立联结——上海F1之行</span>
+    </a><a class="item new" href="https://sspai.com/post/113315" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">从0.01到MelGeek｜磁轴之前，那些被时间掩埋的客制化往事</span>
+    </a><a class="item new" href="https://sspai.com/post/113390" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">记了 2 万条笔记后，我把知识库交给了 AI | Obsidian插件推荐</span>
+    </a><a class="item new" href="https://sspai.com/post/113429" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">我家也跨上了信息高速路！在25年前的笔记本上体验有线网络冲浪</span>
+    </a><a class="item new" href="https://sspai.com/post/113309" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">双持手机的方案：不是工作机 + 生活机，而是功能互补</span>
+    </a><a class="item new" href="https://sspai.com/post/113302" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">普通话之外，中文语音合成还缺什么：我做乡音阁时遇到的几个问题</span>
+    </a><a class="item new" href="https://sspai.com/post/113342" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">无痛日语：把 AI、FSRS 和短视频交互装进日语学习</span>
+    </a><a class="item new" href="https://sspai.com/post/113377" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">这款免费开源的工具，满足了我对统计时间花费的所有幻想！</span>
+    </a><a class="item new" href="https://sspai.com/post/113362" target="_blank" rel="noopener">
+      <span class="time">7 天前</span><span class="title">进入三伏，也进入一年最浓的夏天｜文末赠送 10 个付费主题兑换码</span>
+    </a></div>
+  </details>
+<details class="src" open>
+    <summary><span class="src-name">Anthropic News</span><span class="tag">anthropic</span><span class="badge">10 新</span><span class="count">10 条</span></summary>
+    <div class="list"><a class="item new" href="https://www.anthropic.com/news/claude-text-watermark" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">How Claude’s text watermark works</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">Improving Fable 5's biology safeguards</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/tino-cuellar" target="_blank" rel="noopener">
+      <span class="time">15 天前</span><span class="title">Mariano-Florentino (Tino) Cuéllar to join Anthropic as Chief Global Affairs Officer</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals" target="_blank" rel="noopener">
+      <span class="time">20 天前</span><span class="title">Investigating three real-world incidents in our cybersecurity evaluations</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/position-open-weights-models" target="_blank" rel="noopener">
+      <span class="time">23 天前</span><span class="title">Our position on open-weights models</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/cognizant-anthropic" target="_blank" rel="noopener">
+      <span class="time">23 天前</span><span class="title">Cognizant and Anthropic expand their partnership to bring Claude to enterprise clients</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/claude-opus-5" target="_blank" rel="noopener">
+      <span class="time">26 天前</span><span class="title">Introducing Claude Opus 5</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/economic-futures-research-fund-agenda" target="_blank" rel="noopener">
+      <span class="time">28 天前</span><span class="title">A research agenda for the Economic Futures Research Fund</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/anthropic-economic-index-connector" target="_blank" rel="noopener">
+      <span class="time">28 天前</span><span class="title">Ask Claude about the Anthropic Economic Index</span>
+    </a><a class="item new" href="https://www.anthropic.com/news/donation-public-first-action" target="_blank" rel="noopener">
+      <span class="time">29 天前</span><span class="title">Anthropic is donating another $20 million to Public First Action</span>
+    </a></div>
+  </details>
 </div>
 </body>
 </html>
