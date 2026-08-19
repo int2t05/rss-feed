@@ -17,10 +17,13 @@ function readLines(file) {
         .filter((l) => l && !l.startsWith('#'));
 }
 
-// 解析订阅列表：名称 | URL
+// 每源默认显示条数（可配置项）：config 第三段可覆盖单源，改此值改全局默认
+const DEFAULT_LIMIT = 10;
+
+// 解析订阅列表：名称 | URL | 显示条数(可选，默认 DEFAULT_LIMIT)
 const sources = readLines('config.txt').map((line) => {
-    const [name, ...urlParts] = line.split('|');
-    return { name: name.trim(), url: urlParts.join('|').trim() };
+    const [name, url, limit] = line.split('|').map((s) => s.trim());
+    return { name, url, limit: limit ? parseInt(limit, 10) || DEFAULT_LIMIT : DEFAULT_LIMIT };
 });
 
 const instances = readLines('instances.txt');

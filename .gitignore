@@ -1,7 +1,3 @@
-# 调研参考源码（本地保留，不入库）
-rsshub-src/
-rss2cubox-src/
-
 # 依赖与日志
 node_modules/
 *.log

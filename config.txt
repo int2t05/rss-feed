@@ -1,12 +1,22 @@
 # 通用 RSS 订阅列表
-# 每行：名称 | URL
+# 每行：名称 | URL | 显示条数(可选，默认10)
 # URL 为完整直链或 RSSHub 路由（/开头）
 # 空行和 # 开头的行会被忽略
+# 路由速查见 reference/rsshub-routes.md
 
-# B站 UP 主（RSSHub 路由）
+# === B站 UP 主（API 直连）===
 DIYgod | /bilibili/user/video/2267573
 凉风Kaze | /bilibili/user/video/946974
 
-# 技术博客（直链）
+# === 技术博客（直链）===
 Cloudflare Blog | https://blog.cloudflare.com/rss/
 Claude Code Releases | https://github.com/anthropics/claude-code/releases.atom
+
+# === 资讯（RSSHub 路由）===
+知乎日报 | /zhihu/daily
+掘金 AI 周榜 | /juejin/trending/ai/weekly
+Solidot | /solidot
+V2EX 热门 | /v2ex/topics/hot
+GitHub Trending Python | /github/trending/daily/python
+少数派 Matrix | /sspai/matrix
+Anthropic News | /anthropic/news
