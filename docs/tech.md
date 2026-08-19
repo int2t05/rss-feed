@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart LR
-    A[config.txt<br/>名称|URL] --> B[GitHub Actions 每30min]
+    A["config.txt 名称|URL"] --> B[GitHub Actions 每30min]
     B --> C{URL 类型}
     C -->|直链 http| D[fetch + rss-parser]
     C -->|RSSHub /路由| E[实例池轮换 fetch + rss-parser]
@@ -22,12 +22,15 @@ flowchart LR
 ## 2. 核心组件
 
 ### 2.1 config.txt — 订阅配置
+
 行式 `名称 | URL`，URL 自动识别直链（`http`）/RSSHub 路由（`/`）。
 
 ### 2.2 instances.txt — RSSHub 实例池
+
 公共实例列表，按成功率排序，RSSHub 路由源失败时轮换。
 
 ### 2.3 scripts/fetch.mjs — 同步核心
+
 - 解析 `名称 | URL`
 - 三路分发：
   - `/bilibili/user/video/:uid` → B站 API 直连（`bilibili.mjs`）
@@ -38,17 +41,21 @@ flowchart LR
 - 调 `render.mjs` 生成 HTML + 写 state.json
 
 ### 2.4 scripts/render.mjs — 前端渲染
+
 紧凑文字列表，极简暗色。导出 `relTime`/`esc`/`renderHTML`。
 
 ### 2.5 state.json — 去重状态
+
 `{ url: [条目ID...] }`，仓库内提交持久化。
 
 ### 2.6 .github/workflows/sync.yml — 定时任务
+
 `actions/checkout@v5` → `setup-node@v5` → `npm ci` → `node scripts/fetch.mjs` → git commit/push。concurrency 防并发。
 
 ## 3. 通用 RSS 解析
 
 用 `rss-parser`（RSSHub 同款 `rss-parser@3.13.0`），支持：
+
 - RSS 2.0 / Atom / RDF 三种格式
 - gzip / deflate / brotli 压缩
 - Dublin Core `dc:date`
@@ -83,6 +90,7 @@ config.txt ──→ fetch.mjs
 ## 6. 前端设计
 
 紧凑文字列表，极简暗色：
+
 - 每源区块：源名 + 平台小标（URL 推断）+ 新条数 badge
 - 每条一行 `<a>`：相对时间（灰小字）+ 标题
 - 新条目左侧色条
@@ -112,7 +120,7 @@ rss-feed/
 ├── state.json              # 去重状态（自动维护）
 ├── index.html              # 仪表盘（自动生成）
 ├── .gitignore
-├── LICENSE                 # AGPL-3.0（沿用，无 RSSHub 代码提取后可换 MIT，待定）
+├── LICENSE                 # MIT（bilibili.mjs 为独立实现，未派生 RSSHub 代码）
 ├── README.md
 ├── docs/
 │   ├── prd.md              # 本 PRD
@@ -126,9 +134,9 @@ rss-feed/
 
 ## 10. 风险与缓解
 
-| 风险 | 缓解 |
-| --- | --- |
+| 风险                   | 缓解                          |
+| ---------------------- | ----------------------------- |
 | RSSHub 公共实例限流/挂 | 实例池轮换 + 失败保留旧 state |
-| 抖音强反爬不稳 | 接受偶发失败，下次重试 |
-| Actions cron 延迟 | 架构硬约束，向用户明示近实时 |
-| B站等非 RSS 源依赖实例 | 实例池多源轮换降低单点风险 |
+| 抖音强反爬不稳         | 接受偶发失败，下次重试        |
+| Actions cron 延迟      | 架构硬约束，向用户明示近实时  |
+| B站等非 RSS 源依赖实例 | 实例池多源轮换降低单点风险    |

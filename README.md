@@ -6,7 +6,7 @@
 
 ```mermaid
 flowchart LR
-    A[config.txt 名称|URL] --> B[GitHub Actions 每30min]
+    A["config.txt 名称|URL"] --> B[GitHub Actions 每30min]
     B --> C{URL 类型}
     C -->|B站 /bilibili路由| D[bilibili.mjs 直连API]
     C -->|直链 http| E[fetch + rss-parser]
@@ -18,7 +18,7 @@ flowchart LR
     H --> I[git push → Pages]
 ```
 
-纯拉取架构，零服务。直链源直接 fetch；B站路由走 B站 API 直连（WBI 签名，避开公共 RSSHub 实例对 B站的风控）；其他 RSSHub 路由走实例池轮换。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip + Dublin Core。
+纯拉取架构，零服务。直链源直接 fetch（5 并发，优先用原生 RSS 避免实例波动）；B站路由走 B站 API 直连（WBI 签名 + cookie，避开公共 RSSHub 实例对 B站的风控）；其他 RSSHub 路由走实例池轮换。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip + Dublin Core。
 
 ## 部署
 
@@ -62,8 +62,15 @@ node scripts/fetch.mjs
 
 - 实时性：GitHub Actions cron 不保证准时，实际延迟 5–35 分钟，非真实时
 - 抖音等强反爬源不稳定（依赖 RSSHub 实例的 Playwright 支持）
-- B站路由走 API 直连（公共 RSSHub 实例对 B站普遍风控），偶发 -352 风控时下次 sync 自动重试
+- B站路由走 API 直连，配 `BILIBILI_COOKIE` Secret 后稳定（匿名对热门 UP 易 -352 风控）
 - 合规：底层依赖非公开 API（B站等），个人自用，勿商业化
+
+### 配置 BILIBILI_COOKIE（推荐）
+
+1. 浏览器登录 [bilibili.com](https://www.bilibili.com)
+2. F12 → Network → 刷新 → 点任一 bilibili.com 请求 → 复制 Cookie 整段（含 `SESSDATA`）
+3. 仓库 Settings → Secrets and variables → Actions → New secret → Name `BILIBILI_COOKIE`，Value 粘贴
+4. 下次 sync 自动使用，匿名 buvid 不再触发热门 UP 风控
 
 ## 许可
 

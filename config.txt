@@ -6,35 +6,68 @@
 # 路由速查见 reference/rsshub-routes.md
 
 [video]
-# B站 UP 主（API 直连，避开公共实例 B站风控）
-DIYgod | /bilibili/user/video/2267573
-凉风Kaze | /bilibili/user/video/946974
-影视飓风 | /bilibili/user/video/946583
+# B站技术分享 UP 主（API 直连，配 BILIBILI_COOKIE 后稳定）
+Pi | /bilibili/user/video/316183842
+Pi 动态 | /bilibili/user/dynamic/316183842
+奇乐编程学院 | /bilibili/user/video/372313671
+奇乐编程学院 动态 | /bilibili/user/dynamic/372313671
+技术蛋老师 | /bilibili/user/video/327247876
+技术蛋老师 动态 | /bilibili/user/dynamic/327247876
+技术胖 | /bilibili/user/video/165659472
+技术胖 动态 | /bilibili/user/dynamic/165659472
+峰华前端工程师 | /bilibili/user/video/302954484
+峰华前端工程师 动态 | /bilibili/user/dynamic/302954484
+先进编译实验室 | /bilibili/user/video/1540261574
+先进编译实验室 动态 | /bilibili/user/dynamic/1540261574
 
 [ai]
-# AI 公司动态与研究
+# AI 公司动态与研究（直链优先，避免 RSSHub 实例波动）
 Anthropic News | /anthropic/news
 Anthropic Engineering | /anthropic/engineering
-OpenAI Research | /openai/research
-DeepMind Blog | /deepmind/blog
-HuggingFace Daily Papers | /huggingface/daily-papers
-量子位 AI | /qbitai/category/AI
+OpenAI News | https://openai.com/news/rss.xml
+DeepMind Blog | https://deepmind.google/blog/rss.xml
+HuggingFace Daily Papers | https://huggingface.co/papers/feed
+HuggingFace Blog | https://huggingface.co/blog/feed.xml
+Simon Willison | https://simonwillison.net/atom/everything/
+Lilian Weng | https://lilianweng.github.io/index.xml
+Karpathy | https://karpathy.github.io/feed.xml
+Apple ML Research | https://machinelearning.apple.com/rss.xml
+NVIDIA Developer | https://developer.nvidia.com/blog/feed/
+Microsoft Research | https://www.microsoft.com/en-us/research/feed/
+Meta AI | https://ai.meta.com/blog/rss/
+AWS ML Blog | https://aws.amazon.com/blogs/machine-learning/feed/
+BAIR Blog | https://bair.berkeley.edu/blog/feed.xml
+
+[academic]
+# arXiv 论文（日更高量，独立分类避免 AI 类过载）
+arXiv cs.AI | https://rss.arxiv.org/rss/cs.AI
+arXiv cs.LG | https://rss.arxiv.org/rss/cs.LG
+arXiv cs.CL | https://rss.arxiv.org/rss/cs.CL
 
 [tech]
 # 技术博客
 Cloudflare Blog | https://blog.cloudflare.com/rss/
 Claude Code Releases | https://github.com/anthropics/claude-code/releases.atom
 overreacted | https://overreacted.io/rss.xml
-少数派 Matrix | /sspai/matrix
 Anthropic Research | /anthropic/research
+GitHub Blog Engineering | https://github.blog/engineering/feed/
+少数派 | https://sspai.com/feed
 
 [news]
-# 资讯媒体
+# 资讯媒体（直链优先）
 Solidot | /solidot
 Solidot 科学 | /solidot/science
 知乎日报 | /zhihu/daily
 cnbeta | /cnbeta
-36氪快讯 | /36kr/newsflashes
+36氪 | /36kr/newsflashes
+机器之心 | /jiqizhixin
+IT之家 | https://www.ithome.com/rss/
+爱范儿 | https://www.ifanr.com/feed
+钛媒体 | https://www.tmtpost.com/rss
+虎嗅 | https://www.huxiu.com/rss/0.xml
+TechCrunch AI | https://techcrunch.com/category/artificial-intelligence/feed/
+The Verge AI | https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+MIT Tech Review | https://www.technologyreview.com/feed/
 
 [community]
 # 开发者社区
@@ -44,8 +77,9 @@ GitHub Trending Go | /github/trending/daily/go
 GitHub Trending Rust | /github/trending/daily/rust
 GitHub Topic LLM | /github/topics/llm
 GitHub Topic Agent | /github/topics/agent
-V2EX 热门 | /v2ex/topics/hot
-V2EX 最新 | /v2ex/topics/latest
-Hacker News | /hackernews
-Hacker News Best | /hackernews/best
+V2EX 热门 | https://www.v2ex.com/feed/tab/hot.xml
+V2EX 最新 | https://www.v2ex.com/feed/tab/latest.xml
+Hacker News | https://hnrss.org/frontpage
+Hacker News Best | https://hnrss.org/best
 掘金 AI 周榜 | /juejin/trending/ai/weekly
+LinuxDo | https://linux.do/latest.rss

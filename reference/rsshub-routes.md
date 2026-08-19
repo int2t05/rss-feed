@@ -31,8 +31,12 @@ RSSHub 路由完整 URL = `实例地址 + 路由`，如 `https://rsshub.rssforev
 
 ### B站（API 直连，不走实例）
 - `/bilibili/user/video/:uid` — UP 主投稿，uid 在 `space.bilibili.com/:uid`
-- `/bilibili/user/dynamic/:uid` — UP 主动态
+- `/bilibili/user/dynamic/:uid` — UP 主动态（图文/转发/视频投稿动态）
 - `/bilibili/favlists/:uid` — 收藏夹
+
+> B站路由需配 `BILIBILI_COOKIE` 环境变量（GitHub Secrets 注入）。
+> 匿名 buvid 对热门 UP 易触发 -352 风控，配 cookie 后纯 HTTP 稳定。
+> 获取方式：浏览器登录 B站 → DevTools Network → 任一 bilibili.com 请求 → 复制整段 Cookie（含 SESSDATA）。
 
 ### 知乎
 - `/zhihu/daily` — 知乎日报
@@ -82,4 +86,6 @@ RSSHub 路由完整 URL = `实例地址 + 路由`，如 `https://rsshub.rssforev
 3. 加到 `config.txt`：`名称 | /路由`
 4. push，下次 sync 自动拉取
 
-直链源（博客/Atom）直接加完整 URL，无需实例。
+直链源（博客/Atom）直接加完整 URL，无需实例。**优先用直链**：OpenAI/DeepMind/HuggingFace/arXiv/Hacker News/V2EX/少数派/36氪/机器之心/IT之家 等均有原生 RSS，直链比 RSSHub 路由更稳。
+
+B站源需配 `BILIBILI_COOKIE` Secret（见上节），否则热门 UP 易风控。

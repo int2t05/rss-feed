@@ -29,11 +29,24 @@ function platformColor(url) {
     const tag = platformTag(url);
     const map = {
         bilibili: '#fb7299', github: '#8b949e', 'github.com': '#8b949e',
-        zhihu: '#0084ff', juejin: '#1e80ff', solidot: '#6e7681',
-        v2ex: '#333', sspai: '#d33a31', anthropic: '#cc785c',
+        'github.blog': '#8b949e', zhihu: '#0084ff', juejin: '#1e80ff',
+        solidot: '#6e7681', v2ex: '#333', 'v2ex.com': '#333',
+        sspai: '#d33a31', 'sspai.com': '#d33a31', anthropic: '#cc785c',
         'blog.cloudflare.com': '#f38020', hackernews: '#ff6600',
-        openai: '#10a37f', deepmind: '#4285f4', huggingface: '#ffd21e',
-        qbitai: '#d33a31', cnbeta: '#c92127', '36kr': '#4285ca',
+        'hnrss.org': '#ff6600', openai: '#10a37f', 'openai.com': '#10a37f',
+        deepmind: '#4285f4', 'deepmind.google': '#4285f4',
+        huggingface: '#ffd21e', 'huggingface.co': '#ffd21e',
+        cnbeta: '#c92127', '36kr': '#4285ca', '36kr.com': '#4285ca',
+        'rss.arxiv.org': '#b31b1b', 'machinelearning.apple.com': '#86868b',
+        'developer.nvidia.com': '#76b900', 'microsoft.com': '#0078d4',
+        'ai.meta.com': '#0668e1', 'aws.amazon.com': '#ff9900',
+        'bair.berkeley.edu': '#003262', 'blog.langchain.dev': '#0a7c5a',
+        'simonwillison.net': '#58a6ff', 'lilianweng.github.io': '#58a6ff',
+        'karpathy.github.io': '#58a6ff', 'jiqizhixin.com': '#0066ff',
+        'ithome.com': '#c92127', 'ifanr.com': '#ce1126',
+        'tmtpost.com': '#0094e8', 'huxiu.com': '#ff5b5b',
+        'techcrunch.com': '#00c853', 'theverge.com': '#e91e63',
+        'technologyreview.com': '#c8102e', 'linux.do': '#0066cc',
     };
     return map[tag] || '#6e7681';
 }
@@ -45,6 +58,7 @@ const RSS_ICON = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><c
 const CAT_ICONS = {
     video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg>',
     ai: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="15" r="1.2"/></svg>',
+    academic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
     tech: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
     news: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4H6a2 2 0 0 0-2 2v14"/><path d="M18 14H8M15 18H8M12 10H8M10 6H8"/></svg>',
     community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
@@ -52,8 +66,8 @@ const CAT_ICONS = {
 
 // 共享 head + 顶部导航
 function head(title, active) {
-    const nav = ['index', 'video', 'ai', 'tech', 'news', 'community'];
-    const labels = { index: '首页', video: '视频', ai: 'AI', tech: '技术', news: '资讯', community: '社区' };
+    const nav = ['index', 'video', 'ai', 'academic', 'tech', 'news', 'community'];
+    const labels = { index: '首页', video: '视频', ai: 'AI', academic: '论文', tech: '技术', news: '资讯', community: '社区' };
     const links = nav.map((id) => {
         const cls = id === active ? 'active' : '';
         const href = id === 'index' ? 'index.html' : `${id}.html`;
