@@ -11,7 +11,8 @@ const headers = (ref) => ({ 'User-Agent': UA, Referer: ref });
 
 // 配置 cookie（GitHub Secrets 注入）：有则用登录态，无则匿名 buvid
 // RSSHub cache.ts 确认配置 cookie 后纯 HTTP 可跑、风控大幅降低（热门 UP 匿名请求易触发 -352）
-const COOKIE_ENV = process.env.BILIBILI_COOKIE || '';
+// 去除粘贴时可能带入的换行符，避免 Node fetch Headers 校验失败
+const COOKIE_ENV = (process.env.BILIBILI_COOKIE || '').replace(/[\r\n]+/g, '').trim();
 
 // dm_img 设备指纹生成（提取自 RSSHub utils.ts，纯计算）
 function gauss(mean, std) {
