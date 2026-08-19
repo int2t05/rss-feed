@@ -7,27 +7,108 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.7;font-size:14px}
-.wrap{max-width:640px;margin:0 auto;padding:48px 20px}
-h1{font-size:1.15rem;font-weight:600;color:#e6edf3;margin-bottom:8px}
-.meta{color:#7d8590;font-size:.85rem;margin-bottom:32px}
-.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:24px;margin-bottom:16px}
-.card p{margin:8px 0}
-code{background:#21262d;padding:2px 6px;border-radius:3px;font-size:.85em}
-.note{color:#7d8590;font-size:.8rem}
-@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}h1{color:#1f2328}.card{background:#f6f8fa;border-color:#d0d7de}code{background:#eaeef2}.note{color:#57606a}}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 96px}
+header{margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid #21262d}
+header h1{font-size:1.15rem;font-weight:600;color:#e6edf3}
+header .meta{color:#7d8590;font-size:.75rem;margin-top:6px}
+.src{margin-bottom:28px}
+.src-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.src-name{font-size:.95rem;font-weight:600;color:#e6edf3}
+.tag{font-size:.65rem;padding:1px 6px;background:#21262d;border-radius:3px;color:#7d8590}
+.badge{font-size:.65rem;padding:1px 6px;background:#1f6feb;border-radius:3px;color:#fff}
+.list{display:flex;flex-direction:column}
+.item{display:flex;gap:12px;padding:7px 10px;border-left:2px solid transparent;text-decoration:none;color:inherit;transition:background .12s}
+.item:hover{background:#161b22;border-left-color:#30363d}
+.item.new{border-left-color:#f0883e}
+.time{color:#6e7681;font-size:.7rem;flex-shrink:0;width:64px;padding-top:2px}
+.title{color:#c9d1d9;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item:hover .title{color:#58a6ff}
+.err{color:#f85149;font-size:.78rem;padding:4px 10px}
+@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}header{border-color:#d0d7de}header h1{color:#1f2328}.src-name{color:#1f2328}.tag{background:#eaeef2;color:#57606a}.item:hover{background:#f6f8fa;border-left-color:#d0d7de}.time{color:#57606a}.title{color:#1f2328}.item:hover .title{color:#0969da}}
 </style>
 </head>
 <body>
 <div class="wrap">
+<header>
 <h1>RSS 订阅</h1>
-<div class="meta">等待首次同步</div>
-<div class="card">
-<p>本页面由 GitHub Actions 每 30 分钟自动生成，当前尚未同步。</p>
-<p class="note">首次使用：</p>
-<p>1. 仓库 <strong>Actions</strong> 标签页 → <code>sync</code> → <strong>Run workflow</strong></p>
-<p>2. 等待约 1 分钟，刷新本页</p>
-<p class="note">订阅列表见 <code>config.txt</code>，格式 <code>名称 | URL</code>。</p>
-</div>
+<div class="meta">2026/8/19 17:37:06 · 每 30 分钟同步</div>
+</header>
+<section class="src error">
+    <div class="src-head"><span class="src-name">DIYgod</span><span class="tag">bilibili</span></div>
+    <p class="err">⚠ RSSHub 实例池全部失败（下次重试）</p>
+  </section>
+<section class="src error">
+    <div class="src-head"><span class="src-name">凉风Kaze</span><span class="tag">bilibili</span></div>
+    <p class="err">⚠ RSSHub 实例池全部失败（下次重试）</p>
+  </section>
+<section class="src">
+    <div class="src-head"><span class="src-name">Cloudflare Blog</span><span class="tag">blog.cloudflare.com</span><span class="badge">20 新</span></div>
+    <div class="list"><a class="item new" href="https://blog.cloudflare.com/rfc9234-bgp-role-model/" target="_blank" rel="noopener">
+      <span class="time">18 小时前</span><span class="title">BGP Role model: tracking the adoption of RFC 9234</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/mcp-security-updates/" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">How Cloudflare detects MCP traffic and helps secure it</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/workers-protected-by-access/" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">Secure all your internal vibe-coded applications — in one click</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/total-eclipse-internet-traffic-iceland-spain-portugal/" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">Total eclipse of the Internet: traffic impacts in Iceland, Spain, and Portugal</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/certificate-transparency-monitoring-ga/" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">Certificate Transparency Monitoring is now generally available</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/ddos-threat-report-2026-h1/" target="_blank" rel="noopener">
+      <span class="time">7 天前</span><span class="title">Cloudflare DDoS Threat Report H1 2026: 1 Tbps attacks soar as DNS floods and geopolitical tensions drive a new wave</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/agents-week-review-august-2026/" target="_blank" rel="noopener">
+      <span class="time">8 天前</span><span class="title">Everything we launched during Agents Week</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/fedramp-class-d-certification/" target="_blank" rel="noopener">
+      <span class="time">8 天前</span><span class="title">Serving the most critical missions: Cloudflare for Government achieves FedRAMP Class D (High) Certified status</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/good-and-bad-agentic-behaviors/" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">Unveiling good and bad behaviors on the Agentic Internet</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/introducing-radar-researcher/" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">Introducing Radar Researcher: An AI tool for exploring Internet data in plain language</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/community-program-refresh/" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">Announcing Cloudflare Ambassadors, Community Engineers, and another $1M in open-source funding</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/workers-ai-gateway-unification/" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">Unifying Workers AI and AI Gateway into a single AI control plane</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/ai-search-easier/" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">Cloudflare AI Search: give your agents a search engine for your data </span>
+    </a><a class="item new" href="https://blog.cloudflare.com/mcp-v2/" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">The next generation of MCP</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/aeo/" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">From ranking to recommended: get your site ready to thrive in the age of AI agents</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/the-agentic-internet/" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">Building an open Agentic Internet: readable, discoverable, callable, and payable</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/kitesurf/" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">Introducing Kitesurf: The agent-first browser that runs in V8 isolates on Cloudflare Workers</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/webmcp/" target="_blank" rel="noopener">
+      <span class="time">12 天前</span><span class="title">Give any website a WebMCP interface</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/cloudflare-sase-sse-gartner-magic-quadrants-2026/" target="_blank" rel="noopener">
+      <span class="time">13 天前</span><span class="title">Cloudflare is the only vendor named a Visionary in 2026 SASE and SSE reports</span>
+    </a><a class="item new" href="https://blog.cloudflare.com/the-agent-access-model/" target="_blank" rel="noopener">
+      <span class="time">13 天前</span><span class="title">The Agent Access Model</span>
+    </a></div>
+  </section>
+<section class="src">
+    <div class="src-head"><span class="src-name">Claude Code Releases</span><span class="tag">github.com</span><span class="badge">10 新</span></div>
+    <div class="list"><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.235" target="_blank" rel="noopener">
+      <span class="time">12 小时前</span><span class="title">v2.1.235</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.234" target="_blank" rel="noopener">
+      <span class="time">1 天前</span><span class="title">v2.1.234</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.233" target="_blank" rel="noopener">
+      <span class="time">4 天前</span><span class="title">v2.1.233</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.232" target="_blank" rel="noopener">
+      <span class="time">5 天前</span><span class="title">v2.1.232</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.231" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">v2.1.231</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.229" target="_blank" rel="noopener">
+      <span class="time">6 天前</span><span class="title">v2.1.229</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.228" target="_blank" rel="noopener">
+      <span class="time">7 天前</span><span class="title">v2.1.228</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.227" target="_blank" rel="noopener">
+      <span class="time">8 天前</span><span class="title">v2.1.227</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.226" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">v2.1.226</span>
+    </a><a class="item new" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.225" target="_blank" rel="noopener">
+      <span class="time">11 天前</span><span class="title">v2.1.225</span>
+    </a></div>
+  </section>
 </div>
 </body>
 </html>
