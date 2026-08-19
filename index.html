@@ -3,30 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RSS 订阅</title>
+<title>首页 · RSS 订阅</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%226%22%20cy%3D%2218%22%20r%3D%222.4%22%20fill%3D%22%2523f0883e%22%2F%3E%3Cpath%20d%3D%22M4.5%2011a8.5%208.5%200%200%201%208.5%208.5%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M4.5%205.5A14%2014%200%200%201%2018.5%2019.5%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <style>
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#21262d;--border2:#30363d;--text:#e6edf3;--text2:#c9d1d9;--muted:#7d8590;--muted2:#6e7681;--accent:#f0883e;--blue:#58a6ff;--green:#3fb950;--red:#f85149}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.7;font-size:14px}
-.wrap{max-width:640px;margin:0 auto;padding:48px 20px}
-h1{font-size:1.15rem;font-weight:600;color:#e6edf3;margin-bottom:8px}
-.meta{color:#7d8590;font-size:.85rem;margin-bottom:32px}
-.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:24px;margin-bottom:16px}
-.card p{margin:8px 0}
-code{background:#21262d;padding:2px 6px;border-radius:3px;font-size:.85em}
-.note{color:#7d8590;font-size:.8rem}
+body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text2);line-height:1.6;font-size:14px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;padding:28px 20px 96px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+header .logo{width:24px;height:24px;color:var(--accent);flex-shrink:0}
+header h1{font-size:1.1rem;font-weight:600;color:var(--text)}
+header .nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav-link{padding:5px 12px;border-radius:6px;text-decoration:none;color:var(--muted);font-size:.82rem;transition:background .12s,color .12s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:var(--surface2);color:var(--text);font-weight:600}
+.meta{color:var(--muted2);font-size:.72rem;margin-bottom:20px}
+/* bento 首页卡片网格 */
+.bento{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.cat-card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s;position:relative;overflow:hidden}
+.cat-card:hover{transform:translateY(-2px);border-color:var(--border2)}
+.cat-card .top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.cat-card .ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff}
+.cat-card .ic svg{width:18px;height:18px}
+.cat-card h2{font-size:1rem;font-weight:600;color:var(--text)}
+.cat-card .stats{display:flex;gap:14px;font-size:.75rem;color:var(--muted)}
+.cat-card .stats b{color:var(--text);font-weight:600}
+.cat-card .stats .fresh b{color:var(--accent)}
+.cat-card .latest{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:.78rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-card .latest .lt{color:var(--text2)}
+.cat-card .arrow{position:absolute;top:18px;right:18px;color:var(--muted2);font-size:1.1rem;transition:transform .15s,color .15s}
+.cat-card:hover .arrow{transform:translateX(3px);color:var(--accent)}
+/* 类别页：源列表 details 默认收住 */
+.cat-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.cat-head .ic{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff}
+.cat-head .ic svg{width:20px;height:20px}
+.cat-head h2{font-size:1.2rem;font-weight:600;color:var(--text)}
+.cat-head .desc{color:var(--muted);font-size:.8rem;margin-left:auto}
+details.src{margin-bottom:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .15s}
+details.src[open]{border-color:var(--border2)}
+details.src>summary{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;list-style:none;user-select:none;transition:background .12s}
+details.src>summary::-webkit-details-marker{display:none}
+details.src>summary:hover{background:var(--surface2)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.src-name{font-size:.9rem;font-weight:600;color:var(--text)}
+.tag{font-size:.65rem;padding:1px 6px;background:var(--surface2);border-radius:3px;color:var(--muted)}
+.badge{font-size:.65rem;padding:1px 6px;background:var(--blue);border-radius:3px;color:#fff}
+.count{font-size:.7rem;color:var(--muted2);margin-left:auto}
+.chev{color:var(--muted2);transition:transform .15s;font-size:.7rem}
+details.src[open] .chev{transform:rotate(90deg)}
+.list{display:flex;flex-direction:column;padding:2px 0}
+.item{display:flex;gap:12px;padding:7px 14px;border-left:2px solid transparent;text-decoration:none;color:inherit;transition:background .12s,border-color .12s}
+.item:hover{background:var(--bg);border-left-color:var(--border2)}
+.item.new{border-left-color:var(--accent)}
+.time{color:var(--muted2);font-size:.7rem;flex-shrink:0;width:64px;padding-top:2px}
+.title{color:var(--text2);font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .12s}
+.item:hover .title{color:var(--blue)}
+.err{color:var(--red);font-size:.78rem;padding:8px 14px}
+@media(prefers-color-scheme:light){:root{--bg:#fff;--surface:#f6f8fa;--surface2:#eef1f4;--border:#eaeef2;--border2:#d0d7de;--text:#1f2328;--text2:#1f2328;--muted:#57606a;--muted2:#57606a;--blue:#0969da}.cat-card:hover{border-color:var(--border2)}.nav-link:hover{background:var(--surface2)}.item:hover{background:#fff;border-left-color:var(--border2)}.title{color:#1f2328}.item:hover .title{color:var(--blue)}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>RSS 订阅</h1>
-<div class="meta">等待首次同步</div>
-<div class="card">
-<p>本页面由 GitHub Actions 每 30 分钟自动生成，当前尚未同步。</p>
-<p class="note">首次使用：</p>
-<p>1. 仓库 <strong>Actions</strong> 标签页 → <code>sync</code> → <strong>Run workflow</strong></p>
-<p>2. 等待约 2 分钟，刷新本页</p>
-<p class="note">首页为类别索引，各类别有独立页面。订阅列表见 <code>config.txt</code>。</p>
-</div>
-</div>
-</body>
-</html>
+<header><span class="logo"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="18" r="2.4" fill="currentColor"/><path d="M4.5 11a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M4.5 5.5A14 14 0 0 1 18.5 19.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><h1>RSS 订阅</h1><nav class="nav"><a class="nav-link active" href="index.html">首页</a><a class="nav-link " href="video.html">视频</a><a class="nav-link " href="ai.html">AI</a><a class="nav-link " href="tech.html">技术</a><a class="nav-link " href="news.html">资讯</a><a class="nav-link " href="community.html">社区</a></nav></header><div class="meta">30 个源 · 838 条新更新 · 2026/8/19 19:08:26 · 每 30 分钟同步</div><div class="bento"><a class="cat-card" href="video.html">
+      <div class="top"><span class="ic" style="background:#fb7299"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg></span><h2>视频 UP 主</h2></div>
+      <div class="stats"><span><b>3</b> 源</span><span><b>2</b> 在线</span><span class="fresh"><b>60</b> 新</span></div>
+      <div class="latest"><span class="lt">欧洲旅游VLOG | 巴塞罗那 罗马 梵蒂冈 威尼斯 米兰 苏黎世 因特拉肯 巴黎</span> · 241 天前</div>
+      <span class="arrow">→</span>
+    </a><a class="cat-card" href="ai.html">
+      <div class="top"><span class="ic" style="background:#a371f7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="15" r="1.2"/></svg></span><h2>AI 动态</h2></div>
+      <div class="stats"><span><b>6</b> 源</span><span><b>5</b> 在线</span><span class="fresh"><b>168</b> 新</span></div>
+      <div class="latest"><span class="lt">How Claude’s text watermark works</span> · 5 天前</div>
+      <span class="arrow">→</span>
+    </a><a class="cat-card" href="tech.html">
+      <div class="top"><span class="ic" style="background:#58a6ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><h2>技术博客</h2></div>
+      <div class="stats"><span><b>5</b> 源</span><span><b>5</b> 在线</span><span class="fresh"><b>267</b> 新</span></div>
+      <div class="latest"><span class="lt">BGP Role model: tracking the adoption of RFC 9234</span> · 19 小时前</div>
+      <span class="arrow">→</span>
+    </a><a class="cat-card" href="news.html">
+      <div class="top"><span class="ic" style="background:#3fb950"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4H6a2 2 0 0 0-2 2v14"/><path d="M18 14H8M15 18H8M12 10H8M10 6H8"/></svg></span><h2>资讯媒体</h2></div>
+      <div class="stats"><span><b>5</b> 源</span><span><b>5</b> 在线</span><span class="fresh"><b>110</b> 新</span></div>
+      <div class="latest"><span class="lt">量子存储器间纠缠距离提升至 420 公里</span> · 1 小时前</div>
+      <span class="arrow">→</span>
+    </a><a class="cat-card" href="community.html">
+      <div class="top"><span class="ic" style="background:#f0883e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h2>开发者社区</h2></div>
+      <div class="stats"><span><b>11</b> 源</span><span><b>11</b> 在线</span><span class="fresh"><b>233</b> 新</span></div>
+      <div class="latest"><span class="lt">harry0703/MoneyPrinterTurbo</span> · </div>
+      <span class="arrow">→</span>
+    </a></div></div></body></html>
