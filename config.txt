@@ -1,0 +1,12 @@
+# 通用 RSS 订阅列表
+# 每行：名称 | URL
+# URL 为完整直链或 RSSHub 路由（/开头）
+# 空行和 # 开头的行会被忽略
+
+# B站 UP 主（RSSHub 路由）
+DIYgod | /bilibili/user/video/2267573
+凉风Kaze | /bilibili/user/video/946974
+
+# 技术博客（直链）
+Cloudflare Blog | https://blog.cloudflare.com/rss/
+Claude Code Releases | https://github.com/anthropics/claude-code/releases.atom

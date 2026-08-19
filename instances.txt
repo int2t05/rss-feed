@@ -1,0 +1,6 @@
+# RSSHub 公共实例池，按成功率排序，每行一个
+# 失败时自动轮换到下一个实例
+https://rsshub.rssforever.com
+https://hub.slarker.me
+https://rsshub.pseudoyu.com
+https://rsshub.app

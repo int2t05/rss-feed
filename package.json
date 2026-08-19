@@ -1,0 +1,13 @@
+{
+  "name": "rss-feed",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "通用 RSS 订阅仪表盘 · GitHub Actions 每30分钟拉取，静态托管 GitHub Pages",
+  "scripts": {
+    "sync": "node scripts/fetch.mjs"
+  },
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  }
+}
