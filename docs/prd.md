@@ -21,11 +21,12 @@
 ## 3. 功能需求
 
 ### 3.1 订阅配置
-- 行式配置：`名称 | URL`
+- 分类头 `[id|标题|图标|主题色]`，源行 `名称 | URL | 显示条数(可选)`
 - URL 两种：
   - 完整直链（`https://...rss.xml` / `.atom`）
   - RSSHub 路由（`/开头`，如 `/bilibili/user/video/UID`）
 - 支持空行、`#` 注释
+- 类别与源完全由 config 驱动，新增/删除类别只需改 config
 
 ### 3.2 数据拉取
 - B站路由（`/bilibili/user/video/:uid`）：直连 B站 API（WBI 签名 + 匿名 buvid + dm_img 指纹），避开公共 RSSHub 实例对 B站的风控
@@ -57,8 +58,7 @@
 ## 5. 约束
 
 - 实时性：GitHub Actions cron 最短 5 分钟且不保证准时，实际延迟 5–35 分钟，非真实时
-- 抖音等强反爬源不稳定（依赖 RSSHub 实例的 Playwright 支持）
-- B站等非 RSS 源依赖公共 RSSHub 实例可用性
+- B站 API 需配 `BILIBILI_COOKIE`，匿名对热门 UP 易 -352 风控
 - 合规：底层依赖非公开 API（B站等），个人自用，勿商业化
 
 ## 6. 验收标准

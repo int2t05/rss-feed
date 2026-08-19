@@ -1,19 +1,19 @@
 # UP 主视频订阅 · GitHub Actions 部署深度调研
 
 Generated: 2026-08-19
-Scope: 在上一版《UP 主视频更新订阅工具调研》基础上，深入到 RSSHub 源码级实现，并聚焦"GitHub 托管网页版 + Actions workflow"部署方案的可行性、实时性边界与现成方案
+Scope: RSSHub 源码级实现分析，聚焦"GitHub 托管网页版 + Actions workflow"部署方案的可行性、实时性边界与现成方案
 方法: 直接克隆 [DIYgod/RSSHub](https://github.com/DIYgod/RSSHub) 与 [gqy20/rss2cubox](https://github.com/gqy20/rss2cubox) 源码逐文件分析，辅以部署配置与官方文档
-关联文档: `video-subscription-tools.md`（宏观方案，本篇为其源码级深化）
+关联文档: `video-subscription-tools.md`（宏观方案）
 
 ## 1. 调研目标与范围
 
-上一版已确认"RSSHub + GitHub Actions + 静态仪表盘"是可行方向，但留有三个空白：
+确认"RSSHub + GitHub Actions + 静态仪表盘"方向的三个关键问题：
 
 1. RSSHub 的 B站/抖音路由**源码到底怎么实现**反爬（WBI 签名、cookie、Playwright）？
 2. RSSHub 能否**直接在 GitHub Actions 里运行**？还是只能拉取外部实例？
 3. 是否有**现成的"Actions 拉 RSS → GitHub Pages 仪表盘"项目**可复用？
 
-本篇逐个击穿。源码已落盘至 `rsshub-src/`、`rss2cubox-src/`（工作目录下），结论均可回溯。
+逐个击穿。源码已落盘至 `rsshub-src/`、`rss2cubox-src/`（工作目录下），结论均可回溯。
 
 ## 2. 核心结论
 
@@ -384,7 +384,7 @@ flowchart TD
 
 ### 源码（已克隆至工作目录，访问日期 2026-08-19）
 
-**RSSHub**（`rsshub-src/`，[DIYgod/RSSHub](https://github.com/DIYgod/RSSHub)，45.8k★，AGPL-3.0）：
+**RSSHub**（`rsshub-src/`，[DIYgod/RSSHub](https://github.com/DIYgod/RSSHub)，AGPL-3.0）：
 
 - `lib/routes/bilibili/video.ts` — `/user/video/:uid`，`requirePuppeteer: false`，API 优先 + Playwright 兜底，API 参数 `ps=30&order=pubdate`
 - `lib/routes/bilibili/utils.ts` — WBI 签名 `addWbiVerifyInfo`（sort+wts+md5）、dm_img 指纹 `getDmImgList`/`getDmImgInter`
@@ -408,7 +408,7 @@ flowchart TD
 
 ### 相关项目
 
-- [AboutRSS/ALL-about-RSS](https://github.com/AboutRSS/ALL-about-RSS) — 5.8k★，RSS 资源索引（无直接可用仪表盘）
+- [AboutRSS/ALL-about-RSS](https://github.com/AboutRSS/ALL-about-RSS) — RSS 资源索引（无直接可用仪表盘）
 - [sansan0/TrendRadar](https://github.com/sansan0/TrendRadar) — AI 舆情 + RSS 聚合，Docker 部署，定位不同，stars/forks 异常仅作参考
 - [ValMystletainn/infiv](https://github.com/ValMystletainn/infiv) — `.github/workflows/daily_flow.yaml` checkout rsshub 改造版 + `BILIBILI_COOKIE`，另一 Actions+RSSHub 案例
 

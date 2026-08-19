@@ -1,26 +1,17 @@
 // 通用 RSS 同步脚本：拉取 feed → rss-parser 解析 → 去重 → 生成多页面仪表盘
 // 纯拉取架构：直链源直接 fetch，RSSHub 路由源走实例池轮换，B站路由直连 API
-import { readFileSync, writeFileSync } from 'node:fs';
+// 类别/源完全由 config.txt 驱动，新增/删除类别只需改 config.txt
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import Parser from 'rss-parser';
 import { renderIndex, renderCategory } from './render.mjs';
-import { fetchBilibiliVideos, fetchBilibiliDynamics } from './bilibili.mjs';
+import { fetchBilibiliVideos } from './bilibili.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
+const DIST = path.join(ROOT, 'dist');
+mkdirSync(DIST, { recursive: true });
 const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
-
-// 每源默认显示条数（可配置项）：config 第三段可覆盖单源，改此值改全局默认
 const DEFAULT_LIMIT = 10;
-
-// 类别元信息：id(页面文件名) / 标题 / 图标 / 主题色
-const CATEGORIES = [
-    { id: 'video', title: '视频 UP 主', icon: 'video', color: '#fb7299' },
-    { id: 'ai', title: 'AI 动态', icon: 'ai', color: '#a371f7' },
-    { id: 'academic', title: '论文', icon: 'academic', color: '#f778ba' },
-    { id: 'tech', title: '技术博客', icon: 'tech', color: '#58a6ff' },
-    { id: 'news', title: '资讯媒体', icon: 'news', color: '#3fb950' },
-    { id: 'community', title: '开发者社区', icon: 'community', color: '#f0883e' },
-];
 
 // 读取行式配置，忽略空行与 # 注释
 function readLines(file) {
@@ -30,14 +21,19 @@ function readLines(file) {
         .filter((l) => l && !l.startsWith('#'));
 }
 
-// 解析分类订阅列表：[分类] 段标记类别，每行 名称 | URL | 显示条数(可选)
+// 解析 config.txt：分类头 [id|标题|图标|主题色] + 源行 名称|URL|显示条数
+// 返回 { categories: [{id,title,icon,color}], groups: {id: [源]} }
 function parseConfig(file) {
     const lines = readLines(file);
+    const categories = [];
     const groups = {};
     let current = null;
     for (const line of lines) {
         if (line.startsWith('[') && line.endsWith(']')) {
-            current = line.slice(1, -1);
+            const parts = line.slice(1, -1).split('|').map((s) => s.trim());
+            const cat = { id: parts[0], title: parts[1] || parts[0], icon: parts[2] || 'default', color: parts[3] || '#6e7681' };
+            categories.push(cat);
+            current = cat.id;
             groups[current] = [];
             continue;
         }
@@ -46,14 +42,14 @@ function parseConfig(file) {
         if (!name || !url) continue;
         groups[current].push({ name, url, limit: limit ? parseInt(limit, 10) || DEFAULT_LIMIT : DEFAULT_LIMIT });
     }
-    return groups;
+    return { categories, groups };
 }
 
 const instances = readLines('instances.txt');
-const groups = parseConfig('config.txt');
+const { categories: CATEGORIES, groups } = parseConfig('config.txt');
 
 // 读取去重状态：{ url: [条目ID...] }
-const statePath = path.join(ROOT, 'state.json');
+const statePath = path.join(DIST, 'state.json');
 let state = {};
 try {
     state = JSON.parse(readFileSync(statePath, 'utf8'));
@@ -97,11 +93,8 @@ async function fetchFromRsshub(route) {
 
 // 拉取单个源：三路分发，返回条目数组
 async function fetchItems(source) {
-    const biliMatch = source.url.match(/^\/bilibili\/user\/(video|dynamic)\/(\w+)/);
-    if (biliMatch) {
-        const [, type, uid] = biliMatch;
-        return type === 'dynamic' ? await fetchBilibiliDynamics(uid) : await fetchBilibiliVideos(uid);
-    }
+    const biliMatch = source.url.match(/^\/bilibili\/user\/video\/(\w+)/);
+    if (biliMatch) return await fetchBilibiliVideos(biliMatch[1]);
     let xml;
     if (source.url.startsWith('/')) {
         xml = await fetchFromRsshub(source.url);
@@ -164,11 +157,11 @@ for (const cat of CATEGORIES) {
 
 const updated = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) + ' · 每 30 分钟同步';
 
-// 生成首页 bento 索引 + 各类别页
+// 生成首页 bento 索引 + 各类别页（输出到 dist/）
 const categories = CATEGORIES.map((cat) => ({ ...cat, sources: allResults[cat.id] }));
-writeFileSync(path.join(ROOT, 'index.html'), renderIndex(categories, updated));
+writeFileSync(path.join(DIST, 'index.html'), renderIndex(categories, updated));
 for (const cat of categories) {
-    writeFileSync(path.join(ROOT, `${cat.id}.html`), renderCategory(cat, categories, updated));
+    writeFileSync(path.join(DIST, `${cat.id}.html`), renderCategory(cat, categories, updated));
 }
 writeFileSync(statePath, JSON.stringify(newState, null, 2));
 

@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html video.html ai.html tech.html news.html community.html academic.html state.json
+          git add dist/
           if git diff --staged --quiet; then
             echo "无更新"
           else

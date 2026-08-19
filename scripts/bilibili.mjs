@@ -118,29 +118,3 @@ export async function fetchBilibiliVideos(uid) {
         }));
     });
 }
-
-// UP 主动态列表（图文/转发/视频投稿动态）：/bilibili/user/dynamic/:uid
-// 走 polymer web-dynamic v1 feed space API，需 cookie（匿名对热门 UP 易 -352）
-export async function fetchBilibiliDynamics(uid) {
-    return fetchWithRetry(uid, (mixinKey) => {
-        const params = `host_mid=${uid}&offset=&features=itemOpusStyle`;
-        return 'https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/space?' + sign(params, mixinKey);
-    }, (data) => {
-        const items = data.items ?? [];
-        return items.map((it) => {
-            const mod = it.modules || {};
-            const author = mod.module_author || {};
-            const dyn = mod.module_dynamic || {};
-            const major = dyn.major || {};
-            // 动态类型多样：视频投稿取 archive.title，图文取 desc.text，专栏取 opus.summary.text
-            const title = major.archive?.title || dyn.desc?.text || major.opus?.summary?.text || '动态';
-            return {
-                title: title.length > 60 ? title.slice(0, 60) + '…' : title,
-                link: `https://t.bilibili.com/${it.id_str}`,
-                id: it.id_str,
-                pubDate: new Date((author.pub_ts || 0) * 1000).toUTCString(),
-                author: author.name || '',
-            };
-        });
-    });
-}

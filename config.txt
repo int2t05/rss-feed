@@ -1,26 +1,20 @@
-# 通用 RSS 订阅列表
-# 格式：名称 | URL | 显示条数(可选，默认10)
+# 通用 RSS 订阅列表（唯一配置源：改此文件，页面/导航/类别自动同步）
+# 分类头：[id|标题|图标|主题色]  图标可选: video/ai/academic/tech/news/community，未匹配用默认
+# 源格式：名称 | URL | 显示条数(可选，默认10)
 # URL 为完整直链或 RSSHub 路由（/开头）
-# 用 [分类] 段划分类别，对应独立页面
 # 空行和 # 开头的行会被忽略
 # 路由速查见 reference/rsshub-routes.md
 
-[video]
+[video|视频 UP 主|video|#fb7299]
 # B站技术分享 UP 主（API 直连，配 BILIBILI_COOKIE 后稳定）
 Pi | /bilibili/user/video/316183842
-Pi 动态 | /bilibili/user/dynamic/316183842
 奇乐编程学院 | /bilibili/user/video/372313671
-奇乐编程学院 动态 | /bilibili/user/dynamic/372313671
 技术蛋老师 | /bilibili/user/video/327247876
-技术蛋老师 动态 | /bilibili/user/dynamic/327247876
 技术胖 | /bilibili/user/video/165659472
-技术胖 动态 | /bilibili/user/dynamic/165659472
 峰华前端工程师 | /bilibili/user/video/302954484
-峰华前端工程师 动态 | /bilibili/user/dynamic/302954484
 先进编译实验室 | /bilibili/user/video/1540261574
-先进编译实验室 动态 | /bilibili/user/dynamic/1540261574
 
-[ai]
+[ai|AI 动态|ai|#a371f7]
 # AI 公司动态与研究（直链优先，避免 RSSHub 实例波动）
 Anthropic News | /anthropic/news
 Anthropic Engineering | /anthropic/engineering
@@ -38,14 +32,13 @@ Meta AI | https://ai.meta.com/blog/rss/
 AWS ML Blog | https://aws.amazon.com/blogs/machine-learning/feed/
 BAIR Blog | https://bair.berkeley.edu/blog/feed.xml
 
-[academic]
+[academic|论文|academic|#f778ba]
 # arXiv 论文（日更高量，独立分类避免 AI 类过载）
 arXiv cs.AI | https://rss.arxiv.org/rss/cs.AI
 arXiv cs.LG | https://rss.arxiv.org/rss/cs.LG
 arXiv cs.CL | https://rss.arxiv.org/rss/cs.CL
 
-[tech]
-# 技术博客
+[tech|技术博客|tech|#58a6ff]
 Cloudflare Blog | https://blog.cloudflare.com/rss/
 Claude Code Releases | https://github.com/anthropics/claude-code/releases.atom
 overreacted | https://overreacted.io/rss.xml
@@ -53,8 +46,7 @@ Anthropic Research | /anthropic/research
 GitHub Blog Engineering | https://github.blog/engineering/feed/
 少数派 | https://sspai.com/feed
 
-[news]
-# 资讯媒体（直链优先）
+[news|资讯媒体|news|#3fb950]
 Solidot | /solidot
 Solidot 科学 | /solidot/science
 知乎日报 | /zhihu/daily
@@ -69,8 +61,7 @@ TechCrunch AI | https://techcrunch.com/category/artificial-intelligence/feed/
 The Verge AI | https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
 MIT Tech Review | https://www.technologyreview.com/feed/
 
-[community]
-# 开发者社区
+[community|开发者社区|community|#f0883e]
 GitHub Trending Python | /github/trending/daily/python
 GitHub Trending TypeScript | /github/trending/daily/typescript
 GitHub Trending Go | /github/trending/daily/go

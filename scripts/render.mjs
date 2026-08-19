@@ -54,7 +54,7 @@ function platformColor(url) {
 // RSS 广播图标（favicon）
 const RSS_ICON = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="18" r="2.4" fill="currentColor"/><path d="M4.5 11a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M4.5 5.5A14 14 0 0 1 18.5 19.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
 
-// 类别图标（线性 SVG，统一风格）
+// 类别图标（线性 SVG，统一风格）；config.txt 的 icon 字段未匹配时用 DEFAULT_ICON
 const CAT_ICONS = {
     video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg>',
     ai: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="15" r="1.2"/></svg>',
@@ -63,16 +63,17 @@ const CAT_ICONS = {
     news: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4H6a2 2 0 0 0-2 2v14"/><path d="M18 14H8M15 18H8M12 10H8M10 6H8"/></svg>',
     community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
 };
+const DEFAULT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+function catIcon(name) { return CAT_ICONS[name] || DEFAULT_ICON; }
 
-// 共享 head + 顶部导航
-function head(title, active) {
-    const nav = ['index', 'video', 'ai', 'academic', 'tech', 'news', 'community'];
-    const labels = { index: '首页', video: '视频', ai: 'AI', academic: '论文', tech: '技术', news: '资讯', community: '社区' };
-    const links = nav.map((id) => {
-        const cls = id === active ? 'active' : '';
-        const href = id === 'index' ? 'index.html' : `${id}.html`;
-        return `<a class="nav-link ${cls}" href="${href}">${labels[id]}</a>`;
-    }).join('');
+// 共享 head + 顶部导航（从 categories 动态生成）
+function head(title, active, categories) {
+    const links = [{ id: 'index', label: '首页' }, ...categories.map((c) => ({ id: c.id, label: c.title }))]
+        .map((item) => {
+            const cls = item.id === active ? 'active' : '';
+            const href = item.id === 'index' ? 'index.html' : `${item.id}.html`;
+            return `<a class="nav-link ${cls}" href="${href}">${esc(item.label)}</a>`;
+        }).join('');
     return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -163,7 +164,7 @@ export function renderIndex(categories, updated) {
                 ? `<div class="latest"><span class="lt">${esc(st.latest.title)}</span> · ${relTime(st.latest.pubDate)}</div>`
                 : `<div class="latest">暂无数据</div>`;
             return `<a class="cat-card" href="${cat.id}.html">
-      <div class="top"><span class="ic" style="background:${cat.color}">${CAT_ICONS[cat.icon] || ''}</span><h2>${esc(cat.title)}</h2></div>
+      <div class="top"><span class="ic" style="background:${cat.color}">${catIcon(cat.icon)}</span><h2>${esc(cat.title)}</h2></div>
       <div class="stats"><span><b>${st.total}</b> 源</span><span><b>${st.online}</b> 在线</span><span class="fresh"><b>${st.fresh}</b> 新</span></div>
       ${latestHtml}
       <span class="arrow">→</span>
@@ -172,7 +173,7 @@ export function renderIndex(categories, updated) {
         .join('');
     const totalAll = categories.reduce((s, c) => s + c.sources.length, 0);
     const freshAll = categories.reduce((s, c) => s + catStat(c.sources).fresh, 0);
-    return `${head('首页', 'index')}<div class="meta">${totalAll} 个源 · ${freshAll} 条新更新 · ${esc(updated)}</div><div class="bento">${cards}</div>${FOOTER}`;
+    return `${head('首页', 'index', categories)}<div class="meta">${totalAll} 个源 · ${freshAll} 条新更新 · ${esc(updated)}</div><div class="bento">${cards}</div>${FOOTER}`;
 }
 
 // 类别页：所有源 details 默认收住（无 open 属性）
@@ -198,5 +199,5 @@ export function renderCategory(cat, categories, updated) {
   </details>`;
         })
         .join('\n');
-    return `${head(cat.title, cat.id)}<div class="cat-head"><span class="ic" style="background:${cat.color}">${CAT_ICONS[cat.icon] || ''}</span><h2>${esc(cat.title)}</h2><span class="desc">${st.total} 源 · ${st.online} 在线 · ${st.fresh} 新</span></div><div class="meta">${esc(updated)}</div>${sections}${FOOTER}`;
+    return `${head(cat.title, cat.id, categories)}<div class="cat-head"><span class="ic" style="background:${cat.color}">${catIcon(cat.icon)}</span><h2>${esc(cat.title)}</h2><span class="desc">${st.total} 源 · ${st.online} 在线 · ${st.fresh} 新</span></div><div class="meta">${esc(updated)}</div>${sections}${FOOTER}`;
 }

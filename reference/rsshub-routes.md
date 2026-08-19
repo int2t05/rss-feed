@@ -1,6 +1,6 @@
 # RSSHub 路由速查表
 
-> 本项目订阅源的参考手册。RSSHub 把"非 RSS 站点"转成 RSS feed，[GitHub: DIYgod/RSSHub](https://github.com/DIYgod/RSSHub) 45.8k★，支持 1600+ 平台。
+> 本项目订阅源的参考手册。RSSHub 把"非 RSS 站点"转成 RSS feed，支持 1600+ 平台。
 
 ## 1. 路由格式
 
@@ -13,7 +13,7 @@ RSSHub 路由完整 URL = `实例地址 + 路由`，如 `https://rsshub.rssforev
 
 ## 2. 已验证可用路由
 
-实例 `rsshub.rssforever.com`，2026-08-19 实测 200 + 有数据：
+以公共实例实测，返回 XML + 有数据：
 
 | 路由 | 条数 | 说明 |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ RSSHub 路由完整 URL = `实例地址 + 路由`，如 `https://rsshub.rssforev
 ## 4. 实例池
 
 `instances.txt` 列公共实例，按成功率排序，失败自动轮换。可添加：
-- `https://rsshub.rssforever.com`（本项验证最稳）
+- `https://rsshub.rssforever.com`
 - `https://hub.slarker.me`
 - `https://rsshub.pseudoyu.com`
 - `https://rsshub.app`（官方，限流）

@@ -1,3 +1,7 @@
 # 依赖与日志
 node_modules/
 *.log
+
+# 根目录不再放生成产物（统一输出到 dist/）
+/*.html
+/state.json
