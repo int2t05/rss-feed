@@ -170,11 +170,6 @@ writeFileSync(path.join(ROOT, 'index.html'), renderIndex(categories, updated));
 for (const cat of categories) {
     writeFileSync(path.join(ROOT, `${cat.id}.html`), renderCategory(cat, categories, updated));
 }
-// 清理 stale state：只保留当前 config 中的源，移除已删除源的旧条目
-const currentUrls = new Set(Object.values(groups).flat().map((s) => s.url));
-for (const url of Object.keys(newState)) {
-    if (!currentUrls.has(url)) delete newState[url];
-}
 writeFileSync(statePath, JSON.stringify(newState, null, 2));
 
 const totalSources = categories.reduce((s, c) => s + c.sources.length, 0);
