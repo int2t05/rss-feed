@@ -1,13 +1,25 @@
-// 通用 RSS 同步脚本：拉取 feed → rss-parser 解析 → 去重 → 生成静态仪表盘
-// 纯拉取架构：直链源直接 fetch，RSSHub 路由源走实例池轮换，零服务
+// 通用 RSS 同步脚本：拉取 feed → rss-parser 解析 → 去重 → 生成多页面仪表盘
+// 纯拉取架构：直链源直接 fetch，RSSHub 路由源走实例池轮换，B站路由直连 API
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import Parser from 'rss-parser';
-import { renderHTML } from './render.mjs';
+import { renderIndex, renderCategory } from './render.mjs';
 import { fetchBilibiliVideos } from './bilibili.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
+
+// 每源默认显示条数（可配置项）：config 第三段可覆盖单源，改此值改全局默认
+const DEFAULT_LIMIT = 10;
+
+// 类别元信息：id(页面文件名) / 标题 / 图标 / 主题色
+const CATEGORIES = [
+    { id: 'video', title: '视频 UP 主', icon: 'video', color: '#fb7299' },
+    { id: 'ai', title: 'AI 动态', icon: 'ai', color: '#a371f7' },
+    { id: 'tech', title: '技术博客', icon: 'tech', color: '#58a6ff' },
+    { id: 'news', title: '资讯媒体', icon: 'news', color: '#3fb950' },
+    { id: 'community', title: '开发者社区', icon: 'community', color: '#f0883e' },
+];
 
 // 读取行式配置，忽略空行与 # 注释
 function readLines(file) {
@@ -17,16 +29,27 @@ function readLines(file) {
         .filter((l) => l && !l.startsWith('#'));
 }
 
-// 每源默认显示条数（可配置项）：config 第三段可覆盖单源，改此值改全局默认
-const DEFAULT_LIMIT = 10;
-
-// 解析订阅列表：名称 | URL | 显示条数(可选，默认 DEFAULT_LIMIT)
-const sources = readLines('config.txt').map((line) => {
-    const [name, url, limit] = line.split('|').map((s) => s.trim());
-    return { name, url, limit: limit ? parseInt(limit, 10) || DEFAULT_LIMIT : DEFAULT_LIMIT };
-});
+// 解析分类订阅列表：[分类] 段标记类别，每行 名称 | URL | 显示条数(可选)
+function parseConfig(file) {
+    const lines = readLines(file);
+    const groups = {};
+    let current = null;
+    for (const line of lines) {
+        if (line.startsWith('[') && line.endsWith(']')) {
+            current = line.slice(1, -1);
+            groups[current] = [];
+            continue;
+        }
+        if (!current) continue;
+        const [name, url, limit] = line.split('|').map((s) => s.trim());
+        if (!name || !url) continue;
+        groups[current].push({ name, url, limit: limit ? parseInt(limit, 10) || DEFAULT_LIMIT : DEFAULT_LIMIT });
+    }
+    return groups;
+}
 
 const instances = readLines('instances.txt');
+const groups = parseConfig('config.txt');
 
 // 读取去重状态：{ url: [条目ID...] }
 const statePath = path.join(ROOT, 'state.json');
@@ -56,7 +79,6 @@ async function fetchFromRsshub(route) {
 
 // 拉取单个源：三路分发，返回条目数组
 async function fetchItems(source) {
-    // B站路由直连 B站 API（避开公共 RSSHub 实例对 B站的风控/限流）
     const biliMatch = source.url.match(/^\/bilibili\/user\/video\/(\w+)/);
     if (biliMatch) {
         return await fetchBilibiliVideos(biliMatch[1]);
@@ -81,30 +103,43 @@ async function fetchItems(source) {
     }));
 }
 
-// 逐个拉取并去重
-const results = [];
-for (const s of sources) {
+// 逐个拉取并去重，返回带 fresh 标记的结果
+async function syncSource(s) {
     let items;
     try {
         items = await fetchItems(s);
     } catch (error) {
-        // 源失败时保留旧状态，不丢失历史
         newState[s.url] = state[s.url] || [];
-        results.push({ ...s, error: error.message, items: [], fresh: [] });
-        continue;
+        return { ...s, error: error.message, items: [], fresh: [] };
     }
     const seen = new Set(state[s.url] || []);
     const fresh = items.filter((it) => !seen.has(it.id));
-    // 新条目 ID 置前，合并历史，保留最近 100 条避免无限增长
     newState[s.url] = [...new Set([...fresh.map((i) => i.id), ...(state[s.url] || [])])].slice(0, 100);
-    results.push({ ...s, items, fresh });
+    return { ...s, items, fresh };
+}
+
+// 顺序拉取所有源（避免并发触发风控）
+const allResults = {};
+for (const cat of CATEGORIES) {
+    const sources = groups[cat.id] || [];
+    console.log(`拉取 [${cat.title}] ${sources.length} 源...`);
+    allResults[cat.id] = [];
+    for (const s of sources) {
+        allResults[cat.id].push(await syncSource(s));
+    }
 }
 
 const updated = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) + ' · 每 30 分钟同步';
 
-writeFileSync(path.join(ROOT, 'index.html'), renderHTML(results, updated));
+// 生成首页 bento 索引 + 各类别页
+const categories = CATEGORIES.map((cat) => ({ ...cat, sources: allResults[cat.id] }));
+writeFileSync(path.join(ROOT, 'index.html'), renderIndex(categories, updated));
+for (const cat of categories) {
+    writeFileSync(path.join(ROOT, `${cat.id}.html`), renderCategory(cat, categories, updated));
+}
 writeFileSync(statePath, JSON.stringify(newState, null, 2));
 
-const totalFresh = results.reduce((s, c) => s + (c.fresh?.length || 0), 0);
-const errors = results.filter((c) => c.error).length;
-console.log(`同步完成：${results.length} 个源，${totalFresh} 条新条目，${errors} 个源失败`);
+const totalSources = categories.reduce((s, c) => s + c.sources.length, 0);
+const totalFresh = categories.reduce((s, c) => s + c.sources.reduce((a, b) => a + (b.fresh?.length || 0), 0), 0);
+const errors = categories.reduce((s, c) => s + c.sources.filter((b) => b.error).length, 0);
+console.log(`同步完成：${totalSources} 个源，${totalFresh} 条新条目，${errors} 个源失败，${categories.length + 1} 个页面`);

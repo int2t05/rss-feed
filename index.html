@@ -4,283 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RSS 订阅</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%226%22%20cy%3D%2218%22%20r%3D%222.4%22%20fill%3D%22%2523f0883e%22%2F%3E%3Cpath%20d%3D%22M4.5%2011a8.5%208.5%200%200%201%208.5%208.5%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M4.5%205.5A14%2014%200%200%201%2018.5%2019.5%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.7;font-size:14px}
-.wrap{max-width:720px;margin:0 auto;padding:32px 20px 96px}
-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid #21262d}
-header .brand{display:flex;align-items:center;gap:10px}
-header .logo{width:22px;height:22px;color:#f0883e;flex-shrink:0}
-header h1{font-size:1.15rem;font-weight:600;color:#e6edf3}
-header .stats{display:flex;gap:16px;margin-top:10px;font-size:.75rem;color:#7d8590}
-header .stats b{color:#e6edf3;font-weight:600}
-header .stats .fresh b{color:#f0883e}
-header .meta{color:#6e7681;font-size:.72rem;margin-top:8px}
-/* details 原生折叠：summary 为源标题栏，点击切换 */
-details.src{margin-bottom:10px;background:#161b22;border:1px solid #21262d;border-radius:8px;overflow:hidden;transition:border-color .15s}
-details.src[open]{border-color:#30363d}
-details.src>summary{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;list-style:none;user-select:none;transition:background .12s}
-details.src>summary::-webkit-details-marker{display:none}
-details.src>summary:hover{background:#1c2128}
-.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.src-name{font-size:.92rem;font-weight:600;color:#e6edf3}
-.tag{font-size:.65rem;padding:1px 6px;background:#21262d;border-radius:3px;color:#7d8590}
-.badge{font-size:.65rem;padding:1px 6px;background:#1f6feb;border-radius:3px;color:#fff}
-.count{font-size:.7rem;color:#6e7681;margin-left:auto}
-.list{display:flex;flex-direction:column;padding:2px 0}
-.item{display:flex;gap:12px;padding:7px 14px;border-left:2px solid transparent;text-decoration:none;color:inherit;transition:background .12s,border-color .12s}
-.item:hover{background:#0d1117;border-left-color:#30363d}
-.item.new{border-left-color:#f0883e}
-.time{color:#6e7681;font-size:.7rem;flex-shrink:0;width:64px;padding-top:2px}
-.title{color:#c9d1d9;font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .12s}
-.item:hover .title{color:#58a6ff}
-.err{color:#f85149;font-size:.78rem;padding:8px 14px}
-@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}header{border-color:#d0d7de}header h1{color:#1f2328}header .stats b{color:#1f2328}details.src{background:#f6f8fa;border-color:#eaeef2}details.src[open]{border-color:#d0d7de}details.src>summary:hover{background:#eef1f4}.src-name{color:#1f2328}.tag{background:#eaeef2;color:#57606a}.item:hover{background:#fff;border-left-color:#d0d7de}.time{color:#57606a}.title{color:#1f2328}.item:hover .title{color:#0969da}.count{color:#57606a}}
+.wrap{max-width:640px;margin:0 auto;padding:48px 20px}
+h1{font-size:1.15rem;font-weight:600;color:#e6edf3;margin-bottom:8px}
+.meta{color:#7d8590;font-size:.85rem;margin-bottom:32px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:24px;margin-bottom:16px}
+.card p{margin:8px 0}
+code{background:#21262d;padding:2px 6px;border-radius:3px;font-size:.85em}
+.note{color:#7d8590;font-size:.8rem}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header>
-<div class="brand"><span class="logo"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="18" r="2.4" fill="currentColor"/><path d="M4.5 11a8.5 8.5 0 0 1 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M4.5 5.5A14 14 0 0 1 18.5 19.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><h1>RSS 订阅</h1></div>
-<div class="stats"><span><b>11</b> 个源</span><span><b>10</b> 在线</span><span class="fresh"><b>0</b> 条新更新</span></div>
-<div class="meta">2026/8/19 18:52:41 · 每 30 分钟同步</div>
-</header>
-<details class="src" open>
-    <summary><span class="dot" style="background:#fb7299"></span><span class="src-name">DIYgod</span><span class="tag">bilibili</span><span class="count">显示 10/30</span></summary>
-    <div class="list"><a class="item" href="https://www.bilibili.com/video/BV1hzqrBtEMP" target="_blank" rel="noopener">
-      <span class="time">241 天前</span><span class="title">欧洲旅游VLOG | 巴塞罗那 罗马 梵蒂冈 威尼斯 米兰 苏黎世 因特拉肯 巴黎</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1eu4m1N7cL" target="_blank" rel="noopener">
-      <span class="time">922 天前</span><span class="title">【幻兽帕鲁】佐伊塔主暴揍佐伊塔主</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1vF4m1T7Wi" target="_blank" rel="noopener">
-      <span class="time">922 天前</span><span class="title">【幻兽帕鲁】佐伊塔主老婆带回家</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1DH4y1m7oJ" target="_blank" rel="noopener">
-      <span class="time">1058 天前</span><span class="title">英国旅游VLOG | 爱丁堡圣诞节</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1yz4y147Ht" target="_blank" rel="noopener">
-      <span class="time">1125 天前</span><span class="title">女友浴室沉思录，非正常录音</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1UT411E762" target="_blank" rel="noopener">
-      <span class="time">1485 天前</span><span class="title">英国旅游VLOG | 英格兰湖区</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1iv4y1M7iu" target="_blank" rel="noopener">
-      <span class="time">1514 天前</span><span class="title">英国旅游VLOG | 发小带你逛哈利波特制片厂</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1aQ4y1S7YX" target="_blank" rel="noopener">
-      <span class="time">1752 天前</span><span class="title">一起动森过万圣节</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1qF411a7Y5" target="_blank" rel="noopener">
-      <span class="time">1753 天前</span><span class="title">鬼灭之刃火之神血风谭：火之神神乐</span>
-    </a><a class="item" href="https://www.bilibili.com/video/BV1NT4y1d7Vh" target="_blank" rel="noopener">
-      <span class="time">1753 天前</span><span class="title">鬼灭之刃火之神血风谭：蜘蛛妈妈之死</span>
-    </a></div>
-  </details>
-<details class="src error"><summary><span class="dot" style="background:#f85149"></span><span class="src-name">凉风Kaze</span><span class="tag">bilibili</span><span class="count">源失败</span></summary><p class="err">⚠ B站风控，3 次重试失败（Unexpected token '&lt;', &quot;&lt;!DOCTYPE &quot;... is not valid JSON）（下次重试）</p></details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#f38020"></span><span class="src-name">Cloudflare Blog</span><span class="tag">blog.cloudflare.com</span><span class="count">显示 10/20</span></summary>
-    <div class="list"><a class="item" href="https://blog.cloudflare.com/rfc9234-bgp-role-model/" target="_blank" rel="noopener">
-      <span class="time">19 小时前</span><span class="title">BGP Role model: tracking the adoption of RFC 9234</span>
-    </a><a class="item" href="https://blog.cloudflare.com/mcp-security-updates/" target="_blank" rel="noopener">
-      <span class="time">4 天前</span><span class="title">How Cloudflare detects MCP traffic and helps secure it</span>
-    </a><a class="item" href="https://blog.cloudflare.com/workers-protected-by-access/" target="_blank" rel="noopener">
-      <span class="time">4 天前</span><span class="title">Secure all your internal vibe-coded applications — in one click</span>
-    </a><a class="item" href="https://blog.cloudflare.com/total-eclipse-internet-traffic-iceland-spain-portugal/" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">Total eclipse of the Internet: traffic impacts in Iceland, Spain, and Portugal</span>
-    </a><a class="item" href="https://blog.cloudflare.com/certificate-transparency-monitoring-ga/" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">Certificate Transparency Monitoring is now generally available</span>
-    </a><a class="item" href="https://blog.cloudflare.com/ddos-threat-report-2026-h1/" target="_blank" rel="noopener">
-      <span class="time">7 天前</span><span class="title">Cloudflare DDoS Threat Report H1 2026: 1 Tbps attacks soar as DNS floods and geopolitical tensions drive a new wave</span>
-    </a><a class="item" href="https://blog.cloudflare.com/agents-week-review-august-2026/" target="_blank" rel="noopener">
-      <span class="time">8 天前</span><span class="title">Everything we launched during Agents Week</span>
-    </a><a class="item" href="https://blog.cloudflare.com/fedramp-class-d-certification/" target="_blank" rel="noopener">
-      <span class="time">8 天前</span><span class="title">Serving the most critical missions: Cloudflare for Government achieves FedRAMP Class D (High) Certified status</span>
-    </a><a class="item" href="https://blog.cloudflare.com/good-and-bad-agentic-behaviors/" target="_blank" rel="noopener">
-      <span class="time">11 天前</span><span class="title">Unveiling good and bad behaviors on the Agentic Internet</span>
-    </a><a class="item" href="https://blog.cloudflare.com/introducing-radar-researcher/" target="_blank" rel="noopener">
-      <span class="time">11 天前</span><span class="title">Introducing Radar Researcher: An AI tool for exploring Internet data in plain language</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#8b949e"></span><span class="src-name">Claude Code Releases</span><span class="tag">github.com</span><span class="count">10 条</span></summary>
-    <div class="list"><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.235" target="_blank" rel="noopener">
-      <span class="time">14 小时前</span><span class="title">v2.1.235</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.234" target="_blank" rel="noopener">
-      <span class="time">1 天前</span><span class="title">v2.1.234</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.233" target="_blank" rel="noopener">
-      <span class="time">4 天前</span><span class="title">v2.1.233</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.232" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">v2.1.232</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.231" target="_blank" rel="noopener">
-      <span class="time">6 天前</span><span class="title">v2.1.231</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.229" target="_blank" rel="noopener">
-      <span class="time">6 天前</span><span class="title">v2.1.229</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.228" target="_blank" rel="noopener">
-      <span class="time">7 天前</span><span class="title">v2.1.228</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.227" target="_blank" rel="noopener">
-      <span class="time">8 天前</span><span class="title">v2.1.227</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.226" target="_blank" rel="noopener">
-      <span class="time">11 天前</span><span class="title">v2.1.226</span>
-    </a><a class="item" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.225" target="_blank" rel="noopener">
-      <span class="time">11 天前</span><span class="title">v2.1.225</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#0084ff"></span><span class="src-name">知乎日报</span><span class="tag">zhihu</span><span class="count">显示 10/30</span></summary>
-    <div class="list"><a class="item" href="https://daily.zhihu.com/story/9792003" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">有哪些食物是中国人吃，而外国人基本不吃的呢？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9792007" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">有没有哪两个物种外表非常相似，但进化路径完全不同？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9792004" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">刻在人类基因中里的禁令有哪些？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9792014" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">瞎扯 · 如何正确地吐槽</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9791978" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">兔子和野兔（hare）到底有什么本质区别，为什么很多人会将它们混淆？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9791987" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">旅行者1号已经飞到了太阳系边缘，它为何还能与地球通讯？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9791975" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">如果现实中真的存在光剑，那么适合光剑的剑法是怎样的？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9791997" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">瞎扯 · 如何正确地吐槽</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9791943" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">中国发现全球最古老鸟类「政和八闽鸟」，将鸟类起源时间提早近 2000 万年，这一发现有哪些重要意义？</span>
-    </a><a class="item" href="https://daily.zhihu.com/story/9791958" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">马和牛都只吃素，为何它们这么壮？</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#1e80ff"></span><span class="src-name">掘金 AI 周榜</span><span class="tag">juejin</span><span class="count">显示 10/20</span></summary>
-    <div class="list"><a class="item" href="https://juejin.cn/post/7674826322239258662" target="_blank" rel="noopener">
-      <span class="time">2 天前</span><span class="title">开源两天 9.5 万 Star！DeepSeek Harness 到底是个啥？小白安装到实战一篇讲透</span>
-    </a><a class="item" href="https://juejin.cn/post/7674574367976341567" target="_blank" rel="noopener">
-      <span class="time">2 天前</span><span class="title">本地跑一个 Qwen 3.8，你将拥有一个 Opus 4.6</span>
-    </a><a class="item" href="https://juejin.cn/post/7674574367976046655" target="_blank" rel="noopener">
-      <span class="time">2 天前</span><span class="title">AI 编程工程化：实战——从 0 到 1 搭建 AI 编程工作流</span>
-    </a><a class="item" href="https://juejin.cn/post/7674461849706381363" target="_blank" rel="noopener">
-      <span class="time">2 天前</span><span class="title">奇耻大辱,我的网站被挂马,服务器已沦陷三个月</span>
-    </a><a class="item" href="https://juejin.cn/post/7674215005011951654" target="_blank" rel="noopener">
-      <span class="time">2 天前</span><span class="title">别再被 AI 骗了：我把腾讯云 4 个 Skill 做成了个「AI 打假侦探」，过程的一个小配置坑惨了我</span>
-    </a><a class="item" href="https://juejin.cn/post/7674101873055662120" target="_blank" rel="noopener">
-      <span class="time">3 天前</span><span class="title">DeepSeek Harness 插件推荐：4 款开源神器让写代码直接起飞</span>
-    </a><a class="item" href="https://juejin.cn/post/7674372498315460658" target="_blank" rel="noopener">
-      <span class="time">3 天前</span><span class="title">AI写长篇小说为什么30章必崩</span>
-    </a><a class="item" href="https://juejin.cn/post/7673875524200808494" target="_blank" rel="noopener">
-      <span class="time">3 天前</span><span class="title">让 AI Coding Agent 直接访问 CAD 文档：GitMCP 实战指南</span>
-    </a><a class="item" href="https://juejin.cn/post/7673861180655026212" target="_blank" rel="noopener">
-      <span class="time">3 天前</span><span class="title">DeepSeek Harness 最新邪修曝光！被吹成核弹的极简模式，真的夯吗？</span>
-    </a><a class="item" href="https://juejin.cn/post/7673978658780332083" target="_blank" rel="noopener">
-      <span class="time">3 天前</span><span class="title">给 DeepSeek Harness 装个&quot;应用商店&quot;：一条命令，595 个插件随你逛</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#6e7681"></span><span class="src-name">Solidot</span><span class="tag">solidot</span><span class="count">显示 10/20</span></summary>
-    <div class="list"><a class="item" href="https://www.solidot.org/story?sid=85137" target="_blank" rel="noopener">
-      <span class="time">46 分钟前</span><span class="title">量子存储器间纠缠距离提升至 420 公里</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85136" target="_blank" rel="noopener">
-      <span class="time">1 小时前</span><span class="title">数字信号处理先驱刘必治去世，享年 91 岁</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85135" target="_blank" rel="noopener">
-      <span class="time">3 小时前</span><span class="title">诺基亚大幅缩减中国业务</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85134" target="_blank" rel="noopener">
-      <span class="time">3 小时前</span><span class="title">蓝箭航天成功回收朱雀三号火箭第一级</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85133" target="_blank" rel="noopener">
-      <span class="time">4 小时前</span><span class="title">DDR5 内存条价格在 12 个月内上涨 500%</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85132" target="_blank" rel="noopener">
-      <span class="time">4 小时前</span><span class="title">Comcast 将数百万路由器变成运动探测器</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85131" target="_blank" rel="noopener">
-      <span class="time">5 小时前</span><span class="title">出生后限制摄入糖分与成年后更低的癌症风险相关</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85130" target="_blank" rel="noopener">
-      <span class="time">20 小时前</span><span class="title">Firefox 154 释出</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85129" target="_blank" rel="noopener">
-      <span class="time">21 小时前</span><span class="title">Google 拍下破产航空公司 Spirit 的数据</span>
-    </a><a class="item" href="https://www.solidot.org/story?sid=85128" target="_blank" rel="noopener">
-      <span class="time">22 小时前</span><span class="title">苹果开发配备摄像头的耳机 AirPods</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#333"></span><span class="src-name">V2EX 热门</span><span class="tag">v2ex</span><span class="count">7 条</span></summary>
-    <div class="list"><a class="item" href="https://www.v2ex.com/t/1235528" target="_blank" rel="noopener">
-      <span class="time">7 小时前</span><span class="title">[BeefAPI] 已稳定运行 4 个月， 0 客诉｜ Claude/GPT 平价中转，新用户评论区留 id 送 5 刀额度</span>
-    </a><a class="item" href="https://www.v2ex.com/t/1235509" target="_blank" rel="noopener">
-      <span class="time">8 小时前</span><span class="title">前端的小伙伴们，都怎么样了</span>
-    </a><a class="item" href="https://www.v2ex.com/t/1235487" target="_blank" rel="noopener">
-      <span class="time">9 小时前</span><span class="title">粱圣变小粱了，还有啥方便好用的 coding 套餐吗？</span>
-    </a><a class="item" href="https://www.v2ex.com/t/1235479" target="_blank" rel="noopener">
-      <span class="time">9 小时前</span><span class="title">跟摩的佬骂起来了。</span>
-    </a><a class="item" href="https://www.v2ex.com/t/1235472" target="_blank" rel="noopener">
-      <span class="time">9 小时前</span><span class="title">AI Coding 时代作为面试官已经不会面试开发了</span>
-    </a><a class="item" href="https://www.v2ex.com/t/1235460" target="_blank" rel="noopener">
-      <span class="time">9 小时前</span><span class="title">初恋结婚了，新郎不是我</span>
-    </a><a class="item" href="https://www.v2ex.com/t/1235437" target="_blank" rel="noopener">
-      <span class="time">18 小时前</span><span class="title">中式的酒桌文化 一生黑</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#8b949e"></span><span class="src-name">GitHub Trending Python</span><span class="tag">github</span><span class="count">显示 10/17</span></summary>
-    <div class="list"><a class="item" href="https://github.com/harry0703/MoneyPrinterTurbo" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">harry0703/MoneyPrinterTurbo</span>
-    </a><a class="item" href="https://github.com/volcengine/OpenViking" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">volcengine/OpenViking</span>
-    </a><a class="item" href="https://github.com/mukul975/Anthropic-Cybersecurity-Skills" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">mukul975/Anthropic-Cybersecurity-Skills</span>
-    </a><a class="item" href="https://github.com/public-apis/public-apis" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">public-apis/public-apis</span>
-    </a><a class="item" href="https://github.com/jundot/omlx" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">jundot/omlx</span>
-    </a><a class="item" href="https://github.com/microsoft/qlib" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">microsoft/qlib</span>
-    </a><a class="item" href="https://github.com/browser-use/video-use" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">browser-use/video-use</span>
-    </a><a class="item" href="https://github.com/pipeshub-ai/pipeshub-ai" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">pipeshub-ai/pipeshub-ai</span>
-    </a><a class="item" href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">RVC-Project/Retrieval-based-Voice-Conversion-WebUI</span>
-    </a><a class="item" href="https://github.com/usestrix/strix" target="_blank" rel="noopener">
-      <span class="time"></span><span class="title">usestrix/strix</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#d33a31"></span><span class="src-name">少数派 Matrix</span><span class="tag">sspai</span><span class="count">显示 10/20</span></summary>
-    <div class="list"><a class="item" href="https://sspai.com/post/113499" target="_blank" rel="noopener">
-      <span class="time">2 天前</span><span class="title">如果没有1.0.7补丁，《轮回之兽》仍只值得一个“褒贬不一”</span>
-    </a><a class="item" href="https://sspai.com/post/108010" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">与世界建立联结——上海F1之行</span>
-    </a><a class="item" href="https://sspai.com/post/113315" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">从0.01到MelGeek｜磁轴之前，那些被时间掩埋的客制化往事</span>
-    </a><a class="item" href="https://sspai.com/post/113390" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">记了 2 万条笔记后，我把知识库交给了 AI | Obsidian插件推荐</span>
-    </a><a class="item" href="https://sspai.com/post/113429" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">我家也跨上了信息高速路！在25年前的笔记本上体验有线网络冲浪</span>
-    </a><a class="item" href="https://sspai.com/post/113309" target="_blank" rel="noopener">
-      <span class="time">6 天前</span><span class="title">双持手机的方案：不是工作机 + 生活机，而是功能互补</span>
-    </a><a class="item" href="https://sspai.com/post/113302" target="_blank" rel="noopener">
-      <span class="time">6 天前</span><span class="title">普通话之外，中文语音合成还缺什么：我做乡音阁时遇到的几个问题</span>
-    </a><a class="item" href="https://sspai.com/post/113342" target="_blank" rel="noopener">
-      <span class="time">6 天前</span><span class="title">无痛日语：把 AI、FSRS 和短视频交互装进日语学习</span>
-    </a><a class="item" href="https://sspai.com/post/113377" target="_blank" rel="noopener">
-      <span class="time">6 天前</span><span class="title">这款免费开源的工具，满足了我对统计时间花费的所有幻想！</span>
-    </a><a class="item" href="https://sspai.com/post/113362" target="_blank" rel="noopener">
-      <span class="time">7 天前</span><span class="title">进入三伏，也进入一年最浓的夏天｜文末赠送 10 个付费主题兑换码</span>
-    </a></div>
-  </details>
-<details class="src" open>
-    <summary><span class="dot" style="background:#cc785c"></span><span class="src-name">Anthropic News</span><span class="tag">anthropic</span><span class="count">10 条</span></summary>
-    <div class="list"><a class="item" href="https://www.anthropic.com/news/claude-text-watermark" target="_blank" rel="noopener">
-      <span class="time">5 天前</span><span class="title">How Claude’s text watermark works</span>
-    </a><a class="item" href="https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards" target="_blank" rel="noopener">
-      <span class="time">12 天前</span><span class="title">Improving Fable 5's biology safeguards</span>
-    </a><a class="item" href="https://www.anthropic.com/news/tino-cuellar" target="_blank" rel="noopener">
-      <span class="time">15 天前</span><span class="title">Mariano-Florentino (Tino) Cuéllar to join Anthropic as Chief Global Affairs Officer</span>
-    </a><a class="item" href="https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals" target="_blank" rel="noopener">
-      <span class="time">20 天前</span><span class="title">Investigating three real-world incidents in our cybersecurity evaluations</span>
-    </a><a class="item" href="https://www.anthropic.com/news/position-open-weights-models" target="_blank" rel="noopener">
-      <span class="time">23 天前</span><span class="title">Our position on open-weights models</span>
-    </a><a class="item" href="https://www.anthropic.com/news/cognizant-anthropic" target="_blank" rel="noopener">
-      <span class="time">23 天前</span><span class="title">Cognizant and Anthropic expand their partnership to bring Claude to enterprise clients</span>
-    </a><a class="item" href="https://www.anthropic.com/news/claude-opus-5" target="_blank" rel="noopener">
-      <span class="time">26 天前</span><span class="title">Introducing Claude Opus 5</span>
-    </a><a class="item" href="https://www.anthropic.com/news/economic-futures-research-fund-agenda" target="_blank" rel="noopener">
-      <span class="time">28 天前</span><span class="title">A research agenda for the Economic Futures Research Fund</span>
-    </a><a class="item" href="https://www.anthropic.com/news/anthropic-economic-index-connector" target="_blank" rel="noopener">
-      <span class="time">28 天前</span><span class="title">Ask Claude about the Anthropic Economic Index</span>
-    </a><a class="item" href="https://www.anthropic.com/news/donation-public-first-action" target="_blank" rel="noopener">
-      <span class="time">29 天前</span><span class="title">Anthropic is donating another $20 million to Public First Action</span>
-    </a></div>
-  </details>
+<h1>RSS 订阅</h1>
+<div class="meta">等待首次同步</div>
+<div class="card">
+<p>本页面由 GitHub Actions 每 30 分钟自动生成，当前尚未同步。</p>
+<p class="note">首次使用：</p>
+<p>1. 仓库 <strong>Actions</strong> 标签页 → <code>sync</code> → <strong>Run workflow</strong></p>
+<p>2. 等待约 2 分钟，刷新本页</p>
+<p class="note">首页为类别索引，各类别有独立页面。订阅列表见 <code>config.txt</code>。</p>
+</div>
 </div>
 </body>
 </html>

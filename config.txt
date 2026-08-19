@@ -1,22 +1,51 @@
 # 通用 RSS 订阅列表
-# 每行：名称 | URL | 显示条数(可选，默认10)
+# 格式：名称 | URL | 显示条数(可选，默认10)
 # URL 为完整直链或 RSSHub 路由（/开头）
+# 用 [分类] 段划分类别，对应独立页面
 # 空行和 # 开头的行会被忽略
 # 路由速查见 reference/rsshub-routes.md
 
-# === B站 UP 主（API 直连）===
+[video]
+# B站 UP 主（API 直连，避开公共实例 B站风控）
 DIYgod | /bilibili/user/video/2267573
 凉风Kaze | /bilibili/user/video/946974
+影视飓风 | /bilibili/user/video/946583
 
-# === 技术博客（直链）===
+[ai]
+# AI 公司动态与研究
+Anthropic News | /anthropic/news
+Anthropic Engineering | /anthropic/engineering
+OpenAI Research | /openai/research
+DeepMind Blog | /deepmind/blog
+HuggingFace Daily Papers | /huggingface/daily-papers
+量子位 AI | /qbitai/category/AI
+
+[tech]
+# 技术博客
 Cloudflare Blog | https://blog.cloudflare.com/rss/
 Claude Code Releases | https://github.com/anthropics/claude-code/releases.atom
-
-# === 资讯（RSSHub 路由）===
-知乎日报 | /zhihu/daily
-掘金 AI 周榜 | /juejin/trending/ai/weekly
-Solidot | /solidot
-V2EX 热门 | /v2ex/topics/hot
-GitHub Trending Python | /github/trending/daily/python
+overreacted | https://overreacted.io/rss.xml
 少数派 Matrix | /sspai/matrix
-Anthropic News | /anthropic/news
+Anthropic Research | /anthropic/research
+
+[news]
+# 资讯媒体
+Solidot | /solidot
+Solidot 科学 | /solidot/science
+知乎日报 | /zhihu/daily
+cnbeta | /cnbeta
+36氪快讯 | /36kr/newsflashes
+
+[community]
+# 开发者社区
+GitHub Trending Python | /github/trending/daily/python
+GitHub Trending TypeScript | /github/trending/daily/typescript
+GitHub Trending Go | /github/trending/daily/go
+GitHub Trending Rust | /github/trending/daily/rust
+GitHub Topic LLM | /github/topics/llm
+GitHub Topic Agent | /github/topics/agent
+V2EX 热门 | /v2ex/topics/hot
+V2EX 最新 | /v2ex/topics/latest
+Hacker News | /hackernews
+Hacker News Best | /hackernews/best
+掘金 AI 周榜 | /juejin/trending/ai/weekly
