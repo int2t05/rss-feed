@@ -77,9 +77,10 @@ export function renderSPA(data) {
 <style>
 :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#21262d;--border2:#30363d;--text:#e6edf3;--text2:#c9d1d9;--muted:#7d8590;--muted2:#6e7681;--accent:#f0883e;--blue:#58a6ff;--green:#3fb950;--red:#f85149}
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
 body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text2);line-height:1.6;font-size:14px;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 96px}
-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.wrap{max-width:1180px;margin:0 auto;padding:16px 20px;display:flex;flex-direction:column;height:100vh}
+header{display:flex;align-items:center;gap:12px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0}
 header .logo{width:22px;height:22px;color:var(--accent);flex-shrink:0}
 header h1{font-size:1.05rem;font-weight:600;color:var(--text)}
 header .nav{display:flex;gap:4px;flex-wrap:wrap}
@@ -88,16 +89,20 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 .nav-link.active{background:var(--surface2);color:var(--text);font-weight:600}
 #search{margin-left:auto;padding:5px 10px;background:var(--surface);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:.8rem;width:180px}
 #search:focus{outline:none;border-color:var(--blue)}
-.meta{color:var(--muted2);font-size:.72rem;margin-bottom:16px}
-.layout{display:flex;gap:20px}
-.main{flex:1;min-width:0}
-.sidebar{width:260px;flex-shrink:0}
+.meta{color:var(--muted2);font-size:.72rem;margin-bottom:8px;flex-shrink:0}
+.quick-filters{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;flex-shrink:0}
+.qf{padding:4px 12px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:.76rem;cursor:pointer;transition:all .12s}
+.qf:hover{border-color:var(--border2);color:var(--text)}
+.qf.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.layout{display:flex;gap:20px;flex:1;min-height:0}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.sidebar{width:260px;flex-shrink:0;overflow-y:auto}
 @media(max-width:860px){.sidebar{display:none}.layout{flex-direction:column}}
-.head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-shrink:0}
 .head h2{font-size:1rem;font-weight:600;color:var(--text)}
 .head .back{color:var(--blue);font-size:.8rem;cursor:pointer;text-decoration:none}
 .head .count{color:var(--muted);font-size:.75rem;margin-left:auto}
-.list{display:flex;flex-direction:column}
+.list{display:flex;flex-direction:column;flex:1;overflow-y:auto;min-height:0}
 .item{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:background .1s}
 .item:hover{background:var(--surface)}
 .item .time{color:var(--muted2);font-size:.7rem;flex-shrink:0;width:110px;padding-top:2px;font-variant-numeric:tabular-nums}
@@ -106,10 +111,10 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 .item .title{color:var(--text2);font-size:.84rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .item:hover .title{color:var(--blue)}
 .item.fresh .title{color:var(--accent)}
-.day-group{margin-top:16px}
+.day-group{margin-top:12px}
 .day-group:first-child{margin-top:0}
 .day-group .day-label{font-size:.72rem;color:var(--muted);padding:6px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px;font-weight:600}
-.pager{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:16px;padding:8px}
+.pager{display:flex;gap:6px;justify-content:center;align-items:center;padding:8px 0;flex-shrink:0;border-top:1px solid var(--border)}
 .pager button{background:var(--surface);border:1px solid var(--border2);color:var(--text2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:.78rem}
 .pager button:hover{background:var(--surface2);border-color:var(--blue)}
 .pager button:disabled{opacity:.4;cursor:default}
@@ -252,12 +257,13 @@ function renderList() {
   const start = (state.page - 1) * PER_PAGE;
   const pageItems = items.slice(start, start + PER_PAGE);
   const now = Date.now();
-  // 按日期分组渲染
+  // 按日期分组渲染（每组闭合 </div>）
   let html = '';
   let curDay = '';
   for (const it of pageItems) {
     const k = dayKey(it.pubDate);
     if (k !== curDay) {
+      if (curDay) html += '</div>'; // 闭合上一个 day-group
       html += '<div class="day-group"><div class="day-label">' + dayLabel(k) + '</div>';
       curDay = k;
     }
@@ -267,7 +273,9 @@ function renderList() {
       '<span class="src" title="' + esc(it.source) + '">' + esc(it.source) + '</span>' +
       '<span class="title">' + esc(it.title) + '</span></a>';
   }
+  if (curDay) html += '</div>'; // 闭合最后一个 day-group
   $('list').innerHTML = html;
+  $('list').scrollTop = 0; // 翻页时列表回到顶部
   renderPager(totalPages);
 }
 
@@ -277,7 +285,6 @@ function renderPager(totalPages) {
   let html = '';
   html += '<button data-pg="1"' + (p === 1 ? ' disabled' : '') + '>«</button>';
   html += '<button data-pg="' + (p - 1) + '"' + (p === 1 ? ' disabled' : '') + '>‹</button>';
-  // 页码：显示当前 ±2
   const from = Math.max(1, p - 2), to = Math.min(totalPages, p + 2);
   for (let i = from; i <= to; i++) {
     html += '<button data-pg="' + i + '"' + (i === p ? ' class="active"' : '') + '>' + i + '</button>';
@@ -287,7 +294,7 @@ function renderPager(totalPages) {
   html += '<span class="pg-info">' + p + ' / ' + totalPages + '</span>';
   $('pager').innerHTML = html;
   $('pager').querySelectorAll('button[data-pg]').forEach(b => {
-    b.addEventListener('click', () => { state.page = parseInt(b.dataset.pg); renderList(); window.scrollTo(0, 0); });
+    b.addEventListener('click', () => { state.page = parseInt(b.dataset.pg); render(); });
   });
 }
 
