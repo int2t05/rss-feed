@@ -42,7 +42,7 @@ flowchart LR
 
 ### 2.4 scripts/render.mjs — 前端渲染
 
-紧凑文字列表，极简暗色。导出 `renderIndex`/`renderCategory`/`relTime`/`esc`。导航与类别图标由 config 驱动。
+单文件 SPA：`renderSPA(data)` 生成完整 HTML，内嵌 JSON 数据，客户端 JS 渲染日历筛选 + 滚动加载 + 类别切换 + 搜索。导出 `renderSPA`/`platformColor`。
 
 ### 2.5 state.json — 去重状态
 
@@ -74,13 +74,15 @@ checkout → 装依赖 → 同步 → git commit/push 四步，concurrency 防�
 
 ## 5. 前端设计
 
-紧凑文字列表，极简暗色：
+单文件 SPA，暗色主题，客户端渲染：
 
-- 每源区块：源名 + 平台小标（URL 推断）+ 新条数 badge
-- 每条一行 `<a>`：相对时间（灰小字）+ 标题
-- 新条目左侧色条
-- `#0d1117` 底 / `#c9d1d9` 字，小字号松行高，`@media(prefers-color-scheme:light)` 浅色自适应
-- 纯文字，零图片
+- 左侧主区域：条目按时间倒序，每条显示相对时间 + 源名 + 标题，默认 50 条，"显示更多"按钮每次加 50
+- 右侧日历：月视图，有内容的日期带标记，点击筛选当天条目
+- 顶部导航：类别切换（全部/各类），客户端筛选，hash 路由
+- 搜索框：标题实时搜索
+- 24h 内条目标记为 fresh（橙色）
+- `@media(max-width:860px)` 移动端隐藏日历
+- `@media(prefers-color-scheme:light)` 浅色自适应
 
 ## 6. 部署
 
@@ -100,8 +102,7 @@ rss-feed/
 ├── instances.txt           # RSSHub 实例池
 ├── package.json            # rss-parser 依赖
 ├── dist/                   # 生成产物（GitHub Pages 源）
-│   ├── index.html          # 仪表盘
-│   ├── *.html              # 各类别页
+│   ├── index.html          # 单文件 SPA（内嵌 JSON）
 │   └── state.json          # 去重状态
 ├── .gitignore
 ├── LICENSE                 # MIT（bilibili.mjs 为独立实现，未派生 RSSHub 代码）

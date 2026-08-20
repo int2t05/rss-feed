@@ -18,7 +18,7 @@ flowchart LR
     H --> I[git push → Pages]
 ```
 
-纯拉取架构，零服务。直链源直接 fetch（5 并发）；B站路由走 B站 API 直连（WBI 签名 + cookie，避开公共 RSSHub 实例对 B站的风控）；其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动，新增/删除类别只需改 config。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip + Dublin Core。
+纯拉取架构，零服务。直链源直接 fetch（5 并发）；B站路由走 B站 API 直连（WBI 签名 + cookie，避开公共 RSSHub 实例对 B站的风控）；其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动，新增/删除类别只需改 config。前端为单文件 SPA（内嵌 JSON，客户端日历筛选 + 滚动加载 + 搜索）。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip + Dublin Core。
 
 ## 部署
 
@@ -44,8 +44,8 @@ flowchart LR
 | `instances.txt` | RSSHub 公共实例池 |
 | `scripts/fetch.mjs` | 同步核心：解析 config → 三路分发 → 去重 → 生成 |
 | `scripts/bilibili.mjs` | B站 API 直连（WBI 签名 + cookie） |
-| `scripts/render.mjs` | HTML 渲染（导航/图标由 config 驱动） |
-| `dist/` | 生成产物（GitHub Pages 源）：`index.html` + 类别页 + `state.json` |
+| `scripts/render.mjs` | 单文件 SPA 渲染（日历 + 滚动加载 + 搜索） |
+| `dist/` | 生成产物：`index.html`（单文件 SPA，内嵌 JSON）+ `state.json` |
 | `.github/workflows/sync.yml` | Actions 定时任务（注入 BILIBILI_COOKIE） |
 | `docs/prd.md` `docs/tech.md` | 需求规格与技术架构 |
 

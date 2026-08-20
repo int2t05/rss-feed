@@ -74,3 +74,26 @@ Hacker News | https://hnrss.org/frontpage
 Hacker News Best | https://hnrss.org/best
 掘金 AI 周榜 | /juejin/trending/ai/weekly
 LinuxDo | https://linux.do/latest.rss
+Lobsters | https://lobste.rs/rss
+Dev.to | https://dev.to/feed
+TLDR | https://www.tldr.tech/rss
+
+[frontend|前端|tech|#39d0d8]
+React 官方 | https://react.dev/rss.xml
+Next.js | https://nextjs.org/feed.xml
+Tailwind CSS | https://tailwindcss.com/feeds/feed.xml
+
+[backend|后端|tech|#f1e05a]
+Spring 官方 | https://spring.io/blog.atom
+Rust 官方 | https://blog.rust-lang.org/feed.xml
+Node.js 官方 | https://nodejs.org/en/feed/blog.xml
+美团技术 | https://tech.meituan.com/feed/
+InfoQ 中文 | https://www.infoq.cn/feed
+
+[devops|DevOps|community|#3fb950]
+Kubernetes | https://kubernetes.io/feed.xml
+Docker Blog | https://www.docker.com/blog/feed/
+HashiCorp | https://www.hashicorp.com/blog/feed.xml
+GitHub Blog | https://github.blog/feed/
+Databricks | https://www.databricks.com/feed
+Google Blog | https://blog.google/rss/

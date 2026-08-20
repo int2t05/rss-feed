@@ -4,7 +4,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import Parser from 'rss-parser';
-import { renderIndex, renderCategory } from './render.mjs';
+import { renderSPA, platformColor } from './render.mjs';
 import { fetchBilibiliVideos } from './bilibili.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -157,15 +157,34 @@ for (const cat of CATEGORIES) {
 
 const updated = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) + ' · 每 30 分钟同步';
 
-// 生成首页 bento 索引 + 各类别页（输出到 dist/）
+// 收集全量条目（按时间倒序），供客户端日历筛选与滚动加载
 const categories = CATEGORIES.map((cat) => ({ ...cat, sources: allResults[cat.id] }));
-writeFileSync(path.join(DIST, 'index.html'), renderIndex(categories, updated));
+const allItems = [];
 for (const cat of categories) {
-    writeFileSync(path.join(DIST, `${cat.id}.html`), renderCategory(cat, categories, updated));
+    for (const src of cat.sources) {
+        if (src.error) continue;
+        for (const it of src.items) {
+            allItems.push({
+                id: it.id, title: it.title, link: it.link,
+                pubDate: it.pubDate, category: cat.id,
+                source: src.name, sourceColor: platformColor(src.url),
+            });
+        }
+    }
 }
+allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+const data = {
+    updated,
+    categories: CATEGORIES.map((c) => ({ id: c.id, title: c.title, icon: c.icon, color: c.color })),
+    sources: categories.flatMap((c) => c.sources.map((s) => ({ name: s.name, url: s.url, category: c.id, error: s.error || null }))),
+    items: allItems,
+};
+
+// 生成单文件 SPA（内嵌 JSON，客户端渲染日历 + 滚动加载）
+writeFileSync(path.join(DIST, 'index.html'), renderSPA(data));
 writeFileSync(statePath, JSON.stringify(newState, null, 2));
 
 const totalSources = categories.reduce((s, c) => s + c.sources.length, 0);
-const totalFresh = categories.reduce((s, c) => s + c.sources.reduce((a, b) => a + (b.fresh?.length || 0), 0), 0);
 const errors = categories.reduce((s, c) => s + c.sources.filter((b) => b.error).length, 0);
-console.log(`同步完成：${totalSources} 个源，${totalFresh} 条新条目，${errors} 个源失败，${categories.length + 1} 个页面`);
+console.log(`同步完成：${totalSources} 个源，${allItems.length} 条条目，${errors} 个源失败`);
