@@ -42,3 +42,9 @@ jobs:
             git commit -m "sync: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             git push
           fi
+
+      - name: 触发 Pages 部署
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml || true
