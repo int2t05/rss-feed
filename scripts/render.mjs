@@ -100,14 +100,24 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 .list{display:flex;flex-direction:column}
 .item{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:background .1s}
 .item:hover{background:var(--surface)}
-.item .time{color:var(--muted2);font-size:.7rem;flex-shrink:0;width:72px;padding-top:2px}
+.item .time{color:var(--muted2);font-size:.7rem;flex-shrink:0;width:110px;padding-top:2px;font-variant-numeric:tabular-nums}
 .item .src{font-size:.7rem;color:var(--muted);flex-shrink:0;width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-top:2px}
 .item .src::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--src-color,#6e7681);vertical-align:middle}
 .item .title{color:var(--text2);font-size:.84rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .item:hover .title{color:var(--blue)}
 .item.fresh .title{color:var(--accent)}
-.load-more{padding:14px;text-align:center;color:var(--muted);font-size:.8rem;cursor:pointer;border:1px dashed var(--border2);border-radius:8px;margin-top:12px}
-.load-more:hover{color:var(--text);border-color:var(--blue)}
+.day-group{margin-top:16px}
+.day-group:first-child{margin-top:0}
+.day-group .day-label{font-size:.72rem;color:var(--muted);padding:6px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px;font-weight:600}
+.pager{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:16px;padding:8px}
+.pager button{background:var(--surface);border:1px solid var(--border2);color:var(--text2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:.78rem}
+.pager button:hover{background:var(--surface2);border-color:var(--blue)}
+.pager button:disabled{opacity:.4;cursor:default}
+.pager .pg-info{color:var(--muted);font-size:.72rem;margin:0 8px}
+.quick-filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.qf{padding:4px 12px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:.76rem;cursor:pointer;transition:all .12s}
+.qf:hover{border-color:var(--border2);color:var(--text)}
+.qf.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .empty{padding:40px;text-align:center;color:var(--muted2);font-size:.85rem}
 /* 日历 */
 .cal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
@@ -137,10 +147,12 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 <input id="search" placeholder="搜索标题" type="search">
 </header>
 <div class="meta" id="meta"></div>
+<div class="quick-filters" id="qf"></div>
 <div class="layout">
 <main class="main">
 <div class="head" id="head"></div>
 <div class="list" id="list"></div>
+<div class="pager" id="pager"></div>
 </main>
 <aside class="sidebar">
 <div class="cal-box" id="cal"></div>
@@ -150,32 +162,71 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 <script>
 const DATA = ${dataJson};
 const CAT_ICONS = ${catIcons};
-let state = { cat: 'all', date: null, search: '', shown: 50, month: new Date() };
+const PER_PAGE = 50;
+// 视图模式：'24h' 最近24小时 | '7d' 最近7天 | 'all' 全部 | 'date' 日历选日期
+let state = { cat: 'all', mode: '24h', date: null, search: '', page: 1, month: new Date() };
 
 const $ = (id) => document.getElementById(id);
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function relTime(d) {
-  const diff = (Date.now() - new Date(d).getTime()) / 1000;
-  if (isNaN(diff)) return '';
-  if (diff < 3600) return Math.floor(diff/60) + '分前';
-  if (diff < 86400) return Math.floor(diff/3600) + '时前';
-  if (diff < 2592000) return Math.floor(diff/86400) + '天前';
-  return new Date(d).toLocaleDateString('zh-CN', {month:'short',day:'numeric'});
+
+// 统一时间处理：用本地时区解析，具体时间戳格式 MM-DD HH:MM
+function pad(n) { return n < 10 ? '0' + n : n; }
+function fmtTime(d) {
+  const dt = new Date(d);
+  if (isNaN(dt)) return '';
+  return pad(dt.getMonth()+1) + '-' + pad(dt.getDate()) + ' ' + pad(dt.getHours()) + ':' + pad(dt.getMinutes());
 }
-function sameDay(a, b) {
-  const x = new Date(a), y = new Date(b);
-  return x.getFullYear() === y.getFullYear() && x.getMonth() === y.getMonth() && x.getDate() === y.getDate();
+// 日期 key（本地时区 YYYY-MM-DD），用于分组与日历
+function dayKey(d) {
+  const dt = new Date(d);
+  if (isNaN(dt)) return '';
+  return dt.getFullYear() + '-' + pad(dt.getMonth()+1) + '-' + pad(dt.getDate());
+}
+function dayLabel(key) {
+  const dt = new Date(key + 'T00:00:00');
+  const today = dayKey(new Date());
+  const yest = dayKey(new Date(Date.now() - 86400000));
+  if (key === today) return '今天';
+  if (key === yest) return '昨天';
+  return dt.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' });
 }
 
 function filtered() {
   let items = DATA.items;
   if (state.cat !== 'all') items = items.filter(it => it.category === state.cat);
-  if (state.date) items = items.filter(it => sameDay(it.pubDate, state.date));
   if (state.search) {
     const q = state.search.toLowerCase();
     items = items.filter(it => it.title.toLowerCase().includes(q));
   }
+  if (state.mode === 'date' && state.date) {
+    const key = dayKey(state.date);
+    items = items.filter(it => dayKey(it.pubDate) === key);
+  } else if (state.mode === '24h') {
+    const cutoff = Date.now() - 86400000;
+    items = items.filter(it => new Date(it.pubDate).getTime() >= cutoff);
+  } else if (state.mode === '7d') {
+    const cutoff = Date.now() - 7 * 86400000;
+    items = items.filter(it => new Date(it.pubDate).getTime() >= cutoff);
+  }
   return items;
+}
+
+function renderQF() {
+  const opts = [['24h','最近24小时'], ['7d','最近7天'], ['all','全部'], ['date','按日期']];
+  // 当用日历选了日期，自动切 date 模式
+  if (state.date && state.mode === 'date') state.mode = 'date';
+  $('qf').innerHTML = opts.map(([k, label]) => {
+    const active = state.mode === k || (k === 'date' && state.mode === 'date');
+    return '<span class="qf' + (state.mode === k ? ' active' : '') + '" data-mode="' + k + '">' + label + '</span>';
+  }).join('');
+  $('qf').querySelectorAll('.qf').forEach(el => {
+    el.addEventListener('click', () => {
+      state.mode = el.dataset.mode;
+      if (el.dataset.mode !== 'date') state.date = null;
+      state.page = 1;
+      render();
+    });
+  });
 }
 
 function renderHead(items) {
@@ -185,118 +236,132 @@ function renderHead(items) {
     if (c) { title = c.title; icon = CAT_ICONS[c.icon] || CAT_ICONS.default; }
   }
   const parts = [];
-  if (state.date) {
-    const d = new Date(state.date);
-    parts.push('<a class="back" onclick="clearDate()">← 返回全部</a>');
-    parts.push('<span class="count">' + d.toLocaleDateString('zh-CN') + ' · ' + items.length + ' 条</span>');
-  } else {
-    parts.push('<span class="count">' + items.length + ' 条</span>');
+  if (state.mode === 'date' && state.date) {
+    parts.push('<a class="back" id="back-link" style="cursor:pointer">← 返回</a>');
   }
-  $('head').innerHTML = (icon ? '<span style="color:var(--accent);width:18px;height:18px">' + icon + '</span>' : '') + '<h2>' + esc(title) + '</h2>' + parts.join('');
+  parts.push('<span class="count">' + items.length + ' 条</span>');
+  $('head').innerHTML = (icon ? '<span style="color:var(--accent);width:18px;height:18px;display:inline-flex">' + icon + '</span>' : '') + '<h2>' + esc(title) + '</h2>' + parts.join('');
+  const back = $('back-link');
+  if (back) back.addEventListener('click', () => { state.mode = '24h'; state.date = null; state.page = 1; render(); });
 }
 
 function renderList() {
   const items = filtered();
   renderHead(items);
-  if (items.length === 0) { $('list').innerHTML = '<div class="empty">无匹配条目</div>'; return; }
-  const shown = items.slice(0, state.shown);
-  const freshIds = new Set();
-  // fresh 标记：最近 24h 内的条目
-  const dayAgo = Date.now() - 86400000;
-  let html = shown.map(it => {
-    const isFresh = new Date(it.pubDate).getTime() > dayAgo;
-    return '<a class="item' + (isFresh ? ' fresh' : '') + '" href="' + esc(it.link) + '" target="_blank" rel="noopener" style="--src-color:' + (it.sourceColor||'#6e7681') + '">' +
-      '<span class="time">' + relTime(it.pubDate) + '</span>' +
+  if (items.length === 0) { $('list').innerHTML = '<div class="empty">无匹配条目</div>'; $('pager').innerHTML = ''; return; }
+  const totalPages = Math.ceil(items.length / PER_PAGE);
+  if (state.page > totalPages) state.page = 1;
+  const start = (state.page - 1) * PER_PAGE;
+  const pageItems = items.slice(start, start + PER_PAGE);
+  const now = Date.now();
+  // 按日期分组渲染
+  let html = '';
+  let curDay = '';
+  for (const it of pageItems) {
+    const k = dayKey(it.pubDate);
+    if (k !== curDay) {
+      html += '<div class="day-group"><div class="day-label">' + dayLabel(k) + '</div>';
+      curDay = k;
+    }
+    const isFresh = (now - new Date(it.pubDate).getTime()) < 86400000;
+    html += '<a class="item' + (isFresh ? ' fresh' : '') + '" href="' + esc(it.link) + '" target="_blank" rel="noopener" style="--src-color:' + (it.sourceColor || '#6e7681') + '">' +
+      '<span class="time">' + fmtTime(it.pubDate) + '</span>' +
       '<span class="src" title="' + esc(it.source) + '">' + esc(it.source) + '</span>' +
       '<span class="title">' + esc(it.title) + '</span></a>';
-  }).join('');
-  if (items.length > state.shown) {
-    html += '<div class="load-more" onclick="loadMore()">显示更多 ▼ 共 ' + items.length + ' 条 · 已显示 ' + state.shown + '</div>';
   }
   $('list').innerHTML = html;
+  renderPager(totalPages);
 }
 
-function loadMore() { state.shown += 50; renderList(); }
-function clearDate() { state.date = null; state.shown = 50; render(); }
+function renderPager(totalPages) {
+  if (totalPages <= 1) { $('pager').innerHTML = ''; return; }
+  const p = state.page;
+  let html = '';
+  html += '<button data-pg="1"' + (p === 1 ? ' disabled' : '') + '>«</button>';
+  html += '<button data-pg="' + (p - 1) + '"' + (p === 1 ? ' disabled' : '') + '>‹</button>';
+  // 页码：显示当前 ±2
+  const from = Math.max(1, p - 2), to = Math.min(totalPages, p + 2);
+  for (let i = from; i <= to; i++) {
+    html += '<button data-pg="' + i + '"' + (i === p ? ' class="active"' : '') + '>' + i + '</button>';
+  }
+  html += '<button data-pg="' + (p + 1) + '"' + (p === totalPages ? ' disabled' : '') + '>›</button>';
+  html += '<button data-pg="' + totalPages + '"' + (p === totalPages ? ' disabled' : '') + '>»</button>';
+  html += '<span class="pg-info">' + p + ' / ' + totalPages + '</span>';
+  $('pager').innerHTML = html;
+  $('pager').querySelectorAll('button[data-pg]').forEach(b => {
+    b.addEventListener('click', () => { state.page = parseInt(b.dataset.pg); renderList(); window.scrollTo(0, 0); });
+  });
+}
 
 function renderCal() {
   const m = state.month;
   const y = m.getFullYear(), mo = m.getMonth();
-  const first = new Date(y, mo, 1);
-  const last = new Date(y, mo + 1, 0);
-  const startDow = first.getDay();
-  const days = last.getDate();
-  const today = new Date();
-  // 当前筛选类别下的条目按日期分组
+  const days = new Date(y, mo + 1, 0).getDate();
+  const startDow = new Date(y, mo, 1).getDay();
+  const todayKey = dayKey(new Date());
   let items = DATA.items;
   if (state.cat !== 'all') items = items.filter(it => it.category === state.cat);
   const dateMap = {};
   items.forEach(it => {
-    const d = new Date(it.pubDate);
-    if (d.getFullYear() === y && d.getMonth() === mo) {
-      const key = d.getDate();
-      dateMap[key] = (dateMap[key] || 0) + 1;
+    const k = dayKey(it.pubDate);
+    if (k.startsWith(y + '-' + pad(mo + 1))) {
+      const d = parseInt(k.slice(8));
+      dateMap[d] = (dateMap[d] || 0) + 1;
     }
   });
-  const dows = ['日','一','二','三','四','五','六'];
-  let html = '<div class="cal-head"><button onclick="prevMonth()">‹</button><span class="ym">' + y + '年' + (mo+1) + '月</span><button onclick="nextMonth()">›</button></div>';
+  const dows = ['日', '一', '二', '三', '四', '五', '六'];
+  let html = '<div class="cal-head"><button id="prev-m">‹</button><span class="ym">' + y + '年' + (mo + 1) + '月</span><button id="next-m">›</button></div>';
   html += '<div class="cal-grid">';
   dows.forEach(d => html += '<div class="dow">' + d + '</div>');
   for (let i = 0; i < startDow; i++) html += '<div class="cal-day other"></div>';
   for (let d = 1; d <= days; d++) {
-    const date = new Date(y, mo, d);
+    const dKey = y + '-' + pad(mo + 1) + '-' + pad(d);
     const has = dateMap[d];
-    const isToday = sameDay(date, today);
-    const isSel = state.date && sameDay(date, state.date);
+    const isFuture = dKey > todayKey;
+    const isToday = dKey === todayKey;
+    const isSel = state.date && dayKey(state.date) === dKey;
     let cls = 'cal-day';
     if (has) cls += ' has';
     if (isToday) cls += ' today';
     if (isSel) cls += ' selected';
-    html += '<div class="' + cls + '" onclick="selectDate(\\'' + y + '-' + (mo+1) + '-' + d + '\\')">' + d + '</div>';
+    if (isFuture) cls += ' other';
+    html += '<div class="' + cls + '"' + (has && !isFuture ? ' data-date="' + dKey + '"' : '') + '>' + d + '</div>';
   }
   html += '</div>';
-  const total = Object.values(dateMap).reduce((a,b) => a+b, 0);
-  html += '<div class="cal-info">本月 ' + total + ' 条 · 点击日期筛选</div>';
+  const total = Object.values(dateMap).reduce((a, b) => a + b, 0);
+  html += '<div class="cal-info">本月 ' + total + ' 条</div>';
   $('cal').innerHTML = html;
+  $('prev-m').addEventListener('click', () => { state.month = new Date(y, mo - 1, 1); renderCal(); });
+  $('next-m').addEventListener('click', () => { state.month = new Date(y, mo + 1, 1); renderCal(); });
+  $('cal').querySelectorAll('.cal-day[data-date]').forEach(el => {
+    el.addEventListener('click', () => {
+      state.date = el.dataset.date + 'T00:00:00';
+      state.mode = 'date';
+      state.page = 1;
+      render();
+    });
+  });
 }
-
-function selectDate(s) {
-  const parts = s.split('-');
-  state.date = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-  state.shown = 50;
-  render();
-}
-function prevMonth() { state.month = new Date(state.month.getFullYear(), state.month.getMonth()-1, 1); renderCal(); }
-function nextMonth() { state.month = new Date(state.month.getFullYear(), state.month.getMonth()+1, 1); renderCal(); }
 
 function setCat(cat) {
   state.cat = cat;
-  state.date = null;
-  state.shown = 50;
+  state.page = 1;
   render();
   location.hash = cat;
 }
 
 function render() {
   const items = filtered();
-  // meta
-  const total = DATA.items.length;
-  $('meta').textContent = DATA.categories.length + ' 类 · ' + total + ' 条 · ' + DATA.updated;
-  // nav active
-  document.querySelectorAll('.nav-link').forEach(a => {
-    a.classList.toggle('active', a.dataset.cat === state.cat);
-  });
+  $('meta').textContent = DATA.categories.length + ' 类 · ' + DATA.items.length + ' 条 · ' + DATA.updated;
+  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.dataset.cat === state.cat));
+  renderQF();
   renderList();
   renderCal();
 }
 
-// 事件绑定
-document.querySelectorAll('.nav-link').forEach(a => {
-  a.addEventListener('click', () => setCat(a.dataset.cat));
-});
-$('search').addEventListener('input', (e) => { state.search = e.target.value; state.shown = 50; renderList(); });
+document.querySelectorAll('.nav-link').forEach(a => a.addEventListener('click', () => setCat(a.dataset.cat)));
+$('search').addEventListener('input', (e) => { state.search = e.target.value; state.page = 1; renderList(); });
 
-// 初始化：从 hash 读类别
 const hashCat = location.hash.slice(1);
 if (hashCat && DATA.categories.some(c => c.id === hashCat)) state.cat = hashCat;
 render();
