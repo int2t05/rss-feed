@@ -31,7 +31,7 @@ flowchart LR
    - 分类头：`[video|视频 UP 主|video|#fb7299]`
    - 直链：完整 RSS/Atom URL
    - RSSHub 路由：`/` 开头（如 `/bilibili/user/video/UID`），自动拼实例池
-3. **开启 GitHub Pages**：Settings → Pages → Source 选 `Deploy from a branch`，分支 `main` / `/dist`
+3. **开启 GitHub Pages**：Settings → Pages → Source 选 `GitHub Actions`（deploy.yml 自动部署 dist/）
 4. **配置 `BILIBILI_COOKIE` Secret**（B站源必需）：浏览器登录 B站 → DevTools Network → 复制 Cookie → 仓库 Secrets 新建 `BILIBILI_COOKIE`
 5. **手动触发首次同步**：Actions → `sync` → Run workflow
 6. 约 1 分钟后访问 Pages URL
