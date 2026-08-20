@@ -212,17 +212,15 @@ function filtered() {
 }
 
 function renderQF() {
-  const opts = [['24h','最近24小时'], ['7d','最近7天'], ['all','全部'], ['date','按日期']];
-  // 当用日历选了日期，自动切 date 模式
-  if (state.date && state.mode === 'date') state.mode = 'date';
-  $('qf').innerHTML = opts.map(([k, label]) => {
-    const active = state.mode === k || (k === 'date' && state.mode === 'date');
-    return '<span class="qf' + (state.mode === k ? ' active' : '') + '" data-mode="' + k + '">' + label + '</span>';
-  }).join('');
+  const opts = [['24h','最近24小时'], ['7d','最近7天'], ['all','全部']];
+  if (state.mode === 'date' && state.date) opts.push(['date', '已选 ' + new Date(state.date).toLocaleDateString('zh-CN', {month:'numeric',day:'numeric'})]);
+  $('qf').innerHTML = opts.map(([k, label]) =>
+    '<span class="qf' + (state.mode === k ? ' active' : '') + '" data-mode="' + k + '">' + esc(label) + '</span>'
+  ).join('');
   $('qf').querySelectorAll('.qf').forEach(el => {
     el.addEventListener('click', () => {
       state.mode = el.dataset.mode;
-      if (el.dataset.mode !== 'date') state.date = null;
+      state.date = null;
       state.page = 1;
       render();
     });
@@ -345,6 +343,9 @@ function renderCal() {
 
 function setCat(cat) {
   state.cat = cat;
+  // 切换类别时清除日期筛选，避免新类别该日无条目导致空列表
+  state.date = null;
+  state.mode = '24h';
   state.page = 1;
   render();
   location.hash = cat;
