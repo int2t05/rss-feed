@@ -115,10 +115,6 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 .pager button:hover{background:var(--surface2);border-color:var(--blue)}
 .pager button:disabled{opacity:.4;cursor:default}
 .pager .pg-info{color:var(--muted);font-size:.72rem;margin:0 8px}
-.quick-filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.qf{padding:4px 12px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:.76rem;cursor:pointer;transition:all .12s}
-.qf:hover{border-color:var(--border2);color:var(--text)}
-.qf.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .empty{padding:40px;text-align:center;color:var(--muted2);font-size:.85rem}
 /* 日历 */
 .cal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
@@ -163,7 +159,6 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 const DATA = ${dataJson};
 const CAT_ICONS = ${catIcons};
 const PER_PAGE = 50;
-// 视图模式：'24h' 最近24小时 | '7d' 最近7天 | 'all' 全部 | 'date' 日历选日期
 let state = { cat: 'all', date: null, search: '', page: 1, month: new Date() };
 
 const $ = (id) => document.getElementById(id);

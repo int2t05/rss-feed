@@ -4,21 +4,7 @@
 
 ## 架构
 
-```mermaid
-flowchart LR
-    A["config.txt 名称|URL"] --> B[GitHub Actions 每30min]
-    B --> C{URL 类型}
-    C -->|B站 /bilibili路由| D[bilibili.mjs 直连API]
-    C -->|直链 http| E[fetch + rss-parser]
-    C -->|RSSHub /路由| F[实例池轮换 + rss-parser]
-    D --> G[state.json 去重]
-    E --> G
-    F --> G
-    G --> H[render.mjs 生成 index.html]
-    H --> I[git push → Pages]
-```
-
-纯拉取架构，零服务。直链源直接 fetch（5 并发）；B站路由走 B站 API 直连（WBI 签名 + cookie，避开公共 RSSHub 实例对 B站的风控）；其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动，新增/删除类别只需改 config。前端为单文件 SPA（内嵌 JSON，客户端日历筛选 + 滚动加载 + 搜索）。通用解析用 `rss-parser`（RSSHub 同款），支持 RSS 2.0/Atom/RDF + gzip + Dublin Core。
+详见 [docs/tech.md](docs/tech.md)。纯拉取架构，零服务：直链源直接 fetch（5 并发），B站路由走 B站 API 直连（WBI 签名 + cookie），其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动。前端为单文件 SPA（内嵌 JSON，客户端日历筛选 + 分页 + 搜索）。
 
 ## 部署
 
@@ -31,7 +17,7 @@ flowchart LR
    - 分类头：`[video|视频 UP 主|video|#fb7299]`
    - 直链：完整 RSS/Atom URL
    - RSSHub 路由：`/` 开头（如 `/bilibili/user/video/UID`），自动拼实例池
-3. **开启 GitHub Pages**：Settings → Pages → Source 选 `GitHub Actions`（deploy.yml 自动部署 dist/）
+3. **开启 GitHub Pages**：Settings → Pages → Source 选 `GitHub Actions`（sync.yml 自动部署 dist/）
 4. **配置 `BILIBILI_COOKIE` Secret**（B站源必需）：浏览器登录 B站 → DevTools Network → 复制 Cookie → 仓库 Secrets 新建 `BILIBILI_COOKIE`
 5. **手动触发首次同步**：Actions → `sync` → Run workflow
 6. 约 1 分钟后访问 Pages URL

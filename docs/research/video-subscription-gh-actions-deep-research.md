@@ -1,9 +1,8 @@
 # UP 主视频订阅 · GitHub Actions 部署深度调研
 
 Generated: 2026-08-19
-Scope: RSSHub 源码级实现分析，聚焦"GitHub 托管网页版 + Actions workflow"部署方案的可行性、实时性边界与现成方案
+范围: RSSHub 源码级实现分析，聚焦"GitHub 托管网页版 + Actions workflow"部署方案的可行性、实时性边界与现成方案
 方法: 直接克隆 [DIYgod/RSSHub](https://github.com/DIYgod/RSSHub) 与 [gqy20/rss2cubox](https://github.com/gqy20/rss2cubox) 源码逐文件分析，辅以部署配置与官方文档
-关联文档: `video-subscription-tools.md`（宏观方案）
 
 ## 1. 调研目标与范围
 
@@ -370,7 +369,7 @@ flowchart TD
 | GitHub Actions 延迟/跳过 | 中 | 架构硬约束；`workflow_dispatch` 手动补跑；公开仓库避免额度问题 |
 | 公共 RSSHub 实例限流 | 中 | 多实例轮换（rss2cubox 模式）；或自部署 |
 | 合规风险 | 中 | B站底层依赖非公开 API，`bilibili-API-collect` 已因律师函下线（2026-01-28）。个人自用风险低，勿商业化；抖音无公开 API，抓取依赖浏览器模拟 |
-| cookie 泄露 | 高 | `BILIBILI_COOKIE_*` 必须用 GitHub Secrets，**严禁入库**；仓库需公开时尤其注意 |
+| cookie 泄露 | 高 | `BILIBILI_COOKIE_*` 仅通过 GitHub Secrets 注入，不得入库 |
 
 ## 9. 验证路径
 

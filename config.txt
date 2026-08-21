@@ -1,12 +1,11 @@
 # 通用 RSS 订阅列表（唯一配置源：改此文件，页面/导航/类别自动同步）
 # 分类头：[id|标题|图标|主题色]  图标可选: video/ai/academic/tech/news/community，未匹配用默认
-# 源格式：名称 | URL | 显示条数(可选，默认10)
+# 源格式：名称 | URL
 # URL 为完整直链或 RSSHub 路由（/开头）
 # 空行和 # 开头的行会被忽略
 # 路由速查见 reference/rsshub-routes.md
 
-[video|视频 UP 主|video|#fb7299]
-# B站技术分享 UP 主（API 直连，配 BILIBILI_COOKIE 后稳定）
+[video|B站|video|#fb7299]
 Pi | /bilibili/user/video/316183842
 奇乐编程学院 | /bilibili/user/video/372313671
 技术蛋老师 | /bilibili/user/video/327247876
@@ -14,8 +13,14 @@ Pi | /bilibili/user/video/316183842
 峰华前端工程师 | /bilibili/user/video/302954484
 先进编译实验室 | /bilibili/user/video/1540261574
 
+[youtube|YouTube|video|#ff0000]
+Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l7upoD7IJ_ZA
+3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuRTT54ljmlizA
+Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs86EqCGJw
+ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE6xdFuwLrH2eyUikMQ
+IBM Technology | https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VmcTdDP4OcN62RA
+
 [ai|AI 动态|ai|#a371f7]
-# AI 公司动态与研究（直链优先，避免 RSSHub 实例波动）
 Anthropic News | /anthropic/news
 Anthropic Engineering | /anthropic/engineering
 OpenAI News | https://openai.com/news/rss.xml
@@ -31,9 +36,11 @@ Microsoft Research | https://www.microsoft.com/en-us/research/feed/
 Meta AI | https://ai.meta.com/blog/rss/
 AWS ML Blog | https://aws.amazon.com/blogs/machine-learning/feed/
 BAIR Blog | https://bair.berkeley.edu/blog/feed.xml
+Distill | https://distill.pub/rss.xml
+Sebastian Raschka | https://magazine.sebastianraschka.com/feed
+Alignment Forum | https://www.alignmentforum.org/rss
 
 [academic|论文|academic|#f778ba]
-# arXiv 论文（日更高量，独立分类避免 AI 类过载）
 arXiv cs.AI | https://rss.arxiv.org/rss/cs.AI
 arXiv cs.LG | https://rss.arxiv.org/rss/cs.LG
 arXiv cs.CL | https://rss.arxiv.org/rss/cs.CL
@@ -45,6 +52,21 @@ overreacted | https://overreacted.io/rss.xml
 Anthropic Research | /anthropic/research
 GitHub Blog Engineering | https://github.blog/engineering/feed/
 少数派 | https://sspai.com/feed
+React 官方 | https://react.dev/rss.xml
+Next.js | https://nextjs.org/feed.xml
+Tailwind CSS | https://tailwindcss.com/feeds/feed.xml
+Spring 官方 | https://spring.io/blog.atom
+Rust 官方 | https://blog.rust-lang.org/feed.xml
+Node.js 官方 | https://nodejs.org/en/feed/blog.xml
+美团技术 | https://tech.meituan.com/feed/
+InfoQ 中文 | https://www.infoq.cn/feed
+Netflix Tech | https://netflixtechblog.com/feed
+Spotify Engineering | https://engineering.atspotify.com/feed
+Meta Engineering | https://engineering.fb.com/feed/
+Slack Engineering | https://slack.engineering/feed/
+Dropbox Tech | https://dropbox.tech/feed
+Airbnb Engineering | https://medium.com/feed/airbnb-engineering
+PayPal Tech | https://medium.com/feed/paypal-tech
 
 [news|资讯媒体|news|#3fb950]
 Solidot | /solidot
@@ -57,6 +79,7 @@ IT之家 | https://www.ithome.com/rss/
 爱范儿 | https://www.ifanr.com/feed
 钛媒体 | https://www.tmtpost.com/rss
 虎嗅 | https://www.huxiu.com/rss/0.xml
+雷锋网 | https://www.leiphone.com/feed
 TechCrunch AI | https://techcrunch.com/category/artificial-intelligence/feed/
 The Verge AI | https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
 MIT Tech Review | https://www.technologyreview.com/feed/
@@ -77,56 +100,15 @@ LinuxDo | https://linux.do/latest.rss
 Lobsters | https://lobste.rs/rss
 Dev.to | https://dev.to/feed
 TLDR | https://www.tldr.tech/rss
-
-[frontend|前端|tech|#39d0d8]
-React 官方 | https://react.dev/rss.xml
-Next.js | https://nextjs.org/feed.xml
-Tailwind CSS | https://tailwindcss.com/feeds/feed.xml
-
-[backend|后端|tech|#f1e05a]
-Spring 官方 | https://spring.io/blog.atom
-Rust 官方 | https://blog.rust-lang.org/feed.xml
-Node.js 官方 | https://nodejs.org/en/feed/blog.xml
-美团技术 | https://tech.meituan.com/feed/
-InfoQ 中文 | https://www.infoq.cn/feed
-
-[devops|DevOps|community|#3fb950]
-Kubernetes | https://kubernetes.io/feed.xml
-Docker Blog | https://www.docker.com/blog/feed/
-HashiCorp | https://www.hashicorp.com/blog/feed.xml
-GitHub Blog | https://github.blog/feed/
-Databricks | https://www.databricks.com/feed
-Google Blog | https://blog.google/rss/
-
-[youtube|YouTube|video|#ff0000]
-Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l7upoD7IJ_ZA
-3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuRTT54ljmlizA
-Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs86EqCGJw
-ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE6xdFuwLrH2eyUikMQ
-IBM Technology | https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VmcTdDP4OcN62RA
-
-[cn-community|中文社区|community|#1e80ff]
 博客园精选 | /cnblogs/pick
 开源中国 | /oschina/news
 掘金前端 | /juejin/category/frontend
-雷锋网 | https://www.leiphone.com/feed
-
-[en-community|外国社区|community|#ff4500]
 Reddit Programming | https://www.reddit.com/r/programming/hot.rss
 Reddit MachineLearning | https://www.reddit.com/r/machinelearning/hot.rss
 Product Hunt | https://producthunt.com/feed
 Stack Overflow | https://stackoverflow.com/feeds
-
-[eng-blog|公司技术博客|tech|#209ce8]
-Netflix Tech | https://netflixtechblog.com/feed
-Spotify Engineering | https://engineering.atspotify.com/feed
-Meta Engineering | https://engineering.fb.com/feed/
-Slack Engineering | https://slack.engineering/feed/
-Dropbox Tech | https://dropbox.tech/feed
-Airbnb Engineering | https://medium.com/feed/airbnb-engineering
-PayPal Tech | https://medium.com/feed/paypal-tech
-
-[ml-blog|AI 研究|ai|#a371f7]
-Distill | https://distill.pub/rss.xml
-Sebastian Raschka | https://magazine.sebastianraschka.com/feed
-Alignment Forum | https://www.alignmentforum.org/rss
+Kubernetes | https://kubernetes.io/feed.xml
+Docker Blog | https://www.docker.com/blog/feed/
+HashiCorp | https://www.hashicorp.com/blog/feed.xml
+Databricks | https://www.databricks.com/feed
+Google Blog | https://blog.google/rss/

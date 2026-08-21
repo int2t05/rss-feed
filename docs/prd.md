@@ -58,7 +58,7 @@
 ## 5. 约束
 
 - 实时性：GitHub Actions cron 最短 5 分钟且不保证准时，实际延迟 5–35 分钟，非真实时
-- B站 API 需配 `BILIBILI_COOKIE`，匿名对热门 UP 易 -352 风控
+- B站 API 需配 `BILIBILI_COOKIE`（详见 README）
 - 合规：底层依赖非公开 API（B站等），个人自用，勿商业化
 
 ## 6. 验收标准

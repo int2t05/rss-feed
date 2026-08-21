@@ -50,7 +50,7 @@ flowchart LR
 
 ### 2.6 .github/workflows/sync.yml — 定时任务
 
-checkout → 装依赖 → 同步 → git commit/push 四步，concurrency 防并发。注入 `BILIBILI_COOKIE` Secret。
+定时拉取 → 提交产物 → 部署 Pages，concurrency 防并发。注入 `BILIBILI_COOKIE` Secret。
 
 ## 3. 通用 RSS 解析
 
