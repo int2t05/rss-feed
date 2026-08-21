@@ -97,3 +97,36 @@ HashiCorp | https://www.hashicorp.com/blog/feed.xml
 GitHub Blog | https://github.blog/feed/
 Databricks | https://www.databricks.com/feed
 Google Blog | https://blog.google/rss/
+
+[youtube|YouTube|video|#ff0000]
+Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l7upoD7IJ_ZA
+3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuRTT54ljmlizA
+Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs86EqCGJw
+ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE6xdFuwLrH2eyUikMQ
+IBM Technology | https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VmcTdDP4OcN62RA
+
+[cn-community|中文社区|community|#1e80ff]
+博客园精选 | /cnblogs/pick
+开源中国 | /oschina/news
+掘金前端 | /juejin/category/frontend
+雷锋网 | https://www.leiphone.com/feed
+
+[en-community|外国社区|community|#ff4500]
+Reddit Programming | https://www.reddit.com/r/programming/hot.rss
+Reddit MachineLearning | https://www.reddit.com/r/machinelearning/hot.rss
+Product Hunt | https://producthunt.com/feed
+Stack Overflow | https://stackoverflow.com/feeds
+
+[eng-blog|公司技术博客|tech|#209ce8]
+Netflix Tech | https://netflixtechblog.com/feed
+Spotify Engineering | https://engineering.atspotify.com/feed
+Meta Engineering | https://engineering.fb.com/feed/
+Slack Engineering | https://slack.engineering/feed/
+Dropbox Tech | https://dropbox.tech/feed
+Airbnb Engineering | https://medium.com/feed/airbnb-engineering
+PayPal Tech | https://medium.com/feed/paypal-tech
+
+[ml-blog|AI 研究|ai|#a371f7]
+Distill | https://distill.pub/rss.xml
+Sebastian Raschka | https://magazine.sebastianraschka.com/feed
+Alignment Forum | https://www.alignmentforum.org/rss

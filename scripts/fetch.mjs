@@ -115,13 +115,15 @@ async function fetchItems(source) {
         throw new Error('URL 必须以 / 或 http 开头');
     }
     const feed = await parser.parseString(xml);
-    return feed.items.map((it) => ({
-        title: it.title || '(无标题)',
-        link: it.link || '',
-        id: it.guid || it.link || it.title,
-        pubDate: it.isoDate || it.pubDate || '',
-        author: it.creator || it.author || '',
-    }));
+    return feed.items
+        .map((it) => ({
+            title: it.title || '(无标题)',
+            link: it.link || '',
+            id: it.guid || it.link || it.title,
+            pubDate: it.isoDate || it.pubDate || '',
+            author: it.creator || it.author || '',
+        }))
+        .filter((it) => it.pubDate && !isNaN(new Date(it.pubDate).getTime()));
 }
 
 // 逐个拉取并去重，返回带 fresh 标记的结果
