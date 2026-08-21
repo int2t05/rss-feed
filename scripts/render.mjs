@@ -169,7 +169,7 @@ const DATA = ${dataJson};
 const CAT_ICONS = ${catIcons};
 const PER_PAGE = 50;
 // 视图模式：'24h' 最近24小时 | '7d' 最近7天 | 'all' 全部 | 'date' 日历选日期
-let state = { cat: 'all', mode: '24h', date: null, search: '', page: 1, month: new Date() };
+let state = { cat: 'all', mode: 'all', date: null, search: '', page: 1, month: new Date() };
 
 const $ = (id) => document.getElementById(id);
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -245,7 +245,7 @@ function renderHead(items) {
   parts.push('<span class="count">' + items.length + ' 条</span>');
   $('head').innerHTML = (icon ? '<span style="color:var(--accent);width:18px;height:18px;display:inline-flex">' + icon + '</span>' : '') + '<h2>' + esc(title) + '</h2>' + parts.join('');
   const back = $('back-link');
-  if (back) back.addEventListener('click', () => { state.mode = '24h'; state.date = null; state.page = 1; render(); });
+  if (back) back.addEventListener('click', () => { state.mode = 'all'; state.date = null; state.page = 1; render(); });
 }
 
 function renderList() {
@@ -352,7 +352,7 @@ function setCat(cat) {
   state.cat = cat;
   // 切换类别时清除日期筛选，避免新类别该日无条目导致空列表
   state.date = null;
-  state.mode = '24h';
+  state.mode = 'all';
   state.page = 1;
   render();
   location.hash = cat;
