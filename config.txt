@@ -22,7 +22,6 @@ Go夜读 | /bilibili/user/video/326749661
 面向加薪学习 | /bilibili/user/video/375038855
 CodeSheep | /bilibili/user/video/384068749
 程序员鱼皮 | /bilibili/user/video/12890453
-美团技术团队 | /bilibili/user/video/18937923
 跟李沐学AI | /bilibili/user/video/1567748478
 同济子豪兄 | /bilibili/user/video/1900783
 莫烦Python | /bilibili/user/video/243821484
