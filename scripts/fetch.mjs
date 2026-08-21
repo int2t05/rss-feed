@@ -99,16 +99,18 @@ async function fetchItems(source) {
     if (source.url.startsWith('/')) {
         xml = await fetchFromRsshub(source.url);
     } else if (source.url.startsWith('http')) {
-        // 直链源 1 次重试（网络抖动常见，非风控）
-        for (let attempt = 0; attempt < 2; attempt++) {
+        // YouTube 限流严格，3 次重试 + 2s 间隔；其他直链源 1 次重试
+        const isYoutube = source.url.includes('youtube.com');
+        const maxRetry = isYoutube ? 3 : 2;
+        for (let attempt = 0; attempt < maxRetry; attempt++) {
             try {
                 const res = await fetch(source.url, { signal: AbortSignal.timeout(15000), headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 xml = await res.text();
                 break;
             } catch (e) {
-                if (attempt) throw e;
-                await sleep(1000);
+                if (attempt === maxRetry - 1) throw e;
+                await sleep(isYoutube ? 2000 : 1000);
             }
         }
     } else {
