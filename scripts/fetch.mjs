@@ -123,7 +123,10 @@ async function fetchItems(source) {
             pubDate: it.isoDate || it.pubDate || '',
             author: it.creator || it.author || '',
         }))
-        .filter((it) => it.pubDate && !isNaN(new Date(it.pubDate).getTime()));
+        .filter((it) => {
+            const ts = new Date(it.pubDate).getTime();
+            return it.pubDate && !isNaN(ts) && ts <= Date.now() + 60000; // 过滤无效与未来条目（60s 容差）
+        });
 }
 
 // 逐个拉取并去重，返回带 fresh 标记的结果

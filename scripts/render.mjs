@@ -90,10 +90,6 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 #search{margin-left:auto;padding:5px 10px;background:var(--surface);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:.8rem;width:180px}
 #search:focus{outline:none;border-color:var(--blue)}
 .meta{color:var(--muted2);font-size:.72rem;margin-bottom:8px;flex-shrink:0}
-.quick-filters{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;flex-shrink:0}
-.qf{padding:4px 12px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:.76rem;cursor:pointer;transition:all .12s}
-.qf:hover{border-color:var(--border2);color:var(--text)}
-.qf.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .layout{display:flex;gap:20px;flex:1;min-height:0}
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .sidebar{width:260px;flex-shrink:0;overflow-y:auto}
@@ -152,7 +148,6 @@ header .nav{display:flex;gap:4px;flex-wrap:wrap}
 <input id="search" placeholder="搜索标题" type="search">
 </header>
 <div class="meta" id="meta"></div>
-<div class="quick-filters" id="qf"></div>
 <div class="layout">
 <main class="main">
 <div class="head" id="head"></div>
@@ -169,7 +164,7 @@ const DATA = ${dataJson};
 const CAT_ICONS = ${catIcons};
 const PER_PAGE = 50;
 // 视图模式：'24h' 最近24小时 | '7d' 最近7天 | 'all' 全部 | 'date' 日历选日期
-let state = { cat: 'all', mode: 'all', date: null, search: '', page: 1, month: new Date() };
+let state = { cat: 'all', date: null, search: '', page: 1, month: new Date() };
 
 const $ = (id) => document.getElementById(id);
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -203,33 +198,11 @@ function filtered() {
     const q = state.search.toLowerCase();
     items = items.filter(it => it.title.toLowerCase().includes(q));
   }
-  if (state.mode === 'date' && state.date) {
+  if (state.date) {
     const key = dayKey(state.date);
     items = items.filter(it => dayKey(it.pubDate) === key);
-  } else if (state.mode === '24h') {
-    const cutoff = Date.now() - 86400000;
-    items = items.filter(it => new Date(it.pubDate).getTime() >= cutoff);
-  } else if (state.mode === '7d') {
-    const cutoff = Date.now() - 7 * 86400000;
-    items = items.filter(it => new Date(it.pubDate).getTime() >= cutoff);
   }
   return items;
-}
-
-function renderQF() {
-  const opts = [['24h','最近24小时'], ['7d','最近7天'], ['all','全部']];
-  if (state.mode === 'date' && state.date) opts.push(['date', '已选 ' + new Date(state.date).toLocaleDateString('zh-CN', {month:'numeric',day:'numeric'})]);
-  $('qf').innerHTML = opts.map(([k, label]) =>
-    '<span class="qf' + (state.mode === k ? ' active' : '') + '" data-mode="' + k + '">' + esc(label) + '</span>'
-  ).join('');
-  $('qf').querySelectorAll('.qf').forEach(el => {
-    el.addEventListener('click', () => {
-      state.mode = el.dataset.mode;
-      state.date = null;
-      state.page = 1;
-      render();
-    });
-  });
 }
 
 function renderHead(items) {
@@ -239,13 +212,15 @@ function renderHead(items) {
     if (c) { title = c.title; icon = CAT_ICONS[c.icon] || CAT_ICONS.default; }
   }
   const parts = [];
-  if (state.mode === 'date' && state.date) {
-    parts.push('<a class="back" id="back-link" style="cursor:pointer">← 返回</a>');
+  if (state.date) {
+    parts.push('<a class="back" id="back-link" style="cursor:pointer">← 返回全部</a>');
+    parts.push('<span class="count">' + new Date(state.date).toLocaleDateString('zh-CN') + ' · ' + items.length + ' 条</span>');
+  } else {
+    parts.push('<span class="count">' + items.length + ' 条</span>');
   }
-  parts.push('<span class="count">' + items.length + ' 条</span>');
   $('head').innerHTML = (icon ? '<span style="color:var(--accent);width:18px;height:18px;display:inline-flex">' + icon + '</span>' : '') + '<h2>' + esc(title) + '</h2>' + parts.join('');
   const back = $('back-link');
-  if (back) back.addEventListener('click', () => { state.mode = 'all'; state.date = null; state.page = 1; render(); });
+  if (back) back.addEventListener('click', () => { state.date = null; state.page = 1; render(); });
 }
 
 function renderList() {
@@ -341,7 +316,6 @@ function renderCal() {
   $('cal').querySelectorAll('.cal-day[data-date]').forEach(el => {
     el.addEventListener('click', () => {
       state.date = el.dataset.date + 'T00:00:00';
-      state.mode = 'date';
       state.page = 1;
       render();
     });
@@ -350,9 +324,7 @@ function renderCal() {
 
 function setCat(cat) {
   state.cat = cat;
-  // 切换类别时清除日期筛选，避免新类别该日无条目导致空列表
   state.date = null;
-  state.mode = 'all';
   state.page = 1;
   render();
   location.hash = cat;
@@ -362,7 +334,6 @@ function render() {
   const items = filtered();
   $('meta').textContent = DATA.categories.length + ' 类 · ' + DATA.items.length + ' 条 · ' + DATA.updated;
   document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.dataset.cat === state.cat));
-  renderQF();
   renderList();
   renderCal();
 }
