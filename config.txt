@@ -5,20 +5,18 @@
 # 空行和 # 开头的行会被忽略
 # 路由速查见 reference/rsshub-routes.md
 
-[video|B站|video|#fb7299]
+[video|视频|video|#fb7299]
 Pi | /bilibili/user/video/316183842
 奇乐编程学院 | /bilibili/user/video/372313671
 技术蛋老师 | /bilibili/user/video/327247876
 技术胖 | /bilibili/user/video/165659472
 峰华前端工程师 | /bilibili/user/video/302954484
 先进编译实验室 | /bilibili/user/video/1540261574
-
-[youtube|YouTube|video|#ff0000]
-Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l7upoD7IJ_ZA
-3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuRTT54ljmlizA
-Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs86EqCGJw
-ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE6xdFuwLrH2eyUikMQ
-IBM Technology | https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VmcTdDP4OcN62RA
+Two Minute Papers | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFbfYPyITQ-7l7upoD7IJ_ZA
+3Blue1Brown | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFYO_jab_esuRTT54ljmlizA
+Fireship | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFsBjURrPoezykLs86EqCGJw
+ThePrimeagen | https://www.youtube.com/feeds/videos.xml?playlist_id=UULF8ENHE6xdFuwLrH2eyUikMQ
+IBM Technology | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFKWaEZ-_VmcTdDP4OcN62RA
 
 [ai|AI 动态|ai|#a371f7]
 Anthropic News | /anthropic/news
