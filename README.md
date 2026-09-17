@@ -1,10 +1,26 @@
 # RSS 订阅仪表盘
 
-通用 RSS 源订阅：B站 UP 主、技术博客、GitHub Releases、新闻站等任意 RSS feed，统一聚合到一个静态网页。GitHub Actions 每 30 分钟拉取，GitHub Pages 托管。零服务器。
+通用 RSS 源订阅：B站 UP 主、YouTube、arXiv 论文、技术博客、GitHub Releases、新闻站等任意 RSS feed，统一聚合到一个静态网页。GitHub Actions 每 30 分钟拉取，GitHub Pages 托管。零服务器。
 
 ## 架构
 
-详见 [docs/tech.md](docs/tech.md)。纯拉取架构，零服务：直链源直接 fetch（5 并发），B站路由走 B站 API 直连（WBI 签名 + cookie），其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动。前端为单文件 SPA（内嵌 JSON，客户端日历筛选 + 分页 + 搜索）。
+详见 [docs/tech.md](docs/tech.md)。纯拉取架构，零服务：直链源直接 fetch（5 并发），B站路由走 B站 API 直连（WBI 签名 + cookie），其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动。前端为单文件 SPA（内嵌 JSON，侧边栏分类 + 卡片式无限滚动 + 时间筛选 + 搜索）。
+
+## 分类（8 类 139 源）
+
+| 分类 | 源数 | 说明 |
+|---|---|---|
+| 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 |
+| AI 动态 | 24 | AI 实验室博客 + 研究者博客 |
+| arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
+| 会议/期刊 | 10 | ACL/JMLR/Nature/Science/MIT/Stanford |
+| 技术博客 | 25 | 顶级工程博客 + 官方语言博客 |
+| 资讯媒体 | 12 | 中英文科技媒体 |
+| 开发者社区 | 17 | HN/V2EX/Reddit + auto-trend 日报 |
+
+**auto-trend 接入**：auto-trend 项目每日生成 GitHub Trending + RSS 热点的 LLM 分析日报，通过 `docs/feed.xml` 输出 RSS 2.0，本仪表盘作为普通直链源拉取。
+
+**FluxSift 接入**：FluxSift 的 RSS feed 为内网 + token 鉴权，GitHub Actions 云端无法访问。config.txt 中以 `#` 注释形式存在，本地运行时取消注释即可。
 
 ## 部署
 
@@ -14,7 +30,7 @@
    [分类|标题|图标|主题色]
    名称 | URL
    ```
-   - 分类头：`[video|视频 UP 主|video|#fb7299]`
+   - 分类头：`[video|视频|video|#fb7299]`
    - 直链：完整 RSS/Atom URL
    - RSSHub 路由：`/` 开头（如 `/bilibili/user/video/UID`），自动拼实例池
 3. **开启 GitHub Pages**：Settings → Pages → Source 选 `GitHub Actions`（sync.yml 自动部署 dist/）
@@ -26,11 +42,11 @@
 
 | 文件 | 作用 |
 | --- | --- |
-| `config.txt` | 订阅列表（类别+源，唯一配置源） |
+| `config.txt` | 订阅列表（8 分类 139 源，唯一配置源） |
 | `instances.txt` | RSSHub 公共实例池 |
 | `scripts/fetch.mjs` | 同步核心：解析 config → 三路分发 → 去重 → 生成 |
 | `scripts/bilibili.mjs` | B站 API 直连（WBI 签名 + cookie） |
-| `scripts/render.mjs` | 单文件 SPA 渲染（日历 + 滚动加载 + 搜索） |
+| `scripts/render.mjs` | 单文件 SPA 渲染（侧边栏 + 卡片 + 无限滚动 + 搜索） |
 | `dist/` | 生成产物：`index.html`（单文件 SPA，内嵌 JSON）+ `state.json` |
 | `.github/workflows/sync.yml` | Actions 定时任务（注入 BILIBILI_COOKIE） |
 | `docs/prd.md` `docs/tech.md` | 需求规格与技术架构 |

@@ -13,17 +13,34 @@ flowchart LR
     F --> G[render.mjs 生成 index.html]
     G --> H[git push 回仓库]
     H --> I[GitHub Pages 展示]
+    J["auto-trend daily.yml"] --> K["main.py + rss.py"]
+    K --> L["docs/feed.xml RSS 2.0"]
+    L --> D
 ```
 
 **纯拉取架构**：消费端只做拉取-解析-去重-渲染，零服务。不部署 RSSHub。
 
 **三路分发**：`fetch.mjs` 按 URL 前缀路由——`/bilibili/user/video/:uid` 走 B站 API 直连（`bilibili.mjs`，WBI 签名，配 `BILIBILI_COOKIE` 后稳定），`/` 开头的其他 RSSHub 路由走实例池轮换，`http` 开头的直链直接 fetch。B站路由独立于实例池，因公共 RSSHub 实例对 B站普遍风控。
 
+**auto-trend RSS 输出**：auto-trend 项目每日生成 Markdown 日报的同时，通过 `scripts/rss.py` 渲染 RSS 2.0 XML（`docs/feed.xml`），GitHub Pages 公网可达。rss-feed 在 config.txt 中将其作为普通直链源拉取，无需特殊代码。
+
 ## 2. 核心组件
 
 ### 2.1 config.txt — 订阅配置
 
 分类头 `[id|标题|图标|主题色]` + 源行 `名称 | URL | 显示条数`。类别与源完全由此文件驱动，新增/删除类别只需改此文件。
+
+**8 分类 139 源**：
+
+| 分类 | 标题 | 源数 | 说明 |
+|---|---|---|---|
+| `video` | 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift（注释） |
+| `ai` | AI 动态 | 24 | AI 实验室博客 + 研究者博客 |
+| `arxiv` | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
+| `papers` | 会议/期刊 | 10 | ACL/JMLR/Nature/Science/MIT/Stanford |
+| `tech` | 技术博客 | 25 | 顶级工程博客 + 官方语言博客 |
+| `news` | 资讯媒体 | 12 | 中英文科技媒体 |
+| `community` | 开发者社区 | 17 | HN/V2EX/Reddit + auto-trend 日报 |
 
 ### 2.2 instances.txt — RSSHub 实例池
 
@@ -42,7 +59,15 @@ flowchart LR
 
 ### 2.4 scripts/render.mjs — 前端渲染
 
-单文件 SPA：`renderSPA(data)` 生成完整 HTML，内嵌 JSON 数据，客户端 JS 渲染日历筛选 + 滚动加载 + 类别切换 + 搜索。导出 `renderSPA`/`platformColor`。
+单文件 SPA：`renderSPA(data)` 生成完整 HTML，内嵌 JSON 数据，客户端渲染侧边栏分类 + 卡片式无限滚动 + 时间筛选 + 搜索。导出 `renderSPA`/`platformColor`。
+
+**布局**：
+- 左侧侧边栏：搜索框 + 分类列表（源色点 + 标题 + 条目数徽章）+ 时间筛选（全部/今天/本周/本月）
+- 主区域：头部（当前筛选 + 条目数 + 更新时间）+ 卡片列表
+- 卡片：源色点 + 源名 + 标题（粗体）+ 时间 + 分类标签
+- 24h 内条目 `.fresh` 高亮（左侧色条 + 标题橙色）
+- 无限滚动（IntersectionObserver，每批 50 条）
+- 移动端：侧边栏抽屉式（汉堡菜单切换）
 
 ### 2.5 state.json — 去重状态
 
@@ -72,40 +97,47 @@ flowchart LR
 - 新条目 ID 置前，`[...new Set([...fresh, ...old])].slice(0, 100)`
 - 源失败：`newState[key] = state[key] || []`（保留旧）
 
-## 5. 前端设计
+## 5. auto-trend RSS 接入
 
-单文件 SPA，暗色主题，客户端渲染：
+auto-trend 项目（`https://github.com/int2t05/auto-trend`）每日通过 GitHub Actions 生成 GitHub Trending + RSS 热点的 LLM 分析日报。
 
-- 左侧主区域：条目按时间倒序，每条显示相对时间 + 源名 + 标题，默认 50 条，"显示更多"按钮每次加 50
-- 右侧日历：月视图，有内容的日期带标记，点击筛选当天条目
-- 顶部导航：类别切换（全部/各类），客户端筛选，hash 路由
-- 搜索框：标题实时搜索
-- 24h 内条目标记为 fresh（橙色）
-- `@media(max-width:860px)` 移动端隐藏日历
-- `@media(prefers-color-scheme:light)` 浅色自适应
+**RSS 输出流程**：
+1. `scripts/rss.py` 的 `render_rss_feed(repos, analyses, report_date)` 将结构化数据渲染为 RSS 2.0 XML
+2. 每个 trending repo / RSS 热点作为一条 item：`title` = repo 全名，`description` = LLM summary，`content:encoded` = 完整分析 HTML
+3. `scripts/main.py` 在生成 Markdown 日报后追加调用，写入 `docs/feed.xml`
+4. `git_commit_and_push` 同时提交日报和 feed.xml
+5. GitHub Pages 公网可达：`https://int2t05.github.io/auto-trend/feed.xml`
 
-## 6. 部署
+**rss-feed 侧**：config.txt 中 community 分类下配置为普通直链源，fetch.mjs 当作普通 RSS 2.0 处理，无需特殊代码。
+
+## 6. FluxSift 接入
+
+FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + token 鉴权）。GitHub Actions 云端无法访问内网。
+
+**方案**：config.txt 中以 `#` 注释形式存在，附说明。本地运行 `node scripts/fetch.mjs` 时取消注释即可。fetch.mjs 的错误处理已能优雅处理失败源（保留旧 state，不中断其他源）。
+
+## 7. 部署
 
 - 公开仓库 + GitHub Pages（main / root）
 - Actions：`cron: "*/30 * * * *"` + `workflow_dispatch`
 
-## 7. 依赖
+## 8. 依赖
 
 - `rss-parser@^3.13.0`（唯一运行时依赖）
 - Node 22+（fetch、`import.meta.dirname`、`AbortSignal.timeout`）
 
-## 8. 文件结构
+## 9. 文件结构
 
 ```
 rss-feed/
-├── config.txt              # 订阅列表（类别+源，唯一配置源）
+├── config.txt              # 订阅列表（8 分类 139 源，唯一配置源）
 ├── instances.txt           # RSSHub 实例池
 ├── package.json            # rss-parser 依赖
 ├── dist/                   # 生成产物（GitHub Pages 源）
 │   ├── index.html          # 单文件 SPA（内嵌 JSON）
 │   └── state.json          # 去重状态
 ├── .gitignore
-├── LICENSE                 # MIT（bilibili.mjs 为独立实现，未派生 RSSHub 代码）
+├── LICENSE                 # MIT
 ├── README.md
 ├── docs/
 │   ├── prd.md              # 产品需求
@@ -114,13 +146,15 @@ rss-feed/
 └── scripts/
     ├── fetch.mjs           # 同步核心（三路分发）
     ├── bilibili.mjs        # B站 API 直连（WBI 签名）
-    └── render.mjs          # 前端渲染
+    └── render.mjs          # 前端渲染（侧边栏 + 卡片 + 无限滚动）
 ```
 
-## 9. 风险与缓解
+## 10. 风险与缓解
 
-| 风险                   | 缓解                          |
-| ---------------------- | ----------------------------- |
+| 风险 | 缓解 |
+|---|---|
 | RSSHub 公共实例限流/挂 | 实例池轮换 + 失败保留旧 state |
-| Actions cron 延迟      | 架构硬约束，向用户明示近实时  |
-| B站 API 风控           | 配 BILIBILI_COOKIE + 3 次重试 |
+| Actions cron 延迟 | 架构硬约束，向用户明示近实时 |
+| B站 API 风控 | 配 BILIBILI_COOKIE + 3 次重试 |
+| auto-trend feed 不可达 | 源失败保留旧 state，不影响其他源 |
+| FluxSift 内网不可达 | 注释形式存在，仅本地可用 |

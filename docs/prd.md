@@ -2,7 +2,7 @@
 
 ## 1. 背景与目标
 
-订阅分散在多平台的更新源（B站 UP 主、技术博客、GitHub Releases、新闻站等），统一聚合到一个静态网页，主动查看最新更新。
+订阅分散在多平台的更新源（B站 UP 主、YouTube、arXiv 论文、技术博客、GitHub Releases、新闻站等），统一聚合到一个静态网页，主动查看最新更新。
 
 **目标**：零服务器、零运维成本，GitHub 托管的通用 RSS 订阅仪表盘。
 
@@ -16,7 +16,7 @@
 
 1. 在 `config.txt` 添加一行 `名称 | URL`（直链或 RSSHub 路由）
 2. GitHub Actions 每 30 分钟自动拉取、去重、更新网页
-3. 浏览器打开 Pages URL，按源分组看最新条目，点击直达原文
+3. 浏览器打开 Pages URL，侧边栏切分类、时间筛选，卡片列表浏览条目，点击直达原文
 
 ## 3. 功能需求
 
@@ -28,25 +28,50 @@
 - 支持空行、`#` 注释
 - 类别与源完全由 config 驱动，新增/删除类别只需改 config
 
-### 3.2 数据拉取
+### 3.2 分类体系（8 类，139 源）
+
+| 分类 ID | 标题 | 源数 | 说明 |
+|---|---|---|---|
+| `video` | 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift（注释） |
+| `ai` | AI 动态 | 24 | Anthropic/OpenAI/DeepMind 等 AI 实验室 + 研究者博客 |
+| `arxiv` | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物交叉 |
+| `papers` | 会议/期刊 | 10 | ACL Anthology/JMLR/Nature/Science/MIT/Stanford 等 |
+| `tech` | 技术博客 | 25 | Netflix/Spotify/Meta + Uber/Stripe/Discord/Go/Python 官方 |
+| `news` | 资讯媒体 | 12 | Solidot/机器之心/量子位/Ars Technica/MIT Tech Review 等 |
+| `community` | 开发者社区 | 17 | HN/V2EX/Reddit + auto-trend 日报 RSS |
+
+### 3.3 数据拉取
 - B站路由（`/bilibili/user/video/:uid`）：直连 B站 API（WBI 签名 + 匿名 buvid + dm_img 指纹），避开公共 RSSHub 实例对 B站的风控
 - 直链：直接 fetch + 通用 RSS 解析
 - 其他 RSSHub 路由：拼公共实例池 URL，失败自动轮换
 - 单源超时 15s，失败标记错误（不中断其他源）
 - 通用解析支持 RSS 2.0 / Atom / RDF，含 gzip 压缩、Dublin Core 日期
 
-### 3.3 去重
+### 3.4 去重
 - 每源维护已见条目 ID 集合（`state.json`）
 - 仅新条目标记，旧条目正常展示
 - 每源保留最近 100 条 ID，避免无限增长
 - 源失败时保留旧状态，不丢失历史
 
-### 3.4 展示
-- 按源分组，每源一个区块
-- 区块内每条一行：相对时间 + 标题，整行可点击直达原文
-- 新条目视觉标记（左侧色条）
-- 极简暗色风格，暗/浅色自适应
+### 3.5 展示
+- 左侧侧边栏：分类列表（源色点 + 标题 + 条目数徽章）+ 时间筛选（全部/今天/本周/本月）+ 搜索框
+- 主区域：头部（当前筛选 + 条目数 + 更新时间）+ 卡片列表
+- 卡片式条目：源色点 + 源名 + 标题（粗体）+ 相对时间 + 分类标签
+- 24h 内条目 `.fresh` 高亮（左侧色条 + 标题橙色）
+- 无限滚动替代分页（IntersectionObserver，每批 50 条）
+- 暗色/浅色自适应
+- 移动端侧边栏抽屉式（汉堡菜单切换）
 - 纯文字，无图片
+
+### 3.6 auto-trend 接入
+- auto-trend 项目每日生成 GitHub Trending + RSS 热点的 LLM 分析日报
+- 新增 RSS 2.0 输出（`docs/feed.xml`），供 rss-feed 作为普通直链源拉取
+- config.txt 中 community 分类下配置：`auto-trend 日报 | https://int2t05.github.io/auto-trend/feed.xml`
+
+### 3.7 FluxSift 接入
+- FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + token 鉴权）
+- GitHub Actions 云端无法访问内网，config.txt 中以 `#` 注释形式存在
+- 本地运行 `node scripts/fetch.mjs` 时取消注释即可
 
 ## 4. 部署
 
@@ -68,5 +93,10 @@
 3. RSSHub 路由源（如 B站 UP 主）拉取成功并展示
 4. 同一条目不重复出现（去重生效）
 5. 源失败时该区块显示错误，不影响其他源
-6. 网页纯文字链接、按源分组、新条目有标记
-7. Pages 访问正常，每 30 分钟自动更新
+6. 侧边栏展示 8 类 + 源色点 + 条目数徽章
+7. 卡片式条目布局，源色点 + 源名 + 标题 + 时间 + 分类标签
+8. 无限滚动替代分页，滚动加载流畅
+9. 暗色/浅色主题正常
+10. 移动端侧边栏抽屉式切换正常
+11. auto-trend feed 拉取成功，条目出现在 community 分类
+12. Pages 访问正常，每 30 分钟自动更新

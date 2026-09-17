@@ -124,6 +124,7 @@ async function fetchItems(source) {
             id: it.guid || it.link || it.title,
             pubDate: it.isoDate || it.pubDate || '',
             author: it.creator || it.author || '',
+            description: (it.contentSnippet || it.summary || '').slice(0, 200),
         }))
         .filter((it) => {
             const ts = new Date(it.pubDate).getTime();
@@ -166,15 +167,18 @@ const updated = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }
 
 // 收集全量条目（按时间倒序），供客户端日历筛选与滚动加载
 const categories = CATEGORIES.map((cat) => ({ ...cat, sources: allResults[cat.id] }));
+const freshIds = new Set();
 const allItems = [];
 for (const cat of categories) {
     for (const src of cat.sources) {
         if (src.error) continue;
         for (const it of src.items) {
+            if (src.fresh.some((f) => f.id === it.id)) freshIds.add(it.id);
             allItems.push({
                 id: it.id, title: it.title, link: it.link,
                 pubDate: it.pubDate, category: cat.id,
                 source: src.name, sourceColor: platformColor(src.url),
+                description: it.description || '',
             });
         }
     }
@@ -183,8 +187,9 @@ allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
 const data = {
     updated,
-    categories: CATEGORIES.map((c) => ({ id: c.id, title: c.title, icon: c.icon, color: c.color })),
+    categories: CATEGORIES.map((c) => ({ id: c.id, title: c.title, color: c.color })),
     sources: categories.flatMap((c) => c.sources.map((s) => ({ name: s.name, url: s.url, category: c.id, error: s.error || null }))),
+    freshIds: [...freshIds],
     items: allItems,
 };
 
