@@ -126,7 +126,8 @@ body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei"
 .card.unread{background:rgba(88,166,255,.06)}
 .card-row1{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
 .card-row1 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;align-self:center}
-.card-row1 .src{font-size:.74rem;color:var(--muted);flex-shrink:0;font-weight:500}
+.card-row1 .src{font-size:.74rem;color:var(--muted);flex-shrink:0;font-weight:500;display:flex;align-items:center;gap:4px}
+.card-row1 .self-badge{font-size:.6rem;color:#fff;background:linear-gradient(135deg,#f0883e,#a371f7);padding:0 4px;border-radius:3px;font-weight:600;line-height:1.4}
 .card-row1 .title{color:var(--text2);font-size:.85rem;font-weight:500;flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card:hover .title{color:var(--blue)}
 .card.fresh .title{color:var(--accent)}
@@ -261,6 +262,8 @@ const FRESH_SET = new Set(DATA.freshIds || []);
 // 分类查表：渲染时按 id 取标题/主题色，模块级常量避免每次渲染重建
 const CAT_NAMES = {}; for (const c of DATA.categories) CAT_NAMES[c.id] = c.title;
 const CAT_COLOR = {}; for (const c of DATA.categories) CAT_COLOR[c.id] = c.color;
+// 自建源：FluxSift（cpolar 隧道）+ auto-trend（int2t05.github.io），前端标「自建」徽章
+const SELF_BUILT = new Set(DATA.sources.filter(s => /fluxsift|cpolar|int2t05\\.github\\.io\\/auto-trend/.test(s.url)).map(s => s.name));
 const READ_KEY = 'rss-read-ids';
 const READ_MAX = 2000;
 
@@ -363,7 +366,7 @@ function renderList(){
     if(isUnread)cls.push('unread');
     const desc=it.description?'<div class="card-desc">'+esc(it.description)+'</div>':'';
     html+='<a class="'+cls.join(' ')+'" href="'+esc(it.link)+'" target="_blank" rel="noopener" data-id="'+esc(it.id)+'">'+
-      '<div class="card-row1"><span class="dot" style="background:'+(it.sourceColor||'#6e7681')+'"></span><span class="src">'+esc(it.source)+'</span><span class="title">'+esc(it.title)+'</span></div>'+
+      '<div class="card-row1"><span class="dot" style="background:'+(it.sourceColor||'#6e7681')+'"></span><span class="src">'+esc(it.source)+(SELF_BUILT.has(it.source)?'<span class="self-badge">自建</span>':'')+'</span><span class="title">'+esc(it.title)+'</span></div>'+
       desc+
       '<div class="card-row2"><span>'+timeStr+'</span>'+(isUnread?'<span class="unread-dot" title="未读"></span>':'')+(CAT_NAMES[it.category]?'<span class="cat-tag">'+esc(CAT_NAMES[it.category])+'</span>':'')+'</div></a>';
   }
@@ -470,7 +473,7 @@ function renderDayList(){
     if(isFresh)cls.push('fresh');
     if(isUnread)cls.push('unread');
     html+='<a class="'+cls.join(' ')+'" href="'+esc(it.link)+'" target="_blank" rel="noopener" data-id="'+esc(it.id)+'">'+
-      '<div class="card-row1"><span class="dot" style="background:'+(it.sourceColor||'#6e7681')+'"></span><span class="src">'+esc(it.source)+'</span><span class="title">'+esc(it.title)+'</span></div>'+
+      '<div class="card-row1"><span class="dot" style="background:'+(it.sourceColor||'#6e7681')+'"></span><span class="src">'+esc(it.source)+(SELF_BUILT.has(it.source)?'<span class="self-badge">自建</span>':'')+'</span><span class="title">'+esc(it.title)+'</span></div>'+
       '<div class="card-row2"><span>'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'+(isUnread?'<span class="unread-dot" title="未读"></span>':'')+(CAT_NAMES[it.category]?'<span class="cat-tag">'+esc(CAT_NAMES[it.category])+'</span>':'')+'</div></a>';
   }
   $('cal-day-list').innerHTML=html;
