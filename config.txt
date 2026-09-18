@@ -33,14 +33,12 @@ GeekHour | /bilibili/user/video/102438649
 湖科大教书匠 | /bilibili/user/video/360996402
 中科大郑烇 | /bilibili/user/video/410739029
 北京大学肖臻 | /bilibili/user/video/12370885
-Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l7upoD7IJ_ZA
-3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuRTT54ljmlizA
-Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs86EqCGJw
-ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE6xdFuwLrH2eyUikMQ
-IBM Technology | https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VmcTdDP4OcN62RA
-Yannic Kilcher | https://www.youtube.com/feeds/videos.xml?channel_id=UCZHmQk67mSJgfCm94SB0Dbg
-Computerphile | https://www.youtube.com/feeds/videos.xml?channel_id=UC9-y-6csu5WGm29I7J4wpNw
-The Coding Train | https://www.youtube.com/feeds/videos.xml?channel_id=UCvjgXvBlNQHspDx6f5bQk5w
+Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l4upoX8nvctg
+3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw
+Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA
+ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw
+Yannic Kilcher | https://www.youtube.com/feeds/videos.xml?channel_id=UCZHmQk67mSJgfCCTn7xBfew
+Computerphile | https://www.youtube.com/feeds/videos.xml?channel_id=UC9-y-6csu5WGm29I7JiwpnA
 # FluxSift 视频分析 | 经 cpolar 公网隧道转发内网 FluxSift serve（http://localhost:8765）
 # URL 与 token 通过 ${FLUXSIFT_FEED_URL} 环境变量注入（GitHub Secret），避免密钥入库
 FluxSift | ${FLUXSIFT_FEED_URL}
@@ -132,7 +130,7 @@ InfoQ 中文 | https://www.infoq.cn/feed
 Netflix Tech | https://netflixtechblog.com/feed
 Spotify Engineering | https://engineering.atspotify.com/feed
 Meta Engineering | https://engineering.fb.com/feed/
-Uber Engineering | /uber/blog
+Uber Engineering | https://www.uber.com/blog/engineering/rss/
 Stripe Blog | https://stripe.com/blog/feed.rss
 Discord Blog | https://discord.com/blog/rss.xml
 Go Blog | https://go.dev/blog/feed.atom
@@ -144,7 +142,7 @@ PostgreSQL | https://planet.postgresql.org/rss20.xml
 Solidot | /solidot
 知乎日报 | /zhihu/daily
 36氪 | /36kr/newsflashes
-机器之心 | /jiqizhixin
+机器之心 | https://www.jiqizhixin.com/rss
 IT之家 | https://www.ithome.com/rss/
 爱范儿 | https://www.ifanr.com/feed
 虎嗅 | https://www.huxiu.com/rss/0.xml
@@ -155,7 +153,7 @@ MIT Tech Review | https://www.technologyreview.com/feed/
 Ars Technica | https://feeds.arstechnica.com/arstechnica/index
 
 [community|开发者社区|#f0883e]
-V2EX 热门 | /v2ex/topics/hot
+V2EX 热门 | https://www.v2ex.com/feed/tab/hot.xml
 Hacker News | https://hnrss.org/frontpage
 掘金 AI 周榜 | /juejin/trending/ai/weekly
 LinuxDo | https://linux.do/latest.rss
@@ -164,11 +162,11 @@ Dev.to | https://dev.to/feed
 TLDR | https://www.tldr.tech/rss
 博客园精选 | /cnblogs/pick
 开源中国 | /oschina/news
-Reddit Programming | /reddit/subreddit/programming
-Reddit MachineLearning | /reddit/subreddit/MachineLearning
-Reddit webdev | /reddit/subreddit/webdev
-Reddit rust | /reddit/subreddit/rust
-Reddit golang | /reddit/subreddit/golang
-Reddit python | /reddit/subreddit/Python
+Reddit Programming | https://www.reddit.com/r/programming/.rss
+Reddit MachineLearning | https://www.reddit.com/r/MachineLearning/.rss
+Reddit webdev | https://www.reddit.com/r/webdev/.rss
+Reddit rust | https://www.reddit.com/r/rust/.rss
+Reddit golang | https://www.reddit.com/r/golang/.rss
+Reddit python | https://www.reddit.com/r/Python/.rss
 Product Hunt | https://producthunt.com/feed
 auto-trend 日报 | https://int2t05.github.io/auto-trend/feed.xml
