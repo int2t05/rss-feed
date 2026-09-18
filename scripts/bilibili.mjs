@@ -114,7 +114,6 @@ export async function fetchBilibiliVideos(uid) {
             link: v.bvid ? `https://www.bilibili.com/video/${v.bvid}` : `https://www.bilibili.com/video/av${v.aid}`,
             id: v.bvid || String(v.aid),
             pubDate: new Date(v.created * 1000).toUTCString(),
-            author: v.author,
         }));
     });
 }

@@ -1,4 +1,4 @@
-// 通用 RSS 同步脚本：拉取 feed → rss-parser 解析 → 去重 → 生成多页面仪表盘
+// 通用 RSS 同步脚本：拉取 feed → rss-parser 解析 → 去重 → 生成单文件仪表盘
 // 纯拉取架构：直链源直接 fetch，RSSHub 路由源走实例池轮换，B站路由直连 API
 // 类别/源完全由 config.txt 驱动，新增/删除类别只需改 config.txt
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -11,7 +11,6 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 mkdirSync(DIST, { recursive: true });
 const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
-const DEFAULT_LIMIT = 10;
 
 // 读取行式配置，忽略空行与 # 注释
 function readLines(file) {
@@ -21,8 +20,8 @@ function readLines(file) {
         .filter((l) => l && !l.startsWith('#'));
 }
 
-// 解析 config.txt：分类头 [id|标题|图标|主题色] + 源行 名称|URL|显示条数
-// 返回 { categories: [{id,title,icon,color}], groups: {id: [源]} }
+// 解析 config.txt：分类头 [id|标题|主题色] + 源行 名称|URL
+// 返回 { categories: [{id,title,color}], groups: {id: [源]} }
 function parseConfig(file) {
     const lines = readLines(file);
     const categories = [];
@@ -31,16 +30,16 @@ function parseConfig(file) {
     for (const line of lines) {
         if (line.startsWith('[') && line.endsWith(']')) {
             const parts = line.slice(1, -1).split('|').map((s) => s.trim());
-            const cat = { id: parts[0], title: parts[1] || parts[0], icon: parts[2] || 'default', color: parts[3] || '#6e7681' };
+            const cat = { id: parts[0], title: parts[1] || parts[0], color: parts[2] || '#6e7681' };
             categories.push(cat);
             current = cat.id;
             groups[current] = [];
             continue;
         }
         if (!current) continue;
-        const [name, url, limit] = line.split('|').map((s) => s.trim());
+        const [name, url] = line.split('|').map((s) => s.trim());
         if (!name || !url) continue;
-        groups[current].push({ name, url, limit: limit ? parseInt(limit, 10) || DEFAULT_LIMIT : DEFAULT_LIMIT });
+        groups[current].push({ name, url });
     }
     return { categories, groups };
 }
@@ -123,7 +122,6 @@ async function fetchItems(source) {
             link: it.link || '',
             id: it.guid || it.link || it.title,
             pubDate: it.isoDate || it.pubDate || '',
-            author: it.creator || it.author || '',
             description: (it.contentSnippet || it.summary || '').slice(0, 200),
         }))
         .filter((it) => {
@@ -193,7 +191,7 @@ const data = {
     items: allItems,
 };
 
-// 生成单文件 SPA（内嵌 JSON，客户端渲染日历 + 滚动加载）
+// 生成单文件 SPA（内嵌 JSON，客户端渲染列表/日历 + 滚动加载）
 writeFileSync(path.join(DIST, 'index.html'), renderSPA(data));
 writeFileSync(statePath, JSON.stringify(newState, null, 2));
 

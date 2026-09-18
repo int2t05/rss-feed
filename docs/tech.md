@@ -28,13 +28,13 @@ flowchart LR
 
 ### 2.1 config.txt — 订阅配置
 
-分类头 `[id|标题|图标|主题色]` + 源行 `名称 | URL | 显示条数`。类别与源完全由此文件驱动，新增/删除类别只需改此文件。
+分类头 `[id|标题|主题色]` + 源行 `名称 | URL`。类别与源完全由此文件驱动，新增/删除类别只需改此文件。
 
-**8 分类 139 源**：
+**7 分类 139 源**：
 
 | 分类 | 标题 | 源数 | 说明 |
 |---|---|---|---|
-| `video` | 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift（注释） |
+| `video` | 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift（cpolar 隧道） |
 | `ai` | AI 动态 | 24 | AI 实验室博客 + 研究者博客 |
 | `arxiv` | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
 | `papers` | 会议/期刊 | 10 | ACL/JMLR/Nature/Science/MIT/Stanford |
@@ -52,22 +52,35 @@ flowchart LR
 - 三路分发：
   - `/bilibili/user/video/:uid` → B站 API 直连（`bilibili.mjs`）
   - `/` 开头（其他 RSSHub 路由）→ 实例池轮换 fetch + rss-parser
-  - `http` 开头 → 直接 fetch + rss-parser（5 并发，1 次重试）
+   - `http` 开头 → 直接 fetch + rss-parser（5 并发，2 次重试；YouTube 限流严格，3 次重试 + 2s 间隔）
 - 去重 key = URL，新 ID 置前合并保留 100 条
 - 失败源保留旧 state，记录错误
 - 调 `render.mjs` 生成 HTML + 写 state.json
 
 ### 2.4 scripts/render.mjs — 前端渲染
 
-单文件 SPA：`renderSPA(data)` 生成完整 HTML，内嵌 JSON 数据，客户端渲染侧边栏分类 + 卡片式无限滚动 + 时间筛选 + 搜索。导出 `renderSPA`/`platformColor`。
+单文件 SPA：`renderSPA(data)` 生成完整 HTML，内嵌 JSON 数据，客户端渲染侧边栏分类 + 卡片式列表 + 日历视图。导出 `renderSPA`/`platformColor`。
 
-**布局**：
-- 左侧侧边栏：搜索框 + 分类列表（源色点 + 标题 + 条目数徽章）+ 时间筛选（全部/今天/本周/本月）
-- 主区域：头部（当前筛选 + 条目数 + 更新时间）+ 卡片列表
-- 卡片：源色点 + 源名 + 标题（粗体）+ 时间 + 分类标签
-- 24h 内条目 `.fresh` 高亮（左侧色条 + 标题橙色）
-- 无限滚动（IntersectionObserver，每批 50 条）
-- 移动端：侧边栏抽屉式（汉堡菜单切换）
+**列表视图**：
+- 左侧侧边栏：搜索框 + 分类列表（源色点 + 标题 + 条目数徽章 + 失败源⚠徽章）+ 失败源折叠区 + 时间筛选（全部/24h/7天/30天）
+- 主区域：头部（当前筛选 + 条目数 + 更新时间 + 视图切换）+ 卡片列表
+- 卡片：源色点 + 源名 + 标题（2 行截断）+ 摘要预览 + 时间 + 分类标签 + 未读蓝点
+- 24h 内条目 `.fresh` 高亮（左侧色条 + 标题橙色）；新条目 `.unread` 浅蓝背景
+- 无限滚动（IntersectionObserver，每批 50 条，400px 预加载）
+- 滚动位置记忆：切换分类/搜索后切回恢复 scrollTop
+
+**日历视图**：
+- 月历网格（周一到周日，今日橙色高亮、选中日蓝色描边）
+- 日期格显示条目数 + 分类色点（最多 5 个）；空格半透明、outside 格可点击跳月
+- 点日期下半区显示该日条目卡片；月份导航 ‹/›/今天 + 方向键 ←→ 切月
+- 搜索时工具栏显示「搜索: "xxx" 清除」指示
+
+**交互**：
+- 已读状态：localStorage 持久化，点击卡片标记已读，新条目（freshIds）显示未读
+- 搜索防抖（180ms），匹配标题与源名
+- 键盘可达：分类项/日期均为 `<button>`，`/` 聚焦搜索，Esc 关闭侧边栏
+- 暗色/浅色自适应（浅色 `--accent` 满足 WCAG AA 对比度）
+- 移动端：侧边栏抽屉式 + 左滑关闭，日历色点缩到 3px
 
 ### 2.5 state.json — 去重状态
 
@@ -86,7 +99,7 @@ flowchart LR
 - Dublin Core `dc:date`
 - CDATA 与实体转义
 
-解析字段：`{ title, link, id(=guid 或 link), pubDate, author }`。
+解析字段：`{ title, link, id(=guid 或 link), pubDate, description(≤200字) }`。
 
 **为何不用自写正则**：CDATA vs 实体转义、dc:date、压缩均已由 rss-parser 处理，对齐 RSSHub 实现更稳。
 
@@ -112,9 +125,9 @@ auto-trend 项目（`https://github.com/int2t05/auto-trend`）每日通过 GitHu
 
 ## 6. FluxSift 接入
 
-FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + token 鉴权）。GitHub Actions 云端无法访问内网。
+FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + token 鉴权）。GitHub Actions 云端无法直接访问内网。
 
-**方案**：config.txt 中以 `#` 注释形式存在，附说明。本地运行 `node scripts/fetch.mjs` 时取消注释即可。fetch.mjs 的错误处理已能优雅处理失败源（保留旧 state，不中断其他源）。
+**方案**：经 cpolar 公网隧道暴露内网 FluxSift serve，config.txt 中 video 分类下配置为直链源。fetch.mjs 当作普通直链源处理，错误处理优雅降级（隧道断时保留旧 state，不中断其他源）。隧道 URL 变更时改 config.txt 对应行。
 
 ## 7. 部署
 
@@ -146,7 +159,7 @@ rss-feed/
 └── scripts/
     ├── fetch.mjs           # 同步核心（三路分发）
     ├── bilibili.mjs        # B站 API 直连（WBI 签名）
-    └── render.mjs          # 前端渲染（侧边栏 + 卡片 + 无限滚动）
+    └── render.mjs          # 前端渲染（侧边栏 + 卡片 + 日历 + 无限滚动 + 搜索）
 ```
 
 ## 10. 风险与缓解

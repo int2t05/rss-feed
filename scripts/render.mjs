@@ -145,8 +145,8 @@ body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei"
 .view-toggle button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
 .view-toggle button.active{background:var(--surface2);color:var(--text)}
 
-/* 视图过渡 */
-.view-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;transition:opacity .15s ease}
+/* 视图面板 */
+.view-pane{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .view-pane.hidden{display:none}
 
 /* 日历视图 */
@@ -258,6 +258,9 @@ body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei"
 const DATA = ${dataJson};
 const BATCH = 50;
 const FRESH_SET = new Set(DATA.freshIds || []);
+// 分类查表：渲染时按 id 取标题/主题色，模块级常量避免每次渲染重建
+const CAT_NAMES = {}; for (const c of DATA.categories) CAT_NAMES[c.id] = c.title;
+const CAT_COLOR = {}; for (const c of DATA.categories) CAT_COLOR[c.id] = c.color;
 const READ_KEY = 'rss-read-ids';
 const READ_MAX = 2000;
 
@@ -349,7 +352,6 @@ function renderList(){
   if(items.length===0){$('list').innerHTML='<div class="empty">无匹配条目</div>';return}
   const visible=items.slice(0,state.shown);
   const now=Date.now();
-  const catNames={};for(const c of DATA.categories)catNames[c.id]=c.title;
   let html='';
   for(const it of visible){
     const isFresh=(now-new Date(it.pubDate).getTime())<86400000;
@@ -363,7 +365,7 @@ function renderList(){
     html+='<a class="'+cls.join(' ')+'" href="'+esc(it.link)+'" target="_blank" rel="noopener" data-id="'+esc(it.id)+'">'+
       '<div class="card-row1"><span class="dot" style="background:'+(it.sourceColor||'#6e7681')+'"></span><span class="src">'+esc(it.source)+'</span><span class="title">'+esc(it.title)+'</span></div>'+
       desc+
-      '<div class="card-row2"><span>'+timeStr+'</span>'+(isUnread?'<span class="unread-dot" title="未读"></span>':'')+(catNames[it.category]?'<span class="cat-tag">'+esc(catNames[it.category])+'</span>':'')+'</div></a>';
+      '<div class="card-row2"><span>'+timeStr+'</span>'+(isUnread?'<span class="unread-dot" title="未读"></span>':'')+(CAT_NAMES[it.category]?'<span class="cat-tag">'+esc(CAT_NAMES[it.category])+'</span>':'')+'</div></a>';
   }
   if(state.shown<items.length)html+='<div class="sentinel" id="sentinel"></div>';
   $('list').innerHTML=html;
@@ -410,14 +412,13 @@ function renderCalendar(){
   const gridStart=new Date(y,m,1-startOff);
   const todayK=dayKey(new Date());
   const selK=state.calDay?dayKey(state.calDay):'';
-  const catColor={};for(const c of DATA.categories)catColor[c.id]=c.color;
   let html='';
   for(const w of ['一','二','三','四','五','六','日'])html+='<div class="cal-dow">'+w+'</div>';
   for(let i=0;i<42;i++){
     const d=new Date(gridStart.getFullYear(),gridStart.getMonth(),gridStart.getDate()+i);
     const k=dayKey(d);
     const dayItems=byDay[k]||[];
-    const colors=[...new Set(dayItems.map(it=>catColor[it.category]).filter(Boolean))].slice(0,5);
+    const colors=[...new Set(dayItems.map(it=>CAT_COLOR[it.category]).filter(Boolean))].slice(0,5);
     let cls='cal-day';
     if(d.getMonth()!==m)cls+=' outside';
     if(k===todayK)cls+=' today';
@@ -459,7 +460,6 @@ function renderDayList(){
   const d=state.calDay;
   $('cal-day-label').textContent=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' · '+items.length+' 条';
   if(!items.length){$('cal-day-list').innerHTML='<div class="empty">该日无条目</div>';return}
-  const catNames={};for(const c of DATA.categories)catNames[c.id]=c.title;
   const now=Date.now();
   let html='';
   for(const it of items){
@@ -471,7 +471,7 @@ function renderDayList(){
     if(isUnread)cls.push('unread');
     html+='<a class="'+cls.join(' ')+'" href="'+esc(it.link)+'" target="_blank" rel="noopener" data-id="'+esc(it.id)+'">'+
       '<div class="card-row1"><span class="dot" style="background:'+(it.sourceColor||'#6e7681')+'"></span><span class="src">'+esc(it.source)+'</span><span class="title">'+esc(it.title)+'</span></div>'+
-      '<div class="card-row2"><span>'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'+(isUnread?'<span class="unread-dot" title="未读"></span>':'')+(catNames[it.category]?'<span class="cat-tag">'+esc(catNames[it.category])+'</span>':'')+'</div></a>';
+      '<div class="card-row2"><span>'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'+(isUnread?'<span class="unread-dot" title="未读"></span>':'')+(CAT_NAMES[it.category]?'<span class="cat-tag">'+esc(CAT_NAMES[it.category])+'</span>':'')+'</div></a>';
   }
   $('cal-day-list').innerHTML=html;
   $('cal-day-list').querySelectorAll('.card[data-id]').forEach(el=>{

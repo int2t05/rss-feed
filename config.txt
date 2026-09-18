@@ -1,11 +1,11 @@
 # 通用 RSS 订阅列表（唯一配置源：改此文件，页面/导航/类别自动同步）
-# 分类头：[id|标题|图标|主题色]  图标可选: video/ai/academic/tech/news/community，未匹配用默认
+# 分类头：[id|标题|主题色]
 # 源格式：名称 | URL
 # URL 为完整直链或 RSSHub 路由（/开头）
 # 空行和 # 开头的行会被忽略
 # 路由速查见 reference/rsshub-routes.md
 
-[video|视频|video|#fb7299]
+[video|视频|#fb7299]
 北京大学肖臻 | /bilibili/user/video/12370885
 中科大郑烇 | /bilibili/user/video/410739029
 湖科大教书匠 | /bilibili/user/video/360996402
@@ -26,11 +26,11 @@ IBM Technology | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFKWaEZ-
 Yannic Kilcher | https://www.youtube.com/feeds/videos.xml?channel_id=UCZHmQk67mSJgfCm94SB0Dbg
 Computerphile | https://www.youtube.com/feeds/videos.xml?channel_id=UC9-y-6csu5WGm29I7J4wpNw
 The Coding Train | https://www.youtube.com/feeds/videos.xml?channel_id=UCvjgXvBlNQHspDx6f5bQk5w
-# FluxSift 视频分析 | 经 ngrok 公网隧道转发内网 FluxSift serve（http://localhost:8765）
+# FluxSift 视频分析 | 经 cpolar 公网隧道转发内网 FluxSift serve（http://localhost:8765）
 # 隧道 URL 变更时需改此行；token 取自 FluxSift/.env 的 FEED_TOKEN
-FluxSift | https://cape-deceiving-clicker.ngrok-free.dev/feed/c7a8oSIdvAvFkNWPS8N0RY7pgTrVOA3E.xml
+FluxSift | https://fluxsift.vip.cpolar.cn/feed/c7a8oSIdvAvFkNWPS8N0RY7pgTrVOA3E.xml
 
-[ai|AI 动态|ai|#a371f7]
+[ai|AI 动态|#a371f7]
 Anthropic News | /anthropic/news
 Anthropic Engineering | /anthropic/engineering
 OpenAI News | https://openai.com/news/rss.xml
@@ -56,7 +56,7 @@ AI Snake Oil | https://aisnakeoil.substack.com/feed
 Chip Huyen | https://chiphuyen.com/feed.xml
 Eugene Yan | https://eugeneyan.com/feed.xml
 
-[arxiv|arXiv 论文|academic|#b31b1b]
+[arxiv|arXiv 论文|#b31b1b]
 arXiv cs.AI | https://rss.arxiv.org/rss/cs.AI
 arXiv cs.LG | https://rss.arxiv.org/rss/cs.LG
 arXiv cs.CL | https://rss.arxiv.org/rss/cs.CL
@@ -88,7 +88,7 @@ arXiv math.PR | https://rss.arxiv.org/rss/math.PR
 arXiv q-bio.NC | https://rss.arxiv.org/rss/q-bio.NC
 arXiv q-bio.QM | https://rss.arxiv.org/rss/q-bio.QM
 
-[papers|会议/期刊|academic|#f778ba]
+[papers|会议/期刊|#f778ba]
 ACL Anthology | https://aclanthology.org/atom.xml
 JMLR | https://www.jmlr.org/jmlr.xml
 Nature | https://www.nature.com/nature.rss
@@ -100,7 +100,7 @@ Stanford HAI | https://hai.stanford.edu/news/rss
 CACM | https://cacm.acm.org/rss/
 PNAS | https://www.pnas.org/rss.aspx
 
-[tech|技术博客|tech|#58a6ff]
+[tech|技术博客|#58a6ff]
 Cloudflare Blog | https://blog.cloudflare.com/rss/
 Claude Code Releases | https://github.com/anthropics/claude-code/releases.atom
 overreacted | https://overreacted.io/rss.xml
@@ -127,7 +127,7 @@ Figma Blog | https://www.figma.com/blog/feed/
 Shopify Engineering | https://shopify.engineering/feed
 PostgreSQL | https://www.postgresql.org/about/newsrss/
 
-[news|资讯媒体|news|#3fb950]
+[news|资讯媒体|#3fb950]
 Solidot | /solidot
 知乎日报 | /zhihu/daily
 36氪 | /36kr/newsflashes
@@ -141,7 +141,7 @@ MIT Tech Review | https://www.technologyreview.com/feed/
 量子位 | https://www.qbitai.com/feed
 Ars Technica | https://feeds.arstechnica.com/arstechnica/index
 
-[community|开发者社区|community|#f0883e]
+[community|开发者社区|#f0883e]
 V2EX 热门 | https://www.v2ex.com/feed/tab/hot.xml
 Hacker News | https://hnrss.org/frontpage
 掘金 AI 周榜 | /juejin/trending/ai/weekly

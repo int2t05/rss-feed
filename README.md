@@ -4,13 +4,13 @@
 
 ## 架构
 
-详见 [docs/tech.md](docs/tech.md)。纯拉取架构，零服务：直链源直接 fetch（5 并发），B站路由走 B站 API 直连（WBI 签名 + cookie），其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动。前端为单文件 SPA（内嵌 JSON，侧边栏分类 + 卡片式无限滚动 + 时间筛选 + 搜索）。
+详见 [docs/tech.md](docs/tech.md)。纯拉取架构，零服务：直链源直接 fetch（5 并发），B站路由走 B站 API 直连（WBI 签名 + cookie），其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动。前端为单文件 SPA（内嵌 JSON，侧边栏分类 + 列表/日历双视图 + 卡片式无限滚动 + 时间筛选 + 搜索 + 未读标记）。
 
-## 分类（8 类 139 源）
+## 分类（7 类 139 源）
 
 | 分类 | 源数 | 说明 |
 |---|---|---|
-| 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 |
+| 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift |
 | AI 动态 | 24 | AI 实验室博客 + 研究者博客 |
 | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
 | 会议/期刊 | 10 | ACL/JMLR/Nature/Science/MIT/Stanford |
@@ -20,17 +20,17 @@
 
 **auto-trend 接入**：auto-trend 项目每日生成 GitHub Trending + RSS 热点的 LLM 分析日报，通过 `docs/feed.xml` 输出 RSS 2.0，本仪表盘作为普通直链源拉取。
 
-**FluxSift 接入**：FluxSift 的 RSS feed 为内网 + token 鉴权，GitHub Actions 云端无法访问。config.txt 中以 `#` 注释形式存在，本地运行时取消注释即可。
+**FluxSift 接入**：FluxSift 的 RSS feed 为内网 + token 鉴权，经 cpolar 公网隧道暴露给 GitHub Actions 拉取，config.txt 中 video 分类下配置为直链源。
 
 ## 部署
 
 1. **Fork 仓库**（公开仓库 Actions 免费不占额度）
 2. **编辑 `config.txt`**，添加订阅：
    ```
-   [分类|标题|图标|主题色]
+   [分类|标题|主题色]
    名称 | URL
    ```
-   - 分类头：`[video|视频|video|#fb7299]`
+   - 分类头：`[video|视频|#fb7299]`
    - 直链：完整 RSS/Atom URL
    - RSSHub 路由：`/` 开头（如 `/bilibili/user/video/UID`），自动拼实例池
 3. **开启 GitHub Pages**：Settings → Pages → Source 选 `GitHub Actions`（sync.yml 自动部署 dist/）
@@ -42,11 +42,11 @@
 
 | 文件 | 作用 |
 | --- | --- |
-| `config.txt` | 订阅列表（8 分类 139 源，唯一配置源） |
+| `config.txt` | 订阅列表（7 分类 139 源，唯一配置源） |
 | `instances.txt` | RSSHub 公共实例池 |
 | `scripts/fetch.mjs` | 同步核心：解析 config → 三路分发 → 去重 → 生成 |
 | `scripts/bilibili.mjs` | B站 API 直连（WBI 签名 + cookie） |
-| `scripts/render.mjs` | 单文件 SPA 渲染（侧边栏 + 卡片 + 无限滚动 + 搜索） |
+| `scripts/render.mjs` | 单文件 SPA 渲染（侧边栏 + 列表/日历 + 卡片 + 无限滚动 + 搜索） |
 | `dist/` | 生成产物：`index.html`（单文件 SPA，内嵌 JSON）+ `state.json` |
 | `.github/workflows/sync.yml` | Actions 定时任务（注入 BILIBILI_COOKIE） |
 | `docs/prd.md` `docs/tech.md` | 需求规格与技术架构 |
