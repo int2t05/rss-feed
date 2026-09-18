@@ -10,7 +10,9 @@ import { fetchBilibiliVideos } from './bilibili.mjs';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 mkdirSync(DIST, { recursive: true });
-const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
+// 真实浏览器 UA：Reddit 等站点对非浏览器 UA 返回 429
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
+const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': UA } });
 
 // 读取行式配置，忽略空行与 # 注释；展开 \${VAR} 环境变量（Secret 注入，避免密钥入库）
 function readLines(file) {
@@ -80,7 +82,7 @@ async function fetchFromRsshub(route) {
         if (i > 0) await sleep(500);
         const url = base.replace(/\/$/, '') + route;
         try {
-            const res = await fetch(url, { signal: AbortSignal.timeout(15000), headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
+            const res = await fetch(url, { signal: AbortSignal.timeout(15000), headers: { 'User-Agent': UA } });
             if (!res.ok) continue;
             const text = await res.text();
             if (text.includes('<rss') || text.includes('<feed') || text.includes('<rdf')) return text;
@@ -104,7 +106,7 @@ async function fetchItems(source) {
         const maxRetry = isYoutube ? 3 : 2;
         for (let attempt = 0; attempt < maxRetry; attempt++) {
             try {
-                const res = await fetch(source.url, { signal: AbortSignal.timeout(15000), headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
+                const res = await fetch(source.url, { signal: AbortSignal.timeout(15000), headers: { 'User-Agent': UA } });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 xml = await res.text();
                 break;

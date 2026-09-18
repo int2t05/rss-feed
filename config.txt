@@ -33,11 +33,11 @@ GeekHour | /bilibili/user/video/102438649
 湖科大教书匠 | /bilibili/user/video/360996402
 中科大郑烇 | /bilibili/user/video/410739029
 北京大学肖臻 | /bilibili/user/video/12370885
-Two Minute Papers | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFbfYPyITQ-7l7upoD7IJ_ZA
-3Blue1Brown | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFYO_jab_esuRTT54ljmlizA
-Fireship | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFsBjURrPoezykLs86EqCGJw
-ThePrimeagen | https://www.youtube.com/feeds/videos.xml?playlist_id=UULF8ENHE6xdFuwLrH2eyUikMQ
-IBM Technology | https://www.youtube.com/feeds/videos.xml?playlist_id=UULFKWaEZ-_VmcTdDP4OcN62RA
+Two Minute Papers | https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l7upoD7IJ_ZA
+3Blue1Brown | https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuRTT54ljmlizA
+Fireship | https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs86EqCGJw
+ThePrimeagen | https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE6xdFuwLrH2eyUikMQ
+IBM Technology | https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VmcTdDP4OcN62RA
 Yannic Kilcher | https://www.youtube.com/feeds/videos.xml?channel_id=UCZHmQk67mSJgfCm94SB0Dbg
 Computerphile | https://www.youtube.com/feeds/videos.xml?channel_id=UC9-y-6csu5WGm29I7J4wpNw
 The Coding Train | https://www.youtube.com/feeds/videos.xml?channel_id=UCvjgXvBlNQHspDx6f5bQk5w
@@ -58,7 +58,6 @@ Karpathy | https://karpathy.github.io/feed.xml
 Apple ML Research | https://machinelearning.apple.com/rss.xml
 NVIDIA Developer | https://developer.nvidia.com/blog/feed/
 Microsoft Research | https://www.microsoft.com/en-us/research/feed/
-Meta AI | https://ai.meta.com/blog/rss/
 AWS ML Blog | https://aws.amazon.com/blogs/machine-learning/feed/
 BAIR Blog | https://bair.berkeley.edu/blog/feed.xml
 Distill | https://distill.pub/rss.xml
@@ -69,7 +68,7 @@ Latent Space | https://www.latent.space/feed
 The Gradient | https://thegradient.pub/rss/
 AI Snake Oil | https://aisnakeoil.substack.com/feed
 Chip Huyen | https://chiphuyen.com/feed.xml
-Eugene Yan | https://eugeneyan.com/feed.xml
+Eugene Yan | https://eugeneyan.com/feed/
 
 [arxiv|arXiv 论文|#b31b1b]
 arXiv cs.AI | https://rss.arxiv.org/rss/cs.AI
@@ -138,9 +137,8 @@ Stripe Blog | https://stripe.com/blog/feed.rss
 Discord Blog | https://discord.com/blog/rss.xml
 Go Blog | https://go.dev/blog/feed.atom
 Python Insider | https://blog.python.org/feeds/posts/default/
-Figma Blog | https://www.figma.com/blog/feed/
 Shopify Engineering | https://shopify.engineering/feed
-PostgreSQL | https://www.postgresql.org/about/newsrss/
+PostgreSQL | https://planet.postgresql.org/rss20.xml
 
 [news|资讯媒体|#3fb950]
 Solidot | /solidot
