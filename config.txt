@@ -64,9 +64,6 @@ Alignment Forum | https://www.alignmentforum.org/rss
 Google Research | https://research.google/blog/rss/
 Latent Space | https://www.latent.space/feed
 The Gradient | https://thegradient.pub/rss/
-AI Snake Oil | https://aisnakeoil.substack.com/feed
-Chip Huyen | https://huyenchip.com/rss/
-Eugene Yan | https://eugeneyan.com/feed/
 
 [arxiv|arXiv 论文|#b31b1b]
 arXiv cs.AI | https://rss.arxiv.org/rss/cs.AI
@@ -101,16 +98,11 @@ arXiv q-bio.NC | https://rss.arxiv.org/rss/q-bio.NC
 arXiv q-bio.QM | https://rss.arxiv.org/rss/q-bio.QM
 
 [papers|会议/期刊|#f778ba]
-ACL Anthology | https://aclanthology.org/atom.xml
 JMLR | https://www.jmlr.org/jmlr.xml
 Nature | https://www.nature.com/nature.rss
-Nature Machine Intelligence | https://www.nature.com/natmachintell.rss
 Science | https://www.science.org/action/showFeed?type=etoc&journalCode=science
 Science Robotics | https://www.science.org/action/showFeed?type=etoc&journalCode=robotics
-MIT News AI | https://news.mit.edu/topic/artificial-intelligence2/rss
 Stanford HAI | https://hai.stanford.edu/news/all/rss
-CACM | https://cacm.acm.org/rss/
-PNAS | https://www.pnas.org/rss.aspx
 
 [tech|技术博客|#58a6ff]
 Cloudflare Blog | https://blog.cloudflare.com/rss/
@@ -130,22 +122,19 @@ InfoQ 中文 | https://www.infoq.cn/feed
 Netflix Tech | https://netflixtechblog.com/feed
 Spotify Engineering | https://engineering.atspotify.com/feed
 Meta Engineering | https://engineering.fb.com/feed/
-Uber Engineering | https://www.uber.com/blog/engineering/rss/
+Uber Engineering | /uber/blog
 Stripe Blog | https://stripe.com/blog/feed.rss
 Discord Blog | https://discord.com/blog/rss.xml
 Go Blog | https://go.dev/blog/feed.atom
-Python Insider | https://blog.python.org/feeds/posts/default/
-Shopify Engineering | https://shopify.engineering/feed
 PostgreSQL | https://planet.postgresql.org/rss20.xml
 
 [news|资讯媒体|#3fb950]
 Solidot | /solidot
 知乎日报 | /zhihu/daily
 36氪 | /36kr/newsflashes
-机器之心 | https://www.jiqizhixin.com/rss
+机器之心 | /jiqizhixin
 IT之家 | https://www.ithome.com/rss/
 爱范儿 | https://www.ifanr.com/feed
-虎嗅 | https://www.huxiu.com/rss/0.xml
 TechCrunch AI | https://techcrunch.com/category/artificial-intelligence/feed/
 The Verge AI | https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
 MIT Tech Review | https://www.technologyreview.com/feed/
@@ -153,20 +142,19 @@ MIT Tech Review | https://www.technologyreview.com/feed/
 Ars Technica | https://feeds.arstechnica.com/arstechnica/index
 
 [community|开发者社区|#f0883e]
-V2EX 热门 | https://www.v2ex.com/feed/tab/hot.xml
+V2EX 热门 | /v2ex/topics/hot
 Hacker News | https://hnrss.org/frontpage
 掘金 AI 周榜 | /juejin/trending/ai/weekly
-LinuxDo | https://linux.do/latest.rss
 Lobsters | https://lobste.rs/rss
 Dev.to | https://dev.to/feed
 TLDR | https://www.tldr.tech/rss
 博客园精选 | /cnblogs/pick
 开源中国 | /oschina/news
-Reddit Programming | https://www.reddit.com/r/programming/.rss
-Reddit MachineLearning | https://www.reddit.com/r/MachineLearning/.rss
-Reddit webdev | https://www.reddit.com/r/webdev/.rss
-Reddit rust | https://www.reddit.com/r/rust/.rss
-Reddit golang | https://www.reddit.com/r/golang/.rss
-Reddit python | https://www.reddit.com/r/Python/.rss
+Reddit Programming | /reddit/subreddit/programming
+Reddit MachineLearning | /reddit/subreddit/MachineLearning
+Reddit webdev | /reddit/subreddit/webdev
+Reddit rust | /reddit/subreddit/rust
+Reddit golang | /reddit/subreddit/golang
+Reddit python | /reddit/subreddit/Python
 Product Hunt | https://producthunt.com/feed
 auto-trend 日报 | https://int2t05.github.io/auto-trend/feed.xml

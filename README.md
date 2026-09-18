@@ -6,17 +6,17 @@
 
 详见 [docs/tech.md](docs/tech.md)。纯拉取架构，零服务：直链源直接 fetch（5 并发），B站路由走 B站 API 直连（WBI 签名 + cookie），其他 RSSHub 路由走实例池轮换。类别与源完全由 `config.txt` 驱动。前端为单文件 SPA（内嵌 JSON，侧边栏分类 + 列表/日历双视图 + 卡片式无限滚动 + 时间筛选 + 搜索 + 未读标记）。
 
-## 分类（7 类 139 源）
+## 分类（7 类 105 源）
 
 | 分类 | 源数 | 说明 |
 |---|---|---|
-| 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift |
-| AI 动态 | 24 | AI 实验室博客 + 研究者博客 |
+| 视频 | 34 | B站学术/官方 UP + YouTube 科技频道 + FluxSift |
+| AI 动态 | 20 | AI 实验室博客 + 研究者博客 |
 | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
-| 会议/期刊 | 10 | ACL/JMLR/Nature/Science/MIT/Stanford |
-| 技术博客 | 25 | 顶级工程博客 + 官方语言博客 |
+| 会议/期刊 | 5 | ACL/JMLR/Nature/Science/MIT/Stanford |
+| 技术博客 | 20 | 顶级工程博客 + 官方语言博客 |
 | 资讯媒体 | 12 | 中英文科技媒体 |
-| 开发者社区 | 17 | HN/V2EX/Reddit + auto-trend 日报 |
+| 开发者社区 | 13 | HN/V2EX/Reddit + auto-trend 日报 |
 
 **auto-trend 接入**：auto-trend 项目每日生成 GitHub Trending + RSS 热点的 LLM 分析日报，通过 `docs/feed.xml` 输出 RSS 2.0，本仪表盘作为普通直链源拉取。
 
@@ -44,7 +44,7 @@
 
 | 文件 | 作用 |
 | --- | --- |
-| `config.txt` | 订阅列表（7 分类 139 源，唯一配置源） |
+| `config.txt` | 订阅列表（7 分类 105 源，唯一配置源） |
 | `instances.txt` | RSSHub 公共实例池 |
 | `scripts/fetch.mjs` | 同步核心：解析 config → 三路分发 → 去重 → 生成 |
 | `scripts/bilibili.mjs` | B站 API 直连（WBI 签名 + cookie） |

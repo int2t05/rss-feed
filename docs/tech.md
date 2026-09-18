@@ -30,17 +30,17 @@ flowchart LR
 
 分类头 `[id|标题|主题色]` + 源行 `名称 | URL`。类别与源完全由此文件驱动，新增/删除类别只需改此文件。
 
-**7 分类 139 源**：
+**7 分类 105 源**：
 
 | 分类 | 标题 | 源数 | 说明 |
 |---|---|---|---|
-| `video` | 视频 | 21 | B站学术/官方 UP + YouTube 科技频道 + FluxSift（cpolar 隧道） |
-| `ai` | AI 动态 | 24 | AI 实验室博客 + 研究者博客 |
+| `video` | 视频 | 34 | B站学术/官方 UP + YouTube 科技频道 + FluxSift（cpolar 隧道） |
+| `ai` | AI 动态 | 20 | AI 实验室博客 + 研究者博客 |
 | `arxiv` | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
-| `papers` | 会议/期刊 | 10 | ACL/JMLR/Nature/Science/MIT/Stanford |
-| `tech` | 技术博客 | 25 | 顶级工程博客 + 官方语言博客 |
+| `papers` | 会议/期刊 | 5 | ACL/JMLR/Nature/Science/MIT/Stanford |
+| `tech` | 技术博客 | 20 | 顶级工程博客 + 官方语言博客 |
 | `news` | 资讯媒体 | 12 | 中英文科技媒体 |
-| `community` | 开发者社区 | 17 | HN/V2EX/Reddit + auto-trend 日报 |
+| `community` | 开发者社区 | 13 | HN/V2EX/Reddit + auto-trend 日报 |
 
 ### 2.2 instances.txt — RSSHub 实例池
 
@@ -143,7 +143,7 @@ FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + 
 
 ```
 rss-feed/
-├── config.txt              # 订阅列表（8 分类 139 源，唯一配置源）
+├── config.txt              # 订阅列表（7 分类 105 源，唯一配置源）
 ├── instances.txt           # RSSHub 实例池
 ├── package.json            # rss-parser 依赖
 ├── dist/                   # 生成产物（GitHub Pages 源）
