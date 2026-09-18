@@ -44,17 +44,19 @@ FluxSift 经 ngrok 隧道接入（URL 已死），前端 UIUX 整改后提交。
 
 ## 需评审
 
-### FluxSift FEED_TOKEN 明文入库
+### FluxSift FEED_TOKEN 明文入库（已修复 2026-09-18）
 
 **现象**：`config.txt` 第 31 行含 FluxSift 的 `FEED_TOKEN`（`https://fluxsift.vip.cpolar.cn/feed/<token>.xml`），已随提交进入公开仓库 git 历史。
 
-**根因**：FluxSift 用路径 token 鉴权，config.txt 是 fetch.mjs 唯一配置源，token 必须出现在 URL 里。当前 fetch.mjs 不支持环境变量替换。
+**根因**：FluxSift 用路径 token 鉴权，config.txt 是 fetch.mjs 唯一配置源，token 必须出现在 URL 里。原 fetch.mjs 不支持环境变量替换。
 
-**风险**：仓库公开 → 任何人可读 FluxSift feed（个人视频分析文档，非敏感但属私有）。token 已在 git 历史，即使现在移除仍可从历史检出。
+**修复**（2026-09-18 执行）：
+- `fetch.mjs` readLines 加 `${VAR}` 环境变量展开
+- `config.txt` FluxSift 行改 `FluxSift | ${FLUXSIFT_FEED_URL}`
+- `sync.yml` 注入 `FLUXSIFT_FEED_URL: ${{ secrets.FLUXSIFT_FEED_URL }}`
+- GitHub 仓库新建 `FLUXSIFT_FEED_URL` Secret（值含完整 URL + token）
 
-**建议修复**（未自动执行，需确认）：fetch.mjs 加 `${VAR}` 环境变量替换，config.txt 改 `FluxSift | ${FLUXSIFT_FEED_URL}`，sync.yml 注入 `FLUXSIFT_FEED_URL` Secret，仓库 Settings 新建对应 Secret。轮换 FluxSift 的 FEED_TOKEN 使历史泄露 token 失效。
-
-**为何未自动修**：移除 config.txt 的 token 会让下次 sync 在用户配置 Secret 前失败；轮换 token 需登录远程 FluxSift 改 .env。属外向型、不可逆操作，需用户确认后执行。
+**遗留**：历史 commit 仍含明文 token（git 历史不可变）。彻底清除需 `git filter-repo` 重写历史 + force push，会破坏所有 fork 与 Pages 部署。当前方案：token 仍在 FluxSift `.env` 生效，泄露的 token 仍可访问 feed（个人视频分析文档，非敏感）。如需彻底失效，在 FluxSift 端轮换 `FEED_TOKEN` 并更新 GitHub Secret。
 
 ## 验证
 

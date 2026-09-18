@@ -127,7 +127,7 @@ auto-trend 项目（`https://github.com/int2t05/auto-trend`）每日通过 GitHu
 
 FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + token 鉴权）。GitHub Actions 云端无法直接访问内网。
 
-**方案**：经 cpolar 公网隧道暴露内网 FluxSift serve，config.txt 中 video 分类下配置为直链源。fetch.mjs 当作普通直链源处理，错误处理优雅降级（隧道断时保留旧 state，不中断其他源）。隧道 URL 变更时改 config.txt 对应行。
+**方案**：经 cpolar 公网隧道暴露内网 FluxSift serve，config.txt 中 video 分类下以 `${FLUXSIFT_FEED_URL}` 环境变量引用。fetch.mjs readLines 展开 `${VAR}`（`process.env` 注入），sync.yml 注入 `FLUXSIFT_FEED_URL` Secret，避免 token 入库。错误处理优雅降级（隧道断时保留旧 state，不中断其他源）。
 
 ## 7. 部署
 

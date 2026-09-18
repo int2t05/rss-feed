@@ -5,3 +5,6 @@ node_modules/
 # 根目录不再放生成产物（统一输出到 dist/）
 /*.html
 /state.json
+
+# Playwright MCP 测试产物
+.playwright-mcp/

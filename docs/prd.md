@@ -74,8 +74,8 @@
 
 ### 3.7 FluxSift 接入
 - FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + token 鉴权）
-- 经 cpolar 公网隧道暴露，config.txt 中 video 分类下配置为直链源
-- 隧道 URL 变更时改 config.txt 对应行；token 取自 FluxSift/.env 的 FEED_TOKEN
+- 经 cpolar 公网隧道暴露，config.txt 中 video 分类下以 `${FLUXSIFT_FEED_URL}` 环境变量引用
+- fetch.mjs readLines 展开 `${VAR}`，sync.yml 注入 `FLUXSIFT_FEED_URL` Secret，避免 token 入库
 
 ## 4. 部署
 

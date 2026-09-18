@@ -42,8 +42,8 @@ Yannic Kilcher | https://www.youtube.com/feeds/videos.xml?channel_id=UCZHmQk67mS
 Computerphile | https://www.youtube.com/feeds/videos.xml?channel_id=UC9-y-6csu5WGm29I7J4wpNw
 The Coding Train | https://www.youtube.com/feeds/videos.xml?channel_id=UCvjgXvBlNQHspDx6f5bQk5w
 # FluxSift 视频分析 | 经 cpolar 公网隧道转发内网 FluxSift serve（http://localhost:8765）
-# 隧道 URL 变更时需改此行；token 取自 FluxSift/.env 的 FEED_TOKEN
-FluxSift | https://fluxsift.vip.cpolar.cn/feed/c7a8oSIdvAvFkNWPS8N0RY7pgTrVOA3E.xml
+# URL 与 token 通过 ${FLUXSIFT_FEED_URL} 环境变量注入（GitHub Secret），避免密钥入库
+FluxSift | ${FLUXSIFT_FEED_URL}
 
 [ai|AI 动态|#a371f7]
 Anthropic News | /anthropic/news

@@ -20,7 +20,7 @@
 
 **auto-trend 接入**：auto-trend 项目每日生成 GitHub Trending + RSS 热点的 LLM 分析日报，通过 `docs/feed.xml` 输出 RSS 2.0，本仪表盘作为普通直链源拉取。
 
-**FluxSift 接入**：FluxSift 的 RSS feed 为内网 + token 鉴权，经 cpolar 公网隧道暴露给 GitHub Actions 拉取，config.txt 中 video 分类下配置为直链源。
+**FluxSift 接入**：FluxSift 的 RSS feed 为内网 + token 鉴权，经 cpolar 公网隧道暴露给 GitHub Actions 拉取。config.txt 中 video 分类下以 `${FLUXSIFT_FEED_URL}` 环境变量引用（GitHub Secret 注入，避免 token 入库）。
 
 ## 部署
 
@@ -34,7 +34,9 @@
    - 直链：完整 RSS/Atom URL
    - RSSHub 路由：`/` 开头（如 `/bilibili/user/video/UID`），自动拼实例池
 3. **开启 GitHub Pages**：Settings → Pages → Source 选 `GitHub Actions`（sync.yml 自动部署 dist/）
-4. **配置 `BILIBILI_COOKIE` Secret**（B站源必需）：浏览器登录 B站 → DevTools Network → 复制 Cookie → 仓库 Secrets 新建 `BILIBILI_COOKIE`
+4. **配置 Secrets**（仓库 Settings → Secrets and variables → Actions）：
+   - `BILIBILI_COOKIE`（B站源必需）：浏览器登录 [bilibili.com](https://www.bilibili.com) → F12 Network → 复制 Cookie 整段（含 `SESSDATA`）
+   - `FLUXSIFT_FEED_URL`（FluxSift 源必需）：`https://fluxsift.vip.cpolar.cn/feed/<FEED_TOKEN>.xml`，token 取自 FluxSift `.env` 的 `FEED_TOKEN`
 5. **手动触发首次同步**：Actions → `sync` → Run workflow
 6. 约 1 分钟后访问 Pages URL
 
@@ -48,7 +50,7 @@
 | `scripts/bilibili.mjs` | B站 API 直连（WBI 签名 + cookie） |
 | `scripts/render.mjs` | 单文件 SPA 渲染（侧边栏 + 列表/日历 + 卡片 + 无限滚动 + 搜索） |
 | `dist/` | 生成产物：`index.html`（单文件 SPA，内嵌 JSON）+ `state.json` |
-| `.github/workflows/sync.yml` | Actions 定时任务（注入 BILIBILI_COOKIE） |
+| `.github/workflows/sync.yml` | Actions 定时任务（注入 BILIBILI_COOKIE / FLUXSIFT_FEED_URL） |
 | `docs/prd.md` `docs/tech.md` | 需求规格与技术架构 |
 
 ## 本地运行

@@ -12,12 +12,13 @@ const DIST = path.join(ROOT, 'dist');
 mkdirSync(DIST, { recursive: true });
 const parser = new Parser({ timeout: 15000, headers: { 'User-Agent': 'Mozilla/5.0 RSS-Feed-Subscriber' } });
 
-// 读取行式配置，忽略空行与 # 注释
+// 读取行式配置，忽略空行与 # 注释；展开 \${VAR} 环境变量（Secret 注入，避免密钥入库）
 function readLines(file) {
     return readFileSync(path.join(ROOT, file), 'utf8')
         .split('\n')
         .map((l) => l.trim())
-        .filter((l) => l && !l.startsWith('#'));
+        .filter((l) => l && !l.startsWith('#'))
+        .map((l) => l.replace(/\$\{(\w+)\}/g, (_, k) => process.env[k] || ''));
 }
 
 // 解析 config.txt：分类头 [id|标题|主题色] + 源行 名称|URL
