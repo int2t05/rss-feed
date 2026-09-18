@@ -67,7 +67,7 @@ Google Research | https://research.google/blog/rss/
 Latent Space | https://www.latent.space/feed
 The Gradient | https://thegradient.pub/rss/
 AI Snake Oil | https://aisnakeoil.substack.com/feed
-Chip Huyen | https://chiphuyen.com/feed.xml
+Chip Huyen | https://huyenchip.com/rss/
 Eugene Yan | https://eugeneyan.com/feed/
 
 [arxiv|arXiv 论文|#b31b1b]
@@ -110,7 +110,7 @@ Nature Machine Intelligence | https://www.nature.com/natmachintell.rss
 Science | https://www.science.org/action/showFeed?type=etoc&journalCode=science
 Science Robotics | https://www.science.org/action/showFeed?type=etoc&journalCode=robotics
 MIT News AI | https://news.mit.edu/topic/artificial-intelligence2/rss
-Stanford HAI | https://hai.stanford.edu/news/rss
+Stanford HAI | https://hai.stanford.edu/news/all/rss
 CACM | https://cacm.acm.org/rss/
 PNAS | https://www.pnas.org/rss.aspx
 
@@ -132,7 +132,7 @@ InfoQ 中文 | https://www.infoq.cn/feed
 Netflix Tech | https://netflixtechblog.com/feed
 Spotify Engineering | https://engineering.atspotify.com/feed
 Meta Engineering | https://engineering.fb.com/feed/
-Uber Engineering | https://www.uber.com/blog/engineering/rss/
+Uber Engineering | /uber/blog
 Stripe Blog | https://stripe.com/blog/feed.rss
 Discord Blog | https://discord.com/blog/rss.xml
 Go Blog | https://go.dev/blog/feed.atom
@@ -155,7 +155,7 @@ MIT Tech Review | https://www.technologyreview.com/feed/
 Ars Technica | https://feeds.arstechnica.com/arstechnica/index
 
 [community|开发者社区|#f0883e]
-V2EX 热门 | https://www.v2ex.com/feed/tab/hot.xml
+V2EX 热门 | /v2ex/topics/hot
 Hacker News | https://hnrss.org/frontpage
 掘金 AI 周榜 | /juejin/trending/ai/weekly
 LinuxDo | https://linux.do/latest.rss
@@ -164,11 +164,11 @@ Dev.to | https://dev.to/feed
 TLDR | https://www.tldr.tech/rss
 博客园精选 | /cnblogs/pick
 开源中国 | /oschina/news
-Reddit Programming | https://www.reddit.com/r/programming/hot.rss
-Reddit MachineLearning | https://www.reddit.com/r/machinelearning/hot.rss
-Reddit webdev | https://www.reddit.com/r/webdev/hot.rss
-Reddit rust | https://www.reddit.com/r/rust/hot.rss
-Reddit golang | https://www.reddit.com/r/golang/hot.rss
-Reddit python | https://www.reddit.com/r/python/hot.rss
+Reddit Programming | /reddit/subreddit/programming
+Reddit MachineLearning | /reddit/subreddit/MachineLearning
+Reddit webdev | /reddit/subreddit/webdev
+Reddit rust | /reddit/subreddit/rust
+Reddit golang | /reddit/subreddit/golang
+Reddit python | /reddit/subreddit/Python
 Product Hunt | https://producthunt.com/feed
 auto-trend 日报 | https://int2t05.github.io/auto-trend/feed.xml
