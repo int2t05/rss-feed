@@ -30,7 +30,7 @@ flowchart LR
 
 分类头 `[id|标题|主题色]` + 源行 `名称 | URL`。类别与源完全由此文件驱动，新增/删除类别只需改此文件。
 
-**7 分类 105 源**：
+**7 分类 138 源**：
 
 | 分类 | 标题 | 源数 | 说明 |
 |---|---|---|---|
@@ -38,9 +38,9 @@ flowchart LR
 | `ai` | AI 动态 | 20 | AI 实验室博客 + 研究者博客 |
 | `arxiv` | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物 |
 | `papers` | 会议/期刊 | 5 | ACL/JMLR/Nature/Science/MIT/Stanford |
-| `tech` | 技术博客 | 20 | 顶级工程博客 + 官方语言博客 |
-| `news` | 资讯媒体 | 12 | 中英文科技媒体 |
-| `community` | 开发者社区 | 13 | HN/V2EX/Reddit + auto-trend 日报 |
+| `tech` | 技术博客 | 22 | 顶级工程博客 + 官方语言博客 |
+| `news` | 资讯媒体 | 11 | 中英文科技媒体 |
+| `community` | 开发者社区 | 16 | HN/V2EX/Reddit + auto-trend 日报 |
 
 ### 2.2 instances.txt — RSSHub 实例池
 
@@ -88,7 +88,7 @@ flowchart LR
 
 ### 2.6 .github/workflows/sync.yml — 定时任务
 
-定时拉取 → 提交产物 → 部署 Pages，concurrency 防并发。注入 `BILIBILI_COOKIE` Secret。
+定时拉取 → 提交产物并上传 Pages artifact → 独立 deploy job 发布。`sync` job 负责拉取、提交和上传，`deploy` job 通过 `needs: sync` 等待 artifact 完成后再部署；注入 `BILIBILI_COOKIE` 与 `FLUXSIFT_FEED_URL` Secrets。
 
 ## 3. 通用 RSS 解析
 
@@ -132,7 +132,8 @@ FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + 
 ## 7. 部署
 
 - 公开仓库 + GitHub Pages（main / root）
-- Actions：`cron: "*/30 * * * *"` + `workflow_dispatch`
+- 上传与部署使用独立 job；这规避 `deploy-pages` 在同一 job 紧跟 artifact 上传时的间歇性查询竞态。
+- Actions：`cron: "17,47 * * * *"` + `workflow_dispatch`，每半小时运行并避开整点；GitHub 高负载时仍可能延迟或跳过。
 
 ## 8. 依赖
 
@@ -143,7 +144,7 @@ FluxSift 的 RSS feed 在 `http://<host>:8765/feed/<FEED_TOKEN>.xml`（内网 + 
 
 ```
 rss-feed/
-├── config.txt              # 订阅列表（7 分类 105 源，唯一配置源）
+├── config.txt              # 订阅列表（7 分类 138 源，唯一配置源）
 ├── instances.txt           # RSSHub 实例池
 ├── package.json            # rss-parser 依赖
 ├── dist/                   # 生成产物（GitHub Pages 源）

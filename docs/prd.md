@@ -28,7 +28,7 @@
 - 支持空行、`#` 注释
 - 类别与源完全由 config 驱动，新增/删除类别只需改 config
 
-### 3.2 分类体系（7 类，105 源）
+### 3.2 分类体系（7 类，138 源）
 
 | 分类 ID | 标题 | 源数 | 说明 |
 |---|---|---|---|
@@ -36,9 +36,9 @@
 | `ai` | AI 动态 | 20 | Anthropic/OpenAI/DeepMind 等 AI 实验室 + 研究者博客 |
 | `arxiv` | arXiv 论文 | 30 | 全 CS 分类 + 统计/物理/数学/生物交叉 |
 | `papers` | 会议/期刊 | 5 | ACL Anthology/JMLR/Nature/Science/MIT/Stanford 等 |
-| `tech` | 技术博客 | 20 | Netflix/Spotify/Meta + Uber/Stripe/Discord/Go/Python 官方 |
-| `news` | 资讯媒体 | 12 | Solidot/机器之心/量子位/Ars Technica/MIT Tech Review 等 |
-| `community` | 开发者社区 | 13 | HN/V2EX/Reddit + auto-trend 日报 RSS |
+| `tech` | 技术博客 | 22 | Netflix/Spotify/Meta + Uber/Stripe/Discord/Go/Python 官方 |
+| `news` | 资讯媒体 | 11 | Solidot/机器之心/量子位/Ars Technica/MIT Tech Review 等 |
+| `community` | 开发者社区 | 16 | HN/V2EX/Reddit + auto-trend 日报 RSS |
 
 ### 3.3 数据拉取
 - B站路由（`/bilibili/user/video/:uid`）：直连 B站 API（WBI 签名 + 匿名 buvid + dm_img 指纹），避开公共 RSSHub 实例对 B站的风控
